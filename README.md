@@ -56,10 +56,11 @@ PYTHONPATH=sim python3 -m steel_tide m1-bot --check
 PYTHONPATH=sim python3 -m steel_tide m2-resident --check
 PYTHONPATH=sim python3 -m steel_tide m2-roles --check
 PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
+PYTHONPATH=sim python3 -m steel_tide m2-fail --check
 PYTHONPATH=sim python3 -m steel_tide
 ```
 
-第一条把后面的 `repro`、各张 `--check` 和 `unittest` 串起来，全部退出码为 0 才通过。记录在 `docs/evidence/nr-m2-pack/`。`repro` 打印四条已通过的复现：同帧抢芯只有一人持有、打断不计分、坠海超时芯回中场、超时结算不重新三选一岗位。`nr02` 跑 3v3（两个客户端视角 + 四个本地 bot）并对照 `docs/evidence/nr02/` 的双端日志。`m1` 跑 NR-M1 首切片并对照 `docs/evidence/nr-m1/`。`m1-pass` 跑近距传球、持芯突进、两种读条打断和常规先到 2 分，并对照 `docs/evidence/nr-m1-pass/`。`m1-bot` 让四个 `local_bot` 自己走完一局，并对照 `docs/evidence/nr-m1-bot/`。`m2-resident` 让一个 `digital_resident` 用 `select_match` 和 `decide` 走完同一局路径，并对照 `docs/evidence/nr-m2-resident/`。这仍不是生产数字居民。`m2-roles` 对照 `docs/evidence/nr-m2-roles/`。`m2-bridge` 对照 `docs/evidence/nr-m2-bridge/`：桥接通后跨度可走，断开后跨度离开路线图，机修巷仍可得分。`m2-audio` 不在开发包步骤里。队标音、4 秒桥预警和芯链的音效契约是 `PYTHONPATH=sim python3 -m steel_tide m2-audio --check`，样例在 `docs/evidence/nr-m2-audio/`。规格见 [docs/NR-M2-audio.md](docs/NR-M2-audio.md)。它不改计分，也不把 `AudioCue` 写进双端事件表。最后一条命令是两个本地 bot 的短切片，不在开发包里。UE 侧如何接同一批事件见 [docs/rules/UE_EVENT_WIRING.md](docs/rules/UE_EVENT_WIRING.md)。双端日志格式见 [docs/rules/DUAL_END_EVENT_LOG.md](docs/rules/DUAL_END_EVENT_LOG.md)。
+第一条把后面的 `repro`、各张 `--check` 和 `unittest` 串起来，全部退出码为 0 才通过。记录在 `docs/evidence/nr-m2-pack/`。`repro` 打印四条已通过的复现：同帧抢芯只有一人持有、打断不计分、坠海超时芯回中场、超时结算不重新三选一岗位。`nr02` 跑 3v3（两个客户端视角 + 四个本地 bot）并对照 `docs/evidence/nr02/` 的双端日志。`m1` 跑 NR-M1 首切片并对照 `docs/evidence/nr-m1/`。`m1-pass` 跑近距传球、持芯突进、两种读条打断和常规先到 2 分，并对照 `docs/evidence/nr-m1-pass/`。`m1-bot` 让四个 `local_bot` 自己走完一局，并对照 `docs/evidence/nr-m1-bot/`。`m2-resident` 让一个 `digital_resident` 用 `select_match` 和 `decide` 走完同一局路径，并对照 `docs/evidence/nr-m2-resident/`。这仍不是生产数字居民。`m2-roles` 对照 `docs/evidence/nr-m2-roles/`。`m2-bridge` 对照 `docs/evidence/nr-m2-bridge/`：桥接通后跨度可走，断开后跨度离开路线图，机修巷仍可得分。`m2-audio` 不在开发包步骤里。队标音、4 秒桥预警和芯链的音效契约是 `PYTHONPATH=sim python3 -m steel_tide m2-audio --check`，样例在 `docs/evidence/nr-m2-audio/`。规格见 [docs/NR-M2-audio.md](docs/NR-M2-audio.md)。它不改计分，也不把 `AudioCue` 写进双端事件表。最后一条命令是两个本地 bot 的短切片，不在开发包里。同帧抢芯只有一人持有、读条受击不计分、超时结算不重新三选一，另有 `PYTHONPATH=sim python3 -m steel_tide m2-fail --check`。它不进 `m2-pack` 的步骤表，`wired_into_m2_pack` 为 false。样例在 `docs/evidence/nr-m2-fail/`。规格见 [docs/NR-M2-fail.md](docs/NR-M2-fail.md)。UE 侧如何接同一批事件见 [docs/rules/UE_EVENT_WIRING.md](docs/rules/UE_EVENT_WIRING.md)。双端日志格式见 [docs/rules/DUAL_END_EVENT_LOG.md](docs/rules/DUAL_END_EVENT_LOG.md)。
 
 ## 资料
 

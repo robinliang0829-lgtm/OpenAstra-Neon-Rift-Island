@@ -188,3 +188,11 @@ PYTHONPATH=sim python3 -m steel_tide m2-audio --check
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-light --check
 ```
+
+## NR-M2-fail
+
+同一套三端正文，schema 换成 `nr-m2-fail-dual-end-v1`。表头有 `identities`，另有 `fail_paths`、`role_menu` 和 `wired_into_m2_pack`。样例在 `docs/evidence/nr-m2-fail/`。两端同一毫秒抢芯：一条 `CorePicked`，一条 `CorePickRejected` / `already_held`。读条受击是 `ScoreChannelInterrupted`，没有 `PointScored`。超时 `MatchSettled` 的 `role_select_open` 为 false，三选一不再打开。这条不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-fail --check
+```

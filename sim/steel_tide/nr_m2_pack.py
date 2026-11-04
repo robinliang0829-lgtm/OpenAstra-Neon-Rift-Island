@@ -38,6 +38,8 @@ STEPS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("unittest", "unittest", ("discover", "-s", "sim/tests", "-v")),
 )
 
+# m2-fail is a separate --check. It is not a step above. See docs/NR-M2-fail.md.
+
 
 def command_line(module: str, args: tuple[str, ...]) -> str:
     return f"PYTHONPATH=sim python3 -m {module} " + " ".join(args)

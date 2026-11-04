@@ -49,6 +49,8 @@ python3 -m steel_tide m2-pack --check
 - `docs/evidence/nr-m2-pack/commands.txt`
 - `docs/evidence/nr-m2-pack/exit-codes.txt`
 
+`m2-fail` 不在上表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。同帧抢芯、受击打断、超时不重新三选一用 `PYTHONPATH=sim python3 -m steel_tide m2-fail --check`，样例在 `docs/evidence/nr-m2-fail/`。规格见 [NR-M2-fail](NR-M2-fail.md)。输出里的 `wired_into_m2_pack` 为 false。`unittest` 这一步会跑 `sim/tests/test_nr_m2_fail.py`。单独的 `--check` 才对照那三份失败路径日志。
+
 ## 仍等本机 UE 的卡
 
 这些卡的上机段都还没做。开发包不代替它们。

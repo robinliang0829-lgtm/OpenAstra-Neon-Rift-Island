@@ -127,3 +127,9 @@ NR-02 的通过线是双端日志里出现与这三条相同的结果，而不�
 - 芯进海水或卡住体积：满 8 秒一条 `CoreReset` 回到 `center`，没有 `PointScored`。得分回中用的是 `CoreReturnedToCenter`，不要接成复位。
 
 出现双持或一次读条记两次分，把两端日志退回 Codex，不要在编辑器里改胜负条件。
+
+同帧抢芯、读条受击不计分、超时结算不重新三选一，另有仓内刀口 `m2-fail`。它和开发包并行，不进上面的步骤表。`wired_into_m2_pack` 为 false。它不新造事件名。规格见 [../NR-M2-fail.md](../NR-M2-fail.md)。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-fail --check
+```
