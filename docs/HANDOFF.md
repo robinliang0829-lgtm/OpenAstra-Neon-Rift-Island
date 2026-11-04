@@ -22,6 +22,8 @@ NR-M2-bridge 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m 
 
 NR-M2-pack 已入库。这是无头 Python 开发包，不是 UE 包。UE 仍挂。仓内一条命令是 `PYTHONPATH=sim python3 -m steel_tide m2-pack --check`。它串起 `repro`、`nr02`、`nr03`、`m1`、`m1-pass`、`m1-bot`、`m2-resident`、`m2-roles`、`m2-bridge` 和 `unittest`，全部退出码为 0 才算通过。命令和退出码在 `docs/evidence/nr-m2-pack/`。规格见 [NR-M2-pack.md](NR-M2-pack.md)。不要 cook，不要打二进制包，不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M2-audio 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-audio --check`，样例在 `docs/evidence/nr-m2-audio/`。规格见 [NR-M2-audio.md](NR-M2-audio.md)。模拟在权威事件的同一毫秒写 `AudioCue` 旁路日志：A/B 音口跟肩章形状和肩灯，颜色只是辅助；桥的 4 秒预警、灯带、接通、断开走 NR-03 的 `schedule_bridge_connect` / `schedule_bridge_disconnect`；拾取、传球、掉落、读条开始、打断、得分、回中、复位各至少一条。不提交 wav、MetaSound 或 `.uasset`。`AudioCue` 不进计分事件名，也不进 `m2-pack` 的步骤表。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。

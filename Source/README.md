@@ -19,5 +19,6 @@
 | `NeonRift/Public/NeonRiftBotPolicy.h` | 转发 `BotDecision`。不选择，不计分 |
 | `NeonRift/Public/NeonRiftResidentPort.h` | 数字居民薄策略。`SelectMatch` / `Decide` 不计分，不收坐标 |
 | `NeonRift/Public/NeonRiftReadability.h` | NR-03 代理数据。不记分 |
+| `NeonRift/Public/NeonRiftAudioCues.h` | NR-M2 音效 id。只列名字，不播放，不计分 |
 
 这些类只把事件名交给子系统。胜负仍以 `sim/steel_tide` 为准。本环境没有编译过这个模块。

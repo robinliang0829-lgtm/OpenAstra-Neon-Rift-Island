@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 
+from .audio import cues_for
 from .config import SteelTideConfig, load_config
 from .model import Channel, Combatant, Command, Core, Event, audit_holder_log
 from .routes import authoritative_edges, plan_route, shortest_path, span_edge_token, span_hops, step_edge
@@ -30,6 +31,8 @@ class SteelTideMatch:
         self.lobby_open = True
         self.combatants: dict[str, Combatant] = {}
         self.events: list[Event] = []
+        # Side log. Same timestamps as `events`, not part of the scoring name set.
+        self.audio_cues: list[Event] = []
         self.score = {"A": 0, "B": 0}
         self.bridge_state = "disconnected"
         self.channel: Channel | None = None
@@ -59,7 +62,9 @@ class SteelTideMatch:
         return self.t_ms / 1000
 
     def _emit(self, name: str, payload: dict | None = None) -> None:
-        self.events.append(Event(self.t_ms, name, payload or {}))
+        event = Event(self.t_ms, name, payload or {})
+        self.events.append(event)
+        self.audio_cues.extend(cues_for(self, event, len(self.events) - 1))
 
     def add_combatant(
         self,
