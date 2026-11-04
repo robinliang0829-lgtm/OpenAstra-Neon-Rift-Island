@@ -1,12 +1,14 @@
 #include "NeonRiftMatchSubsystem.h"
 #include "NeonRift.h"
+#include "NeonRiftEventLog.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
 
 void UNeonRiftMatchSubsystem::Emit(const FString& EventName, const FString& PayloadJson)
 {
+	const FString Line = NeonRiftFormatEventLine(EventName, PayloadJson);
 	OnMatchEvent.Broadcast(FName(*EventName), PayloadJson);
-	UE_LOG(LogNeonRift, Log, TEXT("%s %s"), *EventName, *PayloadJson);
+	UE_LOG(LogNeonRift, Log, TEXT("%s"), *Line);
 }
 
 void NeonRiftEmit(const UObject* WorldContext, const TCHAR* EventName, const FString& PayloadJson)

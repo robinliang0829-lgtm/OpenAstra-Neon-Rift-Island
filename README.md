@@ -43,10 +43,11 @@ M0 的第一张上机卡是 [docs/NR-01.md](docs/NR-01.md)。M1 的规则复现�
 ```bash
 PYTHONPATH=sim python3 -m unittest discover -s sim/tests -v
 PYTHONPATH=sim python3 -m steel_tide repro
+PYTHONPATH=sim python3 -m steel_tide nr02 --check
 PYTHONPATH=sim python3 -m steel_tide
 ```
 
-`repro` 打印四条已通过的复现：同帧抢芯只有一人持有、打断不计分、坠海超时芯回中场、超时结算不重新三选一岗位。最后一条命令是本地 bot 对局，不是已接入的数字居民。UE 侧如何接同一批事件见 [docs/rules/UE_EVENT_WIRING.md](docs/rules/UE_EVENT_WIRING.md)。
+`repro` 打印四条已通过的复现：同帧抢芯只有一人持有、打断不计分、坠海超时芯回中场、超时结算不重新三选一岗位。`nr02` 跑 3v3（两个客户端视角 + 四个本地 bot）并对照 `docs/evidence/nr02/` 的双端日志。最后一条命令是本地 bot 对局，不是已接入的数字居民。UE 侧如何接同一批事件见 [docs/rules/UE_EVENT_WIRING.md](docs/rules/UE_EVENT_WIRING.md)。双端日志格式见 [docs/rules/DUAL_END_EVENT_LOG.md](docs/rules/DUAL_END_EVENT_LOG.md)。
 
 ## 资料
 

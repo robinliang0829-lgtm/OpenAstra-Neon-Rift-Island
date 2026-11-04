@@ -16,3 +16,5 @@ jobs:
         run: PYTHONPATH=sim python3 -m unittest discover -s sim/tests -v
       - name: Scripted reproductions
         run: PYTHONPATH=sim python3 -m steel_tide repro
+      - name: NR-02 dual-end 3v3
+        run: PYTHONPATH=sim python3 -m steel_tide nr02 --check

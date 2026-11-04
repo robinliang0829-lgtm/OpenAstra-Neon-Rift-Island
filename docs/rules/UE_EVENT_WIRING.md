@@ -1,6 +1,6 @@
 # 钢潮港事件接线
 
-规则原型是 `sim/steel_tide`。UE 侧只有 `UNeonRiftMatchSubsystem` 广播这些名字。头文件在 `Source/NeonRift/Public/NeonRiftEventNames.h`，名字集合与 `sim/steel_tide/events.py` 一致。这些 C++ 存根只转发事件，不算分、不发第二名持有者。
+规则原型是 `sim/steel_tide`。UE 侧由 `UNeonRiftMatchSubsystem` 广播这些名字。`ANeonRiftGameMode`、`ANeonRiftGameState`、`ANeonRiftPlayerState` 只订阅并再广播，不另记一分。头文件在 `Source/NeonRift/Public/NeonRiftEventNames.h`，名字集合与 `sim/steel_tide/events.py` 一致。这些 C++ 存根只转发事件，不算分、不发第二名持有者。
 
 不要在关卡蓝图里自己加分或按颜色分队。调用 `Emit*` 不是通过 NR-02。
 
@@ -11,6 +11,9 @@
 | 类型 | 文件 | 职责 |
 | --- | --- | --- |
 | `UNeonRiftMatchSubsystem` | `Source/NeonRift/Public/NeonRiftMatchSubsystem.h` | 唯一广播口 |
+| `ANeonRiftGameMode` | `Source/NeonRift/Public/NeonRiftGameMode.h` | 指定 GameState / PlayerState，转发总线，不计分 |
+| `ANeonRiftGameState` | `Source/NeonRift/Public/NeonRiftGameState.h` | 订阅总线，复制事件行和权威载荷 |
+| `ANeonRiftPlayerState` | `Source/NeonRift/Public/NeonRiftPlayerState.h` | 一个客户端视角，再广播同一行 |
 | `ANeonRiftPhaseCore` | `Source/NeonRift/Public/NeonRiftPhaseCore.h` | 相位芯事件 |
 | `UNeonRiftFactionSelect` | `Source/NeonRift/Public/NeonRiftFactionSelect.h` | 选边、岗位、锁队 |
 | `ANeonRiftTerminalScore` | `Source/NeonRift/Public/NeonRiftTerminalScore.h` | 端子读条、倒地、结算 |
@@ -81,9 +84,12 @@
 
 ```bash
 PYTHONPATH=sim python3 -m steel_tide repro
+PYTHONPATH=sim python3 -m steel_tide nr02 --check
 ```
 
-NR-02 的通过线是双端日志里出现与这三条相同的结果，而不是同一堆毫秒时间（灰盒手测对不齐 bot 的 29.5 秒）：
+双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。
+
+NR-02 的通过线是双端日志里出现与这三条相同的结果，而不是同一堆毫秒时间（灰盒手测对不齐样例里的 `place_for_test`）：
 
 - 同帧两次拾取：一条 `CorePicked`，一条 `CorePickRejected` / `already_held`，全程审计不出第二个持有者。
 - 读条中受击或离开：`ScoreChannelInterrupted`，没有 `PointScored`。倒地会 `CoreDropped`，满 5 秒 `ActorRespawned`，芯留在掉落处。
