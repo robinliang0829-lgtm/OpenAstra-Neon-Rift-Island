@@ -16,6 +16,7 @@ from .nr_m2_roles import main as m2_roles_main
 from .nr_m1_pass import main as m1_pass_main
 from .nr02 import main as nr02_main
 from .nr03 import main as nr03_main
+from .nr_m2_light import main as m2_light_main
 from .repro import run_repro_report
 
 
@@ -41,6 +42,8 @@ def main(argv: list[str] | None = None) -> int:
         return nr02_main(args[1:])
     if args[:1] == ["nr03"]:
         return nr03_main(args[1:])
+    if args[:1] == ["m2-light"]:
+        return m2_light_main(args[1:])
     if args[:1] == ["repro"]:
         return 0 if run_repro_report() else 1
     match = run_bot_slice()

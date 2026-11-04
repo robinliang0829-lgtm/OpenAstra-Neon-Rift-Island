@@ -22,7 +22,8 @@
 | `UNeonRiftResidentPort` | `Source/NeonRift/Public/NeonRiftResidentPort.h` | 薄策略。`SelectMatch` / `Decide` 只记合法座位和意图，不喂坐标，不计分 |
 | `UNeonRiftReadabilityAsset` | `Source/NeonRift/Public/NeonRiftReadability.h` | NR-03 代理与 4 秒预警的数据。不记分 |
 | `NeonRiftAudio` | `Source/NeonRift/Public/NeonRiftAudioCues.h` | NR-M2 音效 id。只列名字，不播放，不计分，无声音资产 |
-| 参数 | `config/steel_tide_greybox.json` | 秒数和阵营。不要在编辑器里另填一套 |
+| 参数 | `config/steel_tide_greybox.json` | 秒数、阵营，以及 `lighting` 里的日港和夜港强度。不要在编辑器里另填一套 |
+| `NeonRiftLight` | `Source/NeonRift/Public/NeonRiftLightCues.h` | NR-M2 灯光 id。只列名字，不打光，不计分，无贴图 |
 
 复制以服务器为准。客户端发送意图。UI 读复制下来的 `holder_id`，不把本地预测的第二名持有者当成真的。
 
@@ -92,6 +93,8 @@
 `AudioCue` 不在上表，也不在 `sim/steel_tide/events.py` 的 `EVENT_NAMES`。模拟在权威事件的同一毫秒另写一行旁路日志，`rules_effect` 为 `none`，不改持有者，不加分，不打断。队标、桥和芯链的 id 在 `NeonRiftAudioCues.h`，与 `sim/steel_tide/audio.py` 一致。不提交声音文件。规格见 [../NR-M2-audio.md](../NR-M2-audio.md)。
 
 持芯者速度用 `walk_speed_mps`（6，即 600 uu/s），不能冲刺，也不能突进。未持芯的原型移动用 `sprint_speed_mps`（8，即 800 uu/s）。1 米 = 100 UE 单位。坐标：模拟 x → UE X，模拟 y → UE Y，Z 向上，甲板 Z = 0。锚点表在 `config/steel_tide_greybox.json`。
+
+`LightCue` 不在上表，也不在 `sim/steel_tide/events.py` 的 `EVENT_NAMES`。模拟在权威事件的同一毫秒另写一行旁路日志，`rules_effect` 为 `none`，不改持有者，不加分，不打断。肩灯、桥灯带、端子读条、得分和出生保护的 id 在 `NeonRiftLightCues.h`，与 `sim/steel_tide/light.py` 一致。桥的 4 秒仍走 NR-03 的 `schedule_bridge_connect` / `schedule_bridge_disconnect`。不提交贴图。规格见 [../NR-M2-light.md](../NR-M2-light.md)。
 
 ## 和原型对日志
 

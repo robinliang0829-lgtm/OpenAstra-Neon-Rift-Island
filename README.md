@@ -22,6 +22,8 @@ UE operator: open `NeonRift.uproject`. The only missing piece is the local UE in
 
 M0 的第一张上机卡是 [docs/NR-01.md](docs/NR-01.md)。M1 的规则复现是 [docs/NR-02.md](docs/NR-02.md)。可读性是 [docs/NR-03.md](docs/NR-03.md)。M1 首切片（两个视角、四个本地 bot、复活、加时、三岗位）是 [docs/NR-M1-prep.md](docs/NR-M1-prep.md)。传球、持芯突进、读条打断和常规先到 2 分是 [docs/NR-M1-pass.md](docs/NR-M1-pass.md)。四个本地 bot 自己走完一局是 [docs/NR-M1-bot.md](docs/NR-M1-bot.md)。一个薄策略数字居民和三个本地 bot 走完同一局是 [docs/NR-M2-resident.md](docs/NR-M2-resident.md)。岗位能力是 [docs/NR-M2-roles.md](docs/NR-M2-roles.md)。桥接通和断开改路线图是 [docs/NR-M2-bridge.md](docs/NR-M2-bridge.md)。事件侧音效契约是 [docs/NR-M2-audio.md](docs/NR-M2-audio.md)：队标音口、4 秒桥预警和芯链各有可审计的 `AudioCue`，没有声音文件。别人能跑的仓内验收是 [docs/NR-M2-pack.md](docs/NR-M2-pack.md)：无头 Python 开发包，不是 UE 包。实机仍等本机 UE。
 
+事件侧灯光契约是 [docs/NR-M2-light.md](docs/NR-M2-light.md)。A 左肩、B 右肩，日港和夜港强度写在配置里，桥灯带跟 NR-03 同一毫秒。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-light --check`。它不进 `m2-pack` 的步骤表，没有贴图，也没有 `.uasset`。
+
 ## 阵营
 
 本局选择，进局后锁定。未选择不会被偷偷分队。
