@@ -1,18 +1,18 @@
 # 霓虹断层岛｜Neon Rift
 
-OpenAstra 的独立对战岛。可玩成品只用 **Unreal Engine 5**。本仓是钢潮港首图的规则、配置和上机交接，还不是已经能打开的 UE 工程。
+OpenAstra 的独立对战岛。可玩成品只用 **Unreal Engine 5**。仓库根上的 `NeonRift.uproject` 是可打开的骨架，`EngineAssociation` 写着 `5.4`，这是占位。真实小版本由 **PM-钢潮岛** 按本机已安装的引擎锁定，不是 PM-Astra。
 
 雨夜海港、湿地反光、工业机械轮廓沿用概念页。阵营按本局选择，不按脸认敌我。`04` 里的人数、时长、比分和桥预警是可调灰盒提案，不是 Robin 已冻结的局规。
 
 ## 交接
 
-**游戏组-虚幻引擎操作：** 本仓还没有 `.uproject`，UE5 小版本以你的机器和 PM-Astra 给出的工程路径为准。拿到工程后按 [docs/NR-01.md](docs/NR-01.md) 只做钢潮港灰盒（出生点、双端子、中央相位芯、高架和机修巷），把俯视图和两侧走到中场的时间交回。胜负以 `sim/steel_tide` 的事件为准，不要在关卡蓝图里另写一套计分。
+**游戏组-虚幻引擎操作：** 工程文件已经在仓库根目录：`NeonRift.uproject`。还缺的只有你机器上的 UE 安装路径，由 PM-钢潮岛按本机安装锁定小版本（文件里的 5.4 是占位）。装好后打开这个工程，按 [docs/HANDOFF.md](docs/HANDOFF.md) 和 [docs/NR-01.md](docs/NR-01.md) 只做钢潮港灰盒。坐标在 [Content/Greybox/NR01_SteelTide.layout.json](Content/Greybox/NR01_SteelTide.layout.json)。胜负以 `sim/steel_tide` 的事件为准，不要在关卡蓝图里另写一套计分。
 
-UE operator: there is no `.uproject` in this repo. After PM-Astra gives you a project path and UE5 minor, start with NR-01 only and send back the Steel Tide greybox measurements. Do not score the match from the level blueprint.
+UE operator: open `NeonRift.uproject`. The only missing piece is the local UE install path. PM-钢潮岛 locks the real minor from that install. Then do NR-01. Do not score the match from the level blueprint.
 
 ## 里程碑
 
-来自开工包 `01_CODEX_主创施工`，本 PR 还没有进入 M0。
+来自开工包 `01_CODEX_主创施工`。M0 的工程骨架已经在仓里。灰盒关卡要等本机 UE 打开后再做，仓里没有 `.umap`。
 
 | 里程碑 | 完成线 |
 | --- | --- |
@@ -61,13 +61,13 @@ PYTHONPATH=sim python3 -m steel_tide
   - [refs/01_Neon_Bay.png](docs/kickoff/refs/01_Neon_Bay.png) 是 2026-10-20 环境参考，不是新的阵营表，也不是实机截图
   - [refs/02_Genesis_Workflow.png](docs/kickoff/refs/02_Genesis_Workflow.png) 是创世岛工作流原图，本岛不替换它
 
-冻结页里的创世岛主线用 Godot。本岛沿用同一条五步工序（Notion 定范围 → PM-Astra 调度 → Codex 主创 → Blender 出模 → 进引擎），进引擎的一步改为 UE5，以开工包里的 SVG 为准。创世岛和猎手岛继续各自施工。本仓不引用那两个工程，也不另起第二套引擎。Tripo 仍是点召，这次开工不消耗 Tripo 额度，也不依赖另一台机器上的 Blender 压缩包。
+冻结页里的创世岛主线用 Godot，工序名字仍写着 PM-Astra。本岛的 UE 工程路径和引擎小版本由 PM-钢潮岛锁定。进引擎的一步是 UE5，以开工包里的 SVG 为准。创世岛和猎手岛继续各自施工。本仓不引用那两个工程，也不另起第二套引擎。Tripo 仍是点召，这次开工不消耗 Tripo 额度，也不依赖另一台机器上的 Blender 压缩包。
 
 ## 谁写什么
 
 | 路径 | 负责人 |
 | --- | --- |
-| `sim/`、`config/`、以后的 `Source/` C++ | Codex：规则、C++、配置 |
-| `Content/` 里的 `.umap`、`.uasset` | 游戏组-虚幻引擎操作 |
+| `sim/`、`config/`、`Source/`、`NeonRift.uproject` | Codex：规则、C++、配置、工程骨架 |
+| `Content/` 里以后的 `.umap`、`.uasset` | 游戏组-虚幻引擎操作 |
 
-现在没有 `.uproject`，也没有提交任何 `.uasset`。目录只是以后的位置，见 [Content/README.md](Content/README.md)、[Source/README.md](Source/README.md) 和 [docs/BASELINE.md](docs/BASELINE.md)。
+已提交 `NeonRift.uproject` 和 C++ 存根。没有提交 `.umap` 或 `.uasset`。灰盒坐标是文本：[Content/Greybox/NR01_SteelTide.layout.json](Content/Greybox/NR01_SteelTide.layout.json)。见 [docs/HANDOFF.md](docs/HANDOFF.md) 和 [docs/BASELINE.md](docs/BASELINE.md)。

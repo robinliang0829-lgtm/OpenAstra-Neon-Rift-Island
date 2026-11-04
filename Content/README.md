@@ -1,11 +1,11 @@
 # Content
 
-UE 操作员以后在这里放钢潮港的图和资产。这次开工没有 `.umap` 或 `.uasset`，也不要在没有工程路径时把二进制提交进来。
+UE 操作员以后在这里放钢潮港的图和资产。现在没有 `.umap` 或 `.uasset`。NR-01 的坐标是文本 `Greybox/NR01_SteelTide.layout.json`，由 `sim/steel_tide/layout.py` 导出。
 
 | 目录 | 以后放什么 |
 | --- | --- |
 | `Maps/SteelTide/` | `NR_SteelTide_Greybox` 以及以后的港口图 |
-| `Greybox/` | NR-01 的块和体积，若工程选择单独目录 |
+| `Greybox/` | `NR01_SteelTide.layout.json`。块和体积以后再放 |
 | `Characters/Human/` | 人类 |
 | `Characters/Celestial/` | 天人 |
 | `Characters/HumanoidRobot/` | 人形机器人，A/B 共用一套身体 |

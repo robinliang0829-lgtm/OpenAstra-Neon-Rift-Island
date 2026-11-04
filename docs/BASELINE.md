@@ -1,19 +1,21 @@
 # Neon Rift baseline
 
-记录日期：2026-11-04。本文件描述这个开工 PR，不是已经可启动的 UE 工程。
+记录日期：2026-11-04。`NeonRift.uproject` 已进仓。本环境没有 UE，编辑器没有打开过它。
 
 ## 工程
 
-- 本仓 **没有** `.uproject`。历史和开工包都没有登记一份可复用的霓虹断层岛工程。不要把空目录说成已经有工程。
-- 目标引擎是 UE5。小版本 **未定**，由 PM-Astra 按虚幻引擎操作员机器上的已授权版本填写。在那之前不要写死 5.x 的补丁号，也不要改用创世岛的 Godot 或猎手岛的工程。
+- 工程文件是仓库根目录的 `NeonRift.uproject`。`EngineAssociation` 为 `5.4`，这是占位。
+- 真实小版本由 **PM-钢潮岛** 按虚幻引擎操作员机器上的安装锁定。不要改去创世岛 Godot 或猎手岛工程。
+- 没有提交 `.umap` / `.uasset`。NR-01 坐标在 `Content/Greybox/NR01_SteelTide.layout.json`。
 - 分支：`cursor/neon-rift-kickoff-747a`
-- 规则与文档快照 SHA：`f8af352895dd890a7aac01e92682698f591faad2`。操作员 checkout 这个分支的 HEAD。HEAD 是记录该快照的戳记，不改规则文件。
+- 加工程文件之前的规则快照：`f8af352895dd890a7aac01e92682698f591faad2`。
+- 操作员 checkout 分支 `cursor/neon-rift-kickoff-747a` 的 HEAD。HEAD 含 `NeonRift.uproject`。
 
 ## 内容负责人
 
 | 所有者 | 范围 |
 | --- | --- |
-| Codex | 比赛规则、以后的 C++、`config/steel_tide_greybox.json`、`sim/steel_tide`、操作卡上的事件名和数值 |
+| Codex | 比赛规则、`Source/NeonRift`、`NeonRift.uproject`、`config/steel_tide_greybox.json`、`sim/steel_tide`、操作卡上的事件名和数值 |
 | 游戏组-虚幻引擎操作 | `.umap`、`.uasset`、编辑器里的摆放、灯光、导入和双端录像 |
 
 编辑器里不维护第二套计分或阵营判定。关卡蓝图只发事件，判定以规则原型为准。
@@ -28,5 +30,5 @@
 ## 快照
 
 - 分支：`cursor/neon-rift-kickoff-747a`
-- 规则与文档快照 SHA：`f8af352895dd890a7aac01e92682698f591faad2`
-- 操作员 checkout 该分支的 HEAD。HEAD 是记录上面这枚快照的戳记提交，不改规则、卡或开工包。PR 描述里的 Baseline HEAD 与 `git rev-parse HEAD` 相同。
+- 加工程文件之前的规则快照：`f8af352895dd890a7aac01e92682698f591faad2`
+- 当前基线是该分支 HEAD，PR 描述里的 Baseline HEAD 与 `git rev-parse HEAD` 相同。

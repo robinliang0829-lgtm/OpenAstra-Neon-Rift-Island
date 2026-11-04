@@ -3,3 +3,13 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .venv/
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+*.sln
+*.VC.db
+*.opensdf
+*.sdf
+*.suo

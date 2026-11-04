@@ -1,15 +1,16 @@
 # Source
 
-UE5 游戏模块以后放在 `Source/NeonRift/`。
+`NeonRift.uproject` 在仓库根目录。本目录是 UE 5.4 占位骨架，真实小版本由 PM-钢潮岛按本机安装锁定。
 
-本仓没有 `.uproject`，所以这里还没有 `.Build.cs`，也没有假装能编译的空模块。下一份 Codex 提交才会加入 C++，并实现 `docs/rules/UE_EVENT_WIRING.md` 里的事件。在那之前，权威规则是 `sim/steel_tide`。
+| 文件 | 作用 |
+| --- | --- |
+| `NeonRift.Target.cs` / `NeonRiftEditor.Target.cs` | Game 与 Editor 目标 |
+| `NeonRift/NeonRift.Build.cs` | 运行时模块 |
+| `NeonRift/Public/NeonRiftEventNames.h` | 与 `sim/steel_tide/events.py` 相同的事件名 |
+| `NeonRift/Public/NeonRiftMatchSubsystem.h` | 唯一广播口 |
+| `NeonRift/Public/NeonRiftPhaseCore.h` | 相位芯 |
+| `NeonRift/Public/NeonRiftFactionSelect.h` | 选边与锁队 |
+| `NeonRift/Public/NeonRiftTerminalScore.h` | 端子读条 |
+| `NeonRift/Public/NeonRiftBridgeWarn.h` | 桥预警与路线 |
 
-预留名字，现在都还不存在于工程里：
-
-- `UNeonRiftMatchSubsystem`
-- `UNeonRiftRulesConfig`
-- `ANeonRiftCore`
-- `ANeonRiftTerminal`
-- `ANeonRiftBridgeSpan`
-
-操作员不要用关卡蓝图实现同名逻辑来代替这个模块。
+这些类只把事件名交给子系统。胜负仍以 `sim/steel_tide` 为准。本环境没有编译过这个模块。
