@@ -43,12 +43,10 @@ PYTHONPATH=sim python3 -m steel_tide m1-bot --check
 | b2 | `bot-b2` | `humanoid_robot` | `local_bot` | B | 突进 `assault` |
 | b3 | `bot-b3` | `beast` | `local_bot` | B | 支援 `support` |
 
-四个 `local_bot` 不是生产数字居民。`digital_resident` 仍是第三种操控者。这张卡不构造它，策略也不调用它。
+四个 `local_bot` 不是生产数字居民。`digital_resident` 仍是第三种操控者。这张卡不构造它，策略也不调用它。可运行的薄策略在 [NR-M2-resident.md](NR-M2-resident.md)。
 
-空端口：
-
-- Python：`sim/steel_tide/resident_port.py` 的 `DigitalResidentPort`。`select_match` 和 `decide` 直接 `NotImplementedError`，后面没有替身策略
-- UE：`UNeonRiftResidentPort` 的 `SelectMatch` 和 `Decide` 是空函数。GameMode / GameState / PlayerState 不构造它
+- Python：`sim/steel_tide/resident_port.py` 的 `DigitalResidentPort`。本卡的 `bot_policy` 与 `nr_m1_bot` 不调用 `select_match` / `decide`
+- UE：`UNeonRiftResidentPort` 的薄策略由 NR-M2 写下。GameMode / GameState / PlayerState 不构造它
 
 身体、本局阵营、操控者仍是三个字段。`BotDecision` 的 `controller` 只写 `local_bot`。人类视角没有这条事件。UE 侧只订阅。`ANeonRiftGameState` 听见 `BotDecision`，不把它记成持有者或比分。GameMode / GameState / PlayerState 不加分，也不选第二个持有者。胜负仍只在 `sim/steel_tide`。
 

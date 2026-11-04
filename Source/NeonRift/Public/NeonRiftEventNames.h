@@ -38,6 +38,7 @@ namespace NeonRiftEvents
 	inline const TCHAR* const MoveRejected = TEXT("MoveRejected");
 	inline const TCHAR* const OvertimeStarted = TEXT("OvertimeStarted");
 	inline const TCHAR* const PointScored = TEXT("PointScored");
+	inline const TCHAR* const ResidentDecision = TEXT("ResidentDecision");
 	inline const TCHAR* const RoleChosen = TEXT("RoleChosen");
 	inline const TCHAR* const RoleRejected = TEXT("RoleRejected");
 	inline const TCHAR* const RolesLocked = TEXT("RolesLocked");

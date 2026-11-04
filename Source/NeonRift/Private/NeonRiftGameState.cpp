@@ -122,6 +122,7 @@ void ANeonRiftGameState::NoteMirror(FName EventName, const FString& PayloadJson)
 		NeonRiftEvents::MoveCompleted,
 		NeonRiftEvents::MoveRejected,
 		NeonRiftEvents::OvertimeStarted,
+		NeonRiftEvents::ResidentDecision,
 		NeonRiftEvents::RoleChosen,
 		NeonRiftEvents::RoleRejected,
 		NeonRiftEvents::RolesLocked,
