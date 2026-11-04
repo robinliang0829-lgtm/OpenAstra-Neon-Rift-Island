@@ -19,7 +19,7 @@
 | `ANeonRiftTerminalScore` | `Source/NeonRift/Public/NeonRiftTerminalScore.h` | 端子读条、倒地、结算 |
 | `ANeonRiftBridgeWarn` | `Source/NeonRift/Public/NeonRiftBridgeWarn.h` | 桥预警、路线、移动 |
 | `ANeonRiftBotPolicy` | `Source/NeonRift/Public/NeonRiftBotPolicy.h` | 转发 `BotDecision`。不选择，不计分 |
-| `UNeonRiftResidentPort` | `Source/NeonRift/Public/NeonRiftResidentPort.h` | 数字居民空端口。不构造，不决策 |
+| `UNeonRiftResidentPort` | `Source/NeonRift/Public/NeonRiftResidentPort.h` | 薄策略。`SelectMatch` / `Decide` 只记合法座位和意图，不喂坐标，不计分 |
 | `UNeonRiftReadabilityAsset` | `Source/NeonRift/Public/NeonRiftReadability.h` | NR-03 代理与 4 秒预警的数据。不记分 |
 | 参数 | `config/steel_tide_greybox.json` | 秒数和阵营。不要在编辑器里另填一套 |
 
@@ -33,7 +33,7 @@
 
 数字居民和本地机器人走同一套意图。回传里把 `local_bot` 和真正的 Resident 分开写。这批 bot 不是生产数字居民。
 
-`BotDecision` 由 `sim/steel_tide` 在本地 bot 提交意图时写下，不是玩家 RPC，也不计分。`hit` 仍只有服务器能发。bot 决定打断读条时，模拟替服务器排队一次 `down` 为 false 的命中。`UNeonRiftResidentPort` 的 `SelectMatch` / `Decide` 是空的。NR-M1-bot 不构造它，GameMode / GameState / PlayerState 也不构造它。
+`BotDecision` 由 `sim/steel_tide` 在本地 bot 提交意图时写下，不是玩家 RPC，也不计分。`hit` 仍只有服务器能发。bot 决定打断读条时，模拟替服务器排队一次 `down` 为 false 的命中。`ResidentDecision` 是薄策略数字居民的同一类审计，`controller` 为 `digital_resident`。它不改持有者，不计分，也不写墙后坐标。NR-M1-bot 不构造 `UNeonRiftResidentPort`。NR-M2-resident 在 `sim/steel_tide` 里调用 `select_match` 和 `decide`。GameMode / GameState / PlayerState 仍不构造它，也不记分。
 
 ## 同一服务器帧的顺序
 
@@ -60,7 +60,8 @@
 | --- | --- | --- |
 | `AbilityUsed` / `AbilityRejected` | 突进、支援、侦察的可调冷却。错岗位、冷却中、桥未通、目标在掩体后，或突进时手里有芯（`holding_core`，不消耗冷却）则拒绝。传出或丢下芯之后可以再突进。不是新里程碑。 | `UNeonRiftFactionSelect` |
 | `CombatantJoined` | 进局，写明 body、controller、client | 玩家或 bot |
-| `BotDecision` | 本地 bot 提交一条意图。载荷有 `action`、`reason`、`target_id`，`controller` 为 `local_bot`。不改持有者，不计分。数字居民端口不产生这条。 | `ANeonRiftBotPolicy` |
+| `BotDecision` | 本地 bot 提交一条意图。载荷有 `action`、`reason`、`target_id`，`controller` 为 `local_bot`。不改持有者，不计分。数字居民不产生这条。 | `ANeonRiftBotPolicy` |
+| `ResidentDecision` | 薄策略数字居民提交一条意图。载荷有 `action`、`reason`、`target_id`，`controller` 为 `digital_resident`。`select_match` 只记录合法阵营。不改持有者，不计分，不含墙后坐标。 | `UNeonRiftResidentPort` |
 | `FactionChosen` / `FactionRejected` | 选边。非法身体、或已锁队 | 大厅 |
 | `RoleChosen` / `RoleRejected` | 突进 `assault` / 支援 `support` / 侦察 `recon`。锁队后拒绝 | 大厅 |
 | `FactionsLocked` `RolesLocked` `MatchStarted` | 开局。`FactionsLocked.identities` 写下 body、faction、controller 三个字段。`role_select_open` 为 false | 子系统 |
@@ -98,6 +99,7 @@ PYTHONPATH=sim python3 -m steel_tide nr03 --check
 PYTHONPATH=sim python3 -m steel_tide m1 --check
 PYTHONPATH=sim python3 -m steel_tide m1-pass --check
 PYTHONPATH=sim python3 -m steel_tide m1-bot --check
+PYTHONPATH=sim python3 -m steel_tide m2-resident --check
 ```
 
 双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。

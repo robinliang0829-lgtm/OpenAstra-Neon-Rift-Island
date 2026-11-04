@@ -39,6 +39,7 @@ EVENT_NAMES = (
     "MoveRejected",
     "OvertimeStarted",
     "PointScored",
+    "ResidentDecision",
     "RoleChosen",
     "RoleRejected",
     "RolesLocked",
@@ -99,4 +100,5 @@ EVENT_GROUPS = {
         "RouteSelected",
     ),
     "BotPolicy": ("BotDecision",),
+    "ResidentPort": ("ResidentDecision",),
 }

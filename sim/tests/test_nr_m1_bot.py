@@ -7,7 +7,6 @@ from steel_tide.dual_log import diff_against_evidence
 from steel_tide.match import SteelTideMatch
 from steel_tide.nr_m1_bot import EVIDENCE_DIR, acceptance_errors, evaluate_slice, run_m1_bot_match
 from steel_tide.repro import scenario_no_double_hold
-from steel_tide.resident_port import DigitalResidentPort
 
 ROOT = CONFIG_PATH.parents[1]
 FRAMEWORK = (
@@ -56,24 +55,18 @@ class SliceTests(unittest.TestCase):
 
 
 class PortTests(unittest.TestCase):
-    def test_resident_port_does_not_decide(self):
-        port = DigitalResidentPort()
-        with self.assertRaises(NotImplementedError):
-            port.select_match({})
-        with self.assertRaises(NotImplementedError):
-            port.decide({})
+    def test_m1_runner_does_not_call_the_resident_port(self):
         policy = (ROOT / "sim" / "steel_tide" / "bot_policy.py").read_text(encoding="utf-8")
         runner = (ROOT / "sim" / "steel_tide" / "nr_m1_bot.py").read_text(encoding="utf-8")
         self.assertNotIn("DigitalResidentPort(", policy)
         self.assertNotIn("DigitalResidentPort(", runner)
+        self.assertNotIn("select_match(", runner)
         self.assertNotIn("place_for_test", policy)
         self.assertNotIn("place_for_test", runner)
         for path in FRAMEWORK:
             self.assertNotIn("UNeonRiftResidentPort", path.read_text(encoding="utf-8"))
-        stub = (ROOT / "Source" / "NeonRift" / "Private" / "NeonRiftResidentPort.cpp").read_text(encoding="utf-8")
-        self.assertIn("Empty on purpose", stub)
-        self.assertNotIn("NeonRiftEmit", stub)
-        self.assertNotIn("PointScored", stub)
+        port_cpp = (ROOT / "Source" / "NeonRift" / "Private" / "NeonRiftResidentPort.cpp").read_text(encoding="utf-8")
+        self.assertNotIn("PointScored", port_cpp)
 
     def test_decision_log_refuses_a_resident_controller(self):
         match = SteelTideMatch(load_config())

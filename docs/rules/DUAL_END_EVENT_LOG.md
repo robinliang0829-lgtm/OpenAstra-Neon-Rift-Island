@@ -106,6 +106,7 @@ EventName  {json}
 | `MoveRejected` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `OvertimeStarted` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `PointScored` | 不改变持有者 | 用 `payload.score` 覆盖镜像比分 | 不是打断 |
+| `ResidentDecision` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `RoleChosen` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `RoleRejected` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `RolesLocked` | 不改变持有者 | 不改变比分 | 不是打断 |
@@ -138,4 +139,12 @@ PYTHONPATH=sim python3 -m steel_tide m1-pass --check
 
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m1-bot --check
+```
+
+## NR-M2-resident
+
+同一套三端正文，schema 换成 `nr-m2-resident-dual-end-v1`。表头有 `identities`，另有 `digital_residents`。样例在 `docs/evidence/nr-m2-resident/`。`a2` 的 `controller` 是 `digital_resident`，决策事件是 `ResidentDecision`。其余三个驱动者仍是 `local_bot`，决策事件是 `BotDecision`。这一局在常规时间先到 2 分结束，日志里没有 `OvertimeStarted`。`ResidentDecision` 不写墙后坐标。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-resident --check
 ```

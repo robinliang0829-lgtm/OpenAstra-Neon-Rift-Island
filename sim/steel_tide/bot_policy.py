@@ -2,8 +2,8 @@
 
 Decisions are `BotDecision` events: action, reason, target_id. The resident
 adapter is `resident_port.DigitalResidentPort`. This module does not construct
-it and does not call it. `controller=local_bot` is not rewritten into
-`digital_resident`.
+it and does not call it. NR-M2-resident is the card that does. `controller=local_bot`
+is not rewritten into `digital_resident`.
 
 Hit stays server-only. When an assault shares the reader's anchor, the policy
 records `interrupt_channel` and the sim enqueues the server `hit`.
@@ -162,6 +162,8 @@ def _pending_pass(match: SteelTideMatch, combatant_id: str) -> bool:
 
 
 def _commit(match: SteelTideMatch, combatant, decision: Decision) -> None:
+    if combatant.controller not in ("local_bot", "digital_resident"):
+        return
     action = decision.action
     if action == "request_move":
         if not _enqueue_move(match, combatant, decision.goal or ""):
@@ -197,13 +199,22 @@ def _commit(match: SteelTideMatch, combatant, decision: Decision) -> None:
         )
     else:
         return
-    match.note_bot_decision(
-        combatant.id,
-        action,
-        decision.reason,
-        decision.target_id,
-        distance_m=decision.distance_m,
-    )
+    if combatant.controller == "local_bot":
+        match.note_bot_decision(
+            combatant.id,
+            action,
+            decision.reason,
+            decision.target_id,
+            distance_m=decision.distance_m,
+        )
+    elif combatant.controller == "digital_resident":
+        match.note_resident_decision(
+            combatant.id,
+            action,
+            decision.reason,
+            decision.target_id,
+            distance_m=decision.distance_m,
+        )
 
 
 def _enqueue_move(match: SteelTideMatch, combatant, goal: str) -> bool:

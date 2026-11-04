@@ -1,0 +1,120 @@
+# schema nr-m2-resident-dual-end-v1
+# authority sim/steel_tide
+# end client-a
+# viewpoint_client client-a
+# controlled a1
+# local_bots a3,b2,b3
+# roster a1:human:A:client-a,a2:digital_resident:A:bot-a2,a3:local_bot:A:bot-a3,b1:human:B:client-b,b2:local_bot:B:bot-b2,b3:local_bot:B:bot-b3
+# mirrored_holder -
+# mirrored_score A=2 B=0
+# event_lines 107
+# identities a1:humanoid_robot:A:human,a2:humanoid_robot:A:digital_resident,a3:human:A:local_bot,b1:humanoid_robot:B:human,b2:humanoid_robot:B:local_bot,b3:beast:B:local_bot
+# digital_residents a2
+# comparable event_body_identical
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-a", "combatant_id": "a1", "controller": "human"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a1", "role": "assault"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-a2", "combatant_id": "a2", "controller": "digital_resident"}
+   0.000  ResidentDecision  {"action": "select_match", "combatant_id": "a2", "controller": "digital_resident", "join": true, "reason": "legal_faction", "role": "support", "target_id": "A"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a2", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a2", "role": "support"}
+   0.000  CombatantJoined  {"body": "human", "client_id": "bot-a3", "combatant_id": "a3", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "human", "combatant_id": "a3", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a3", "role": "recon"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-b", "combatant_id": "b1", "controller": "human"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b1", "role": "recon"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-b2", "combatant_id": "b2", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b2", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b2", "role": "assault"}
+   0.000  CombatantJoined  {"body": "beast", "client_id": "bot-b3", "combatant_id": "b3", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "beast", "combatant_id": "b3", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b3", "role": "support"}
+   0.000  FactionsLocked  {"assignments": {"a1": "A", "a2": "A", "a3": "A", "b1": "B", "b2": "B", "b3": "B"}, "identities": {"a1": {"body": "humanoid_robot", "controller": "human", "faction": "A"}, "a2": {"body": "humanoid_robot", "controller": "digital_resident", "faction": "A"}, "a3": {"body": "human", "controller": "local_bot", "faction": "A"}, "b1": {"body": "humanoid_robot", "controller": "human", "faction": "B"}, "b2": {"body": "humanoid_robot", "controller": "local_bot", "faction": "B"}, "b3": {"body": "beast", "controller": "local_bot", "faction": "B"}}}
+   0.000  RolesLocked  {"assignments": {"a1": "assault", "a2": "support", "a3": "recon", "b1": "recon", "b2": "assault", "b3": "support"}}
+   0.000  MatchStarted  {"deadline_ms": 360000, "points_to_win": 2, "role_select_open": false}
+   0.000  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "contest_core", "target_id": "core"}
+   0.000  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   0.000  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   0.000  BotDecision  {"action": "request_move", "combatant_id": "b3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   2.250  MoveCompleted  {"combatant_id": "a2", "from": "spawn_a", "route": "repair_alley", "to": "alley_a", "travel_ms": 2250}
+   2.250  MoveCompleted  {"combatant_id": "a3", "from": "spawn_a", "route": "repair_alley", "to": "alley_a", "travel_ms": 2250}
+   2.250  MoveCompleted  {"combatant_id": "b2", "from": "spawn_b", "route": "repair_alley", "to": "alley_b", "travel_ms": 2250}
+   2.250  MoveCompleted  {"combatant_id": "b3", "from": "spawn_b", "route": "repair_alley", "to": "alley_b", "travel_ms": 2250}
+   2.250  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "contest_core", "target_id": "core"}
+   2.250  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   2.250  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   2.250  BotDecision  {"action": "request_move", "combatant_id": "b3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   8.000  BridgeWarningStarted  {"alarm_started": true, "alarm_with": "span_light_strip", "cues": ["water_reflection", "span_light_strip", "alarm"], "lead_ms": 4000, "light_strip_count": 5, "light_strip_index": 0, "offset_ms": 0, "readable_without_reflection": true, "sequence_ms": 4000}
+   8.250  MoveCompleted  {"combatant_id": "a2", "from": "alley_a", "route": "repair_alley", "to": "alley_mid", "travel_ms": 6000}
+   8.250  MoveCompleted  {"combatant_id": "a3", "from": "alley_a", "route": "repair_alley", "to": "alley_mid", "travel_ms": 6000}
+   8.250  MoveCompleted  {"combatant_id": "b2", "from": "alley_b", "route": "repair_alley", "to": "alley_mid", "travel_ms": 6000}
+   8.250  MoveCompleted  {"combatant_id": "b3", "from": "alley_b", "route": "repair_alley", "to": "alley_mid", "travel_ms": 6000}
+   8.250  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "contest_core", "target_id": "core"}
+   8.250  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   8.250  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   8.250  BotDecision  {"action": "request_move", "combatant_id": "b3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+   9.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 1, "offset_ms": 1000}
+  10.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 2, "offset_ms": 2000}
+  10.500  MoveCompleted  {"combatant_id": "a2", "from": "alley_mid", "route": "repair_alley", "to": "center", "travel_ms": 2250}
+  10.500  MoveCompleted  {"combatant_id": "a3", "from": "alley_mid", "route": "repair_alley", "to": "center", "travel_ms": 2250}
+  10.500  MoveCompleted  {"combatant_id": "b2", "from": "alley_mid", "route": "repair_alley", "to": "center", "travel_ms": 2250}
+  10.500  MoveCompleted  {"combatant_id": "b3", "from": "alley_mid", "route": "repair_alley", "to": "center", "travel_ms": 2250}
+  10.500  ResidentDecision  {"action": "pick_core", "combatant_id": "a2", "controller": "digital_resident", "reason": "contest_core", "target_id": "core"}
+  10.500  BotDecision  {"action": "pick_core", "combatant_id": "a3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+  10.500  BotDecision  {"action": "pick_core", "combatant_id": "b2", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+  10.500  BotDecision  {"action": "pick_core", "combatant_id": "b3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+  10.500  CorePicked  {"anchor": "center", "client_id": "bot-a2", "combatant_id": "a2"}
+  10.500  CorePickRejected  {"client_id": "bot-a3", "combatant_id": "a3", "reason": "already_held"}
+  10.500  CorePickRejected  {"client_id": "bot-b2", "combatant_id": "b2", "reason": "already_held"}
+  10.500  CorePickRejected  {"client_id": "bot-b3", "combatant_id": "b3", "reason": "already_held"}
+  10.500  ResidentDecision  {"action": "pass_core", "combatant_id": "a2", "controller": "digital_resident", "distance_m": 0.0, "reason": "close_range_pass", "target_id": "a3"}
+  10.500  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "interrupt_channel", "target_id": "a2"}
+  10.500  CorePassed  {"from_id": "a2", "to_id": "a3"}
+  10.500  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "score_path", "target_id": "terminal_b"}
+  11.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 3, "offset_ms": 3000}
+  12.000  BridgeWarningCompleted  {"alarm_started_with": "span_light_strip", "elapsed_ms": 4000, "lead_ms": 4000, "light_strip_count": 5, "light_strip_index": 4, "readable_without_reflection": true, "sequence_ms": 4000}
+  12.000  BridgeStateChanged  {"state": "connected"}
+  12.750  MoveCompleted  {"combatant_id": "b2", "from": "center", "route": "repair_alley", "to": "alley_mid", "travel_ms": 2250}
+  12.750  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "interrupt_channel", "target_id": "a3"}
+  13.500  MoveCompleted  {"combatant_id": "a3", "from": "center", "route": "repair_alley", "to": "alley_mid", "travel_ms": 3000}
+  13.500  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "score_path", "target_id": "terminal_b"}
+  18.750  MoveCompleted  {"combatant_id": "b2", "from": "alley_mid", "route": "repair_alley", "to": "alley_b", "travel_ms": 6000}
+  18.750  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "interrupt_channel", "target_id": "a3"}
+  21.000  MoveCompleted  {"combatant_id": "b2", "from": "alley_b", "route": "repair_alley", "to": "spawn_b", "travel_ms": 2250}
+  21.000  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "interrupt_channel", "target_id": "a3"}
+  21.500  MoveCompleted  {"combatant_id": "a3", "from": "alley_mid", "route": "repair_alley", "to": "alley_b", "travel_ms": 8000}
+  21.500  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "score_path", "target_id": "terminal_b"}
+  22.500  MoveCompleted  {"combatant_id": "b2", "from": "spawn_b", "route": "repair_alley", "to": "terminal_b", "travel_ms": 1500}
+  24.500  MoveCompleted  {"combatant_id": "a3", "from": "alley_b", "route": "repair_alley", "to": "spawn_b", "travel_ms": 3000}
+  24.500  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "score_path", "target_id": "terminal_b"}
+  26.500  MoveCompleted  {"combatant_id": "a3", "from": "spawn_b", "route": "repair_alley", "to": "terminal_b", "travel_ms": 2000}
+  26.500  BotDecision  {"action": "begin_score", "combatant_id": "a3", "controller": "local_bot", "reason": "score_path", "target_id": "terminal_b"}
+  26.500  ScoreChannelStarted  {"combatant_id": "a3", "ends_ms": 29500, "terminal": "terminal_b"}
+  26.500  BotDecision  {"action": "interrupt_channel", "combatant_id": "b2", "controller": "local_bot", "reason": "contest_channel", "target_id": "a3"}
+  27.500  ScoreChannelInterrupted  {"combatant_id": "a3", "elapsed_ms": 1000, "reason": "hit"}
+  27.500  BotDecision  {"action": "begin_score", "combatant_id": "a3", "controller": "local_bot", "reason": "score_path", "target_id": "terminal_b"}
+  27.500  ScoreChannelStarted  {"combatant_id": "a3", "ends_ms": 30500, "terminal": "terminal_b"}
+  30.500  PointScored  {"combatant_id": "a3", "faction": "A", "points": 1, "score": {"A": 1, "B": 0}}
+  30.500  CoreReturnedToCenter  {"anchor": "center", "scoring_faction": "A"}
+  30.500  ResidentDecision  {"action": "pick_core", "combatant_id": "a2", "controller": "digital_resident", "reason": "contest_core", "target_id": "core"}
+  30.500  BotDecision  {"action": "request_move", "combatant_id": "a3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+  30.500  BotDecision  {"action": "request_move", "combatant_id": "b2", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+  30.500  BotDecision  {"action": "pick_core", "combatant_id": "b3", "controller": "local_bot", "reason": "contest_core", "target_id": "core"}
+  30.500  MoveCompleted  {"combatant_id": "a3", "from": "terminal_b", "route": "repair_alley", "to": "spawn_b", "travel_ms": 1500}
+  30.500  MoveCompleted  {"combatant_id": "b2", "from": "terminal_b", "route": "repair_alley", "to": "spawn_b", "travel_ms": 1500}
+  30.500  CorePicked  {"anchor": "center", "client_id": "bot-a2", "combatant_id": "a2"}
+  30.500  CorePickRejected  {"client_id": "bot-b3", "combatant_id": "b3", "reason": "already_held"}
+  30.500  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "score_path", "target_id": "terminal_b"}
+  30.500  MoveCompleted  {"combatant_id": "a2", "from": "center", "route": "repair_alley", "to": "alley_mid", "travel_ms": 3000}
+  30.500  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "score_path", "target_id": "terminal_b"}
+  38.500  MoveCompleted  {"combatant_id": "a2", "from": "alley_mid", "route": "repair_alley", "to": "alley_b", "travel_ms": 8000}
+  38.500  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "score_path", "target_id": "terminal_b"}
+  41.500  MoveCompleted  {"combatant_id": "a2", "from": "alley_b", "route": "repair_alley", "to": "spawn_b", "travel_ms": 3000}
+  41.500  ResidentDecision  {"action": "request_move", "combatant_id": "a2", "controller": "digital_resident", "reason": "score_path", "target_id": "terminal_b"}
+  43.500  MoveCompleted  {"combatant_id": "a2", "from": "spawn_b", "route": "repair_alley", "to": "terminal_b", "travel_ms": 2000}
+  43.500  ResidentDecision  {"action": "begin_score", "combatant_id": "a2", "controller": "digital_resident", "reason": "score_path", "target_id": "terminal_b"}
+  43.500  ScoreChannelStarted  {"combatant_id": "a2", "ends_ms": 46500, "terminal": "terminal_b"}
+  46.500  PointScored  {"combatant_id": "a2", "faction": "A", "points": 2, "score": {"A": 2, "B": 0}}
+  46.500  CoreReturnedToCenter  {"anchor": "center", "scoring_faction": "A"}
+  46.500  MatchSettled  {"kind": "points", "role_select_open": false, "score": {"A": 2, "B": 0}, "winner": "A"}

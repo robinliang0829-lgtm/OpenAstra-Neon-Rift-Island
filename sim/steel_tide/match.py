@@ -197,7 +197,7 @@ class SteelTideMatch:
         """Record a local_bot choice. Does not grant the core and does not score.
 
         `digital_resident` is a different controller. This method refuses it.
-        The resident port is not called from here.
+        Use `note_resident_decision` for that controller.
         """
         combatant = self.combatants[combatant_id]
         if combatant.controller != "local_bot":
@@ -212,6 +212,51 @@ class SteelTideMatch:
         if distance_m is not None:
             payload["distance_m"] = distance_m
         self._emit("BotDecision", payload)
+
+    def note_resident_decision(
+        self,
+        combatant_id: str,
+        action: str,
+        reason: str,
+        target_id: str,
+        distance_m: float | None = None,
+        role: str | None = None,
+        join: bool | None = None,
+    ) -> None:
+        """Record a digital_resident choice. Does not grant the core and does not score.
+
+        `local_bot` stays on `note_bot_decision`. This method refuses that controller.
+        """
+        combatant = self.combatants[combatant_id]
+        if combatant.controller != "digital_resident":
+            raise RuntimeError("resident decisions are only recorded for digital_resident")
+        payload: dict = {
+            "action": action,
+            "combatant_id": combatant_id,
+            "controller": combatant.controller,
+            "reason": reason,
+            "target_id": target_id,
+        }
+        if distance_m is not None:
+            payload["distance_m"] = distance_m
+        if join is not None:
+            payload["join"] = join
+        if role is not None:
+            payload["role"] = role
+        self._emit("ResidentDecision", payload)
+
+    def anchor_visible(self, observer_anchor: str | None, target_anchor: str | None) -> bool:
+        """Whether a human at `observer_anchor` can see `target_anchor`.
+
+        The same volume is visible. A different repair-alley anchor is behind cover.
+        This is a bool, not a coordinate.
+        """
+        if observer_anchor is not None and observer_anchor == target_anchor:
+            return True
+        alley = {"alley_a", "alley_mid", "alley_b"}
+        if observer_anchor in alley or target_anchor in alley:
+            return False
+        return observer_anchor is not None and target_anchor is not None
 
     def place_for_test(
         self,
@@ -640,12 +685,7 @@ class SteelTideMatch:
         return None
 
     def _target_visible(self, observer: Combatant, target: Combatant) -> bool:
-        if observer.anchor is not None and observer.anchor == target.anchor:
-            return True
-        alley = {"alley_a", "alley_mid", "alley_b"}
-        if observer.anchor in alley or target.anchor in alley:
-            return False
-        return observer.anchor is not None and target.anchor is not None
+        return self.anchor_visible(observer.anchor, target.anchor)
 
     def _set_route(self, cmd: Command) -> None:
         combatant_id = cmd.payload["combatant_id"]
