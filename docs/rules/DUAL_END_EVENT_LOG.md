@@ -148,3 +148,11 @@ PYTHONPATH=sim python3 -m steel_tide m1-bot --check
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-resident --check
 ```
+
+## NR-M2-roles
+
+同一套三端正文，schema 换成 `nr-m2-roles-dual-end-v1`。表头有 `identities`，另有 `digital_residents`。样例在 `docs/evidence/nr-m2-roles/`。`a2` 仍是 `digital_resident`，其余三个驱动者仍是 `local_bot`。这一局在常规时间先到 2 分结束，日志里没有 `OvertimeStarted`。三种 `AbilityUsed` 都在：`dash`、`shield`、`mark`。使用能力时，`BotDecision` / `ResidentDecision` 的 `reason` 等于该人的岗位 id。侦察拒绝看不见的目标时，决策和 `AbilityRejected` 都不写坐标。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-roles --check
+```

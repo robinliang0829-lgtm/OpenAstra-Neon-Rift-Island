@@ -193,6 +193,8 @@ class SteelTideMatch:
         reason: str,
         target_id: str,
         distance_m: float | None = None,
+        ability: str | None = None,
+        role: str | None = None,
     ) -> None:
         """Record a local_bot choice. Does not grant the core and does not score.
 
@@ -211,6 +213,10 @@ class SteelTideMatch:
         }
         if distance_m is not None:
             payload["distance_m"] = distance_m
+        if ability is not None:
+            payload["ability"] = ability
+        if role is not None:
+            payload["role"] = role
         self._emit("BotDecision", payload)
 
     def note_resident_decision(
@@ -222,6 +228,7 @@ class SteelTideMatch:
         distance_m: float | None = None,
         role: str | None = None,
         join: bool | None = None,
+        ability: str | None = None,
     ) -> None:
         """Record a digital_resident choice. Does not grant the core and does not score.
 
@@ -243,6 +250,8 @@ class SteelTideMatch:
             payload["join"] = join
         if role is not None:
             payload["role"] = role
+        if ability is not None:
+            payload["ability"] = ability
         self._emit("ResidentDecision", payload)
 
     def anchor_visible(self, observer_anchor: str | None, target_anchor: str | None) -> bool:
