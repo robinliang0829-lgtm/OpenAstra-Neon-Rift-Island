@@ -54,7 +54,7 @@
 
 | 事件 | 何时由子系统发出 | 场景物体 |
 | --- | --- | --- |
-| `AbilityUsed` / `AbilityRejected` | 突进、支援、侦察的可调冷却。错岗位、冷却中、桥未通或目标在掩体后则拒绝。不是新里程碑。 | `UNeonRiftFactionSelect` |
+| `AbilityUsed` / `AbilityRejected` | 突进、支援、侦察的可调冷却。错岗位、冷却中、桥未通、目标在掩体后，或突进时手里有芯（`holding_core`，不消耗冷却）则拒绝。传出或丢下芯之后可以再突进。不是新里程碑。 | `UNeonRiftFactionSelect` |
 | `CombatantJoined` | 进局，写明 body、controller、client | 玩家或 bot |
 | `FactionChosen` / `FactionRejected` | 选边。非法身体、或已锁队 | 大厅 |
 | `RoleChosen` / `RoleRejected` | 突进 `assault` / 支援 `support` / 侦察 `recon`。锁队后拒绝 | 大厅 |
@@ -80,9 +80,9 @@
 | `BridgeOccupantNudged` | 断开时把跨度上的人挪到本方桥头，不嵌进网格 | `ANeonRiftBridgeWarn` |
 | `MatchClockExpired` | 提案 360 秒。`role_select_open` 仍为 false | `ANeonRiftTerminalScore` |
 | `OvertimeStarted` | 平分才进入。提案 60 秒。打破平局的第一笔得分立即结束：未到 `points_to_win` 时 `kind=score`，到达时 `kind=points`。这一笔若把比分打回相同，立即 `kind=draw`。60 秒结束仍相同也是 `kind=draw`，不开启第二段，不重新选岗位 | `ANeonRiftTerminalScore` |
-| `MatchSettled` | 只发一次。`kind` 为 `points`、`score` 或 `draw` | `ANeonRiftTerminalScore` |
+| `MatchSettled` | 只发一次。`kind` 为 `points`、`score` 或 `draw`。常规时间先到 `points_to_win` 立即 `kind=points`，不进入加时 | `ANeonRiftTerminalScore` |
 
-持芯者速度用 `walk_speed_mps`（6，即 600 uu/s），不能冲刺。未持芯的原型移动用 `sprint_speed_mps`（8，即 800 uu/s）。1 米 = 100 UE 单位。坐标：模拟 x → UE X，模拟 y → UE Y，Z 向上，甲板 Z = 0。锚点表在 `config/steel_tide_greybox.json`。
+持芯者速度用 `walk_speed_mps`（6，即 600 uu/s），不能冲刺，也不能突进。未持芯的原型移动用 `sprint_speed_mps`（8，即 800 uu/s）。1 米 = 100 UE 单位。坐标：模拟 x → UE X，模拟 y → UE Y，Z 向上，甲板 Z = 0。锚点表在 `config/steel_tide_greybox.json`。
 
 ## 和原型对日志
 
@@ -91,6 +91,7 @@ PYTHONPATH=sim python3 -m steel_tide repro
 PYTHONPATH=sim python3 -m steel_tide nr02 --check
 PYTHONPATH=sim python3 -m steel_tide nr03 --check
 PYTHONPATH=sim python3 -m steel_tide m1 --check
+PYTHONPATH=sim python3 -m steel_tide m1-pass --check
 ```
 
 双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。
