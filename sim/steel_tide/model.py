@@ -49,6 +49,8 @@ class Combatant:
     respawn_ms: int | None = None
     protection_until_ms: int = 0
     preferred_route: str = "repair_alley"
+    ability_ready_ms: int = 0
+    shield_charges: int = 0
 
 
 @dataclass

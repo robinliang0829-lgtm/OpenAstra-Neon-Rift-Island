@@ -6,6 +6,8 @@ broadcast these names. They do not decide the match.
 """
 
 EVENT_NAMES = (
+    "AbilityRejected",
+    "AbilityUsed",
     "ActorDowned",
     "ActorRespawned",
     "BridgeOccupantNudged",
@@ -58,6 +60,8 @@ EVENT_GROUPS = {
         "CoreReturnedToCenter",
     ),
     "FactionSelect": (
+        "AbilityRejected",
+        "AbilityUsed",
         "CombatantJoined",
         "FactionChosen",
         "FactionRejected",

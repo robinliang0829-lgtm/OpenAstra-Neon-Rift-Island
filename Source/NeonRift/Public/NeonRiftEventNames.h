@@ -5,6 +5,8 @@
 /** Canonical Steel Tide event names. Must match sim/steel_tide/events.py. */
 namespace NeonRiftEvents
 {
+	inline const TCHAR* const AbilityRejected = TEXT("AbilityRejected");
+	inline const TCHAR* const AbilityUsed = TEXT("AbilityUsed");
 	inline const TCHAR* const ActorDowned = TEXT("ActorDowned");
 	inline const TCHAR* const ActorRespawned = TEXT("ActorRespawned");
 	inline const TCHAR* const BridgeOccupantNudged = TEXT("BridgeOccupantNudged");

@@ -49,6 +49,7 @@
 
 | 事件 | 何时由子系统发出 | 场景物体 |
 | --- | --- | --- |
+| `AbilityUsed` / `AbilityRejected` | 突进、支援、侦察的可调冷却。错岗位、冷却中、桥未通或目标在掩体后则拒绝。不是新里程碑。 | `UNeonRiftFactionSelect` |
 | `CombatantJoined` | 进局，写明 body、controller、client | 玩家或 bot |
 | `FactionChosen` / `FactionRejected` | 选边。非法身体、或已锁队 | 大厅 |
 | `RoleChosen` / `RoleRejected` | 突进 `assault` / 支援 `support` / 侦察 `recon`。锁队后拒绝 | 大厅 |

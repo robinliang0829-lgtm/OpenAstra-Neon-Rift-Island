@@ -2,6 +2,16 @@
 #include "NeonRiftEventNames.h"
 #include "NeonRiftMatchSubsystem.h"
 
+void UNeonRiftFactionSelect::EmitAbilityRejected(const FString& PayloadJson)
+{
+	NeonRiftEmit(this, NeonRiftEvents::AbilityRejected, PayloadJson);
+}
+
+void UNeonRiftFactionSelect::EmitAbilityUsed(const FString& PayloadJson)
+{
+	NeonRiftEmit(this, NeonRiftEvents::AbilityUsed, PayloadJson);
+}
+
 void UNeonRiftFactionSelect::EmitCombatantJoined(const FString& PayloadJson)
 {
 	NeonRiftEmit(this, NeonRiftEvents::CombatantJoined, PayloadJson);

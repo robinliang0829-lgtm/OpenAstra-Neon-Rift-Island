@@ -60,6 +60,7 @@ PYTHONPATH=sim python3 -m steel_tide
   - [04_首局玩法与交接.txt](docs/kickoff/04_首局玩法与交接.txt)
   - [refs/01_Neon_Bay.png](docs/kickoff/refs/01_Neon_Bay.png) 是 2026-10-20 环境参考，不是新的阵营表，也不是实机截图
   - [refs/02_Genesis_Workflow.png](docs/kickoff/refs/02_Genesis_Workflow.png) 是创世岛工作流原图，本岛不替换它
+- 待命用的色板和肩章 id：[docs/art/PALETTE_AND_IDS.md](docs/art/PALETTE_AND_IDS.md)。这不是新的里程碑。
 
 冻结页里的创世岛主线用 Godot，工序名字仍写着 PM-Astra。本岛的 UE 工程路径和引擎小版本由 PM-钢潮岛锁定。进引擎的一步是 UE5，以开工包里的 SVG 为准。创世岛和猎手岛继续各自施工。本仓不引用那两个工程，也不另起第二套引擎。Tripo 仍是点召，这次开工不消耗 Tripo 额度，也不依赖另一台机器上的 Blender 压缩包。
 

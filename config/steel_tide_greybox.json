@@ -24,6 +24,11 @@
   "terminal_half_extent_m": 2.0,
   "core_reset_timeout_seconds": 8,
   "roles": ["assault", "support", "recon"],
+  "role_abilities": {
+    "assault": {"id": "dash", "label_zh": "突进", "cooldown_seconds": 8, "range_m": 12},
+    "support": {"id": "shield", "label_zh": "支援", "cooldown_seconds": 12, "range_m": 0},
+    "recon": {"id": "mark", "label_zh": "侦察", "cooldown_seconds": 10, "range_m": 0}
+  },
   "controllers": ["human", "digital_resident", "local_bot"],
   "faction_rule": {
     "human": ["A"],

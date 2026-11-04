@@ -242,6 +242,7 @@ class SteelTideMatch:
     def _kind_priority(self, kind: str) -> int:
         order = {
             "request_move": 10,
+            "use_ability": 15,
             "hit": 20,
             "leave_terminal": 20,
             "drop_core": 20,
@@ -274,6 +275,8 @@ class SteelTideMatch:
             self._begin_score(cmd)
         elif kind == "set_route":
             self._set_route(cmd)
+        elif kind == "use_ability":
+            self._use_ability(cmd)
         else:
             raise ValueError(f"unknown command {kind}")
 
@@ -336,6 +339,10 @@ class SteelTideMatch:
         target = self.combatants[target_id]
         if self.t_ms < target.protection_until_ms:
             self._emit("HitIgnored", {"target_id": target_id, "reason": "spawn_protection"})
+            return
+        if target.shield_charges > 0:
+            target.shield_charges -= 1
+            self._emit("HitIgnored", {"target_id": target_id, "reason": "shield"})
             return
         if self.channel and self.channel.combatant_id == target_id:
             self._interrupt(target_id, "hit")
@@ -460,6 +467,95 @@ class SteelTideMatch:
             "ScoreChannelStarted",
             {"combatant_id": combatant_id, "terminal": terminal, "ends_ms": self.channel.ends_ms},
         )
+
+    def _use_ability(self, cmd: Command) -> None:
+        combatant_id = cmd.payload["combatant_id"]
+        if not self._owns(cmd, combatant_id):
+            self._emit("AbilityRejected", {"combatant_id": combatant_id, "reason": "wrong_client"})
+            return
+        combatant = self.combatants[combatant_id]
+        if self.phase not in ("live", "overtime"):
+            self._emit("AbilityRejected", {"combatant_id": combatant_id, "reason": "not_live"})
+            return
+        if combatant.downed or combatant.role is None:
+            self._emit("AbilityRejected", {"combatant_id": combatant_id, "reason": "downed"})
+            return
+        spec = self.config.role_abilities[combatant.role]
+        requested = cmd.payload.get("ability")
+        if requested != spec["id"]:
+            self._emit(
+                "AbilityRejected",
+                {"combatant_id": combatant_id, "reason": "wrong_role", "ability": requested, "role": combatant.role},
+            )
+            return
+        if self.t_ms < combatant.ability_ready_ms:
+            self._emit(
+                "AbilityRejected",
+                {"combatant_id": combatant_id, "reason": "cooldown", "ready_ms": combatant.ability_ready_ms},
+            )
+            return
+        reason = self._apply_ability(combatant, spec, cmd)
+        if reason is not None:
+            payload = {"combatant_id": combatant_id, "reason": reason, "ability": spec["id"]}
+            self._emit("AbilityRejected", payload)
+            return
+        combatant.ability_ready_ms = self.t_ms + self.config.seconds_to_ms(spec["cooldown_seconds"])
+        self._emit(
+            "AbilityUsed",
+            {
+                "combatant_id": combatant_id,
+                "ability": spec["id"],
+                "role": combatant.role,
+                "faction": combatant.faction,
+                "ready_ms": combatant.ability_ready_ms,
+                "target_id": cmd.payload.get("target_id"),
+            },
+        )
+
+    def _apply_ability(self, combatant: Combatant, spec: dict, cmd: Command) -> str | None:
+        ability = spec["id"]
+        if ability == "dash":
+            return self._dash(combatant, cmd.payload.get("dest"), float(spec["range_m"]))
+        if ability == "shield":
+            combatant.shield_charges = 1
+            return None
+        if ability == "mark":
+            return self._mark(combatant, cmd.payload.get("target_id"))
+        return "unknown_ability"
+
+    def _dash(self, combatant: Combatant, dest: str | None, max_range_m: float) -> str | None:
+        if not dest or not combatant.anchor:
+            return "no_edge"
+        edge = step_edge(self.config, combatant.anchor, dest, combatant.preferred_route, self.bridge_state)
+        if edge is None:
+            if self._bridge_blocks(combatant.anchor, dest):
+                return "bridge_blocked"
+            return "no_edge"
+        if edge.length_m > max_range_m:
+            return "out_of_range"
+        combatant.anchor = dest
+        combatant.pos = self.config.anchors[dest]
+        combatant.anchor_since_ms = self.t_ms
+        if self.core.holder_id == combatant.id:
+            self.core.anchor = dest
+            self.core.pos = combatant.pos
+        return None
+
+    def _mark(self, combatant: Combatant, target_id: str | None) -> str | None:
+        target = self.combatants.get(target_id or "")
+        if target is None:
+            return "no_target"
+        if not self._target_visible(combatant, target):
+            return "not_visible"
+        return None
+
+    def _target_visible(self, observer: Combatant, target: Combatant) -> bool:
+        if observer.anchor is not None and observer.anchor == target.anchor:
+            return True
+        alley = {"alley_a", "alley_mid", "alley_b"}
+        if observer.anchor in alley or target.anchor in alley:
+            return False
+        return observer.anchor is not None and target.anchor is not None
 
     def _set_route(self, cmd: Command) -> None:
         combatant_id = cmd.payload["combatant_id"]

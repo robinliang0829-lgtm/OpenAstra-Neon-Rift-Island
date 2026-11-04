@@ -39,6 +39,7 @@ class SteelTideConfig:
     core_reset_timeout_seconds: float
     ue_units_per_meter: int
     roles: tuple[str, ...]
+    role_abilities: dict[str, dict]
     faction_rule: dict[str, tuple[str, ...]]
     badges: dict[str, dict[str, str]]
     score_terminal: dict[str, str]
@@ -109,6 +110,7 @@ def load_config(path: Path | None = None) -> SteelTideConfig:
         core_reset_timeout_seconds=float(raw["core_reset_timeout_seconds"]),
         ue_units_per_meter=int(raw["ue_units_per_meter"]),
         roles=tuple(raw["roles"]),
+        role_abilities=raw["role_abilities"],
         faction_rule=faction_rule,
         badges=raw["badges"],
         score_terminal=dict(raw["terminals"]["scores_at"]),

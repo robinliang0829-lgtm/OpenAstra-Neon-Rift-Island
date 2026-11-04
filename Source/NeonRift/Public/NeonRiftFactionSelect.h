@@ -12,6 +12,10 @@ class NEONRIFT_API UNeonRiftFactionSelect : public UActorComponent
 
 public:
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
+	void EmitAbilityRejected(const FString& PayloadJson);
+	UFUNCTION(BlueprintCallable, Category="NeonRift")
+	void EmitAbilityUsed(const FString& PayloadJson);
+	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void EmitCombatantJoined(const FString& PayloadJson);
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void EmitFactionChosen(const FString& PayloadJson);
