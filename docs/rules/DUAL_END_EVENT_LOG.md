@@ -77,8 +77,10 @@ EventName  {json}
 | `AbilityUsed` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `ActorDowned` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `ActorRespawned` | 不改变持有者 | 不改变比分 | 不是打断 |
+| `BridgeLightStripAdvanced` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `BridgeOccupantNudged` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `BridgeStateChanged` | 不改变持有者 | 不改变比分 | 不是打断 |
+| `BridgeWarningCompleted` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `BridgeWarningStarted` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `CombatantJoined` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `CoreDropRejected` | 不改变持有者 | 不改变比分 | 不是打断 |

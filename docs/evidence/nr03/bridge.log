@@ -1,0 +1,11 @@
+# schema nr03-bridge-v1
+# authority sim/steel_tide
+# bridge_warning_seconds 4
+# readable_without_reflection true
+# note event timing only; no audio file and no device recording
+   6.000  BridgeWarningStarted  {"alarm_started": true, "alarm_with": "span_light_strip", "cues": ["water_reflection", "span_light_strip", "alarm"], "lead_ms": 4000, "light_strip_count": 5, "light_strip_index": 0, "offset_ms": 0, "readable_without_reflection": true, "sequence_ms": 4000}
+   7.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 1, "offset_ms": 1000}
+   8.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 2, "offset_ms": 2000}
+   9.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 3, "offset_ms": 3000}
+  10.000  BridgeWarningCompleted  {"alarm_started_with": "span_light_strip", "elapsed_ms": 4000, "lead_ms": 4000, "light_strip_count": 5, "light_strip_index": 4, "readable_without_reflection": true, "sequence_ms": 4000}
+  10.000  BridgeStateChanged  {"state": "connected"}

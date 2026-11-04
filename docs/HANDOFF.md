@@ -6,6 +6,8 @@
 
 本环境没有装 UE，也没有跑过编辑器。NR-02 的规则侧已经在仓里：事件名、双端日志、3v3 样例，以及只订阅、不记分的 GameMode / GameState / PlayerState。上机验收差的是你本机的引擎。
 
+NR-03 规格已入库、实机录像仍等 UE
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。

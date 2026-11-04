@@ -11,6 +11,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / "config" / "steel_tide_greybox.json"
 
 
+def _json_bool(raw: dict, key: str) -> bool:
+    value = raw[key]
+    if not isinstance(value, bool):
+        raise ValueError(f"{key} must be a JSON boolean")
+    return value
+
+
 @dataclass(frozen=True)
 class Edge:
     a: str
@@ -33,6 +40,7 @@ class SteelTideConfig:
     spawn_protection_seconds: float
     score_channel_seconds: float
     bridge_warning_seconds: float
+    readable_without_reflection: bool
     pass_range_m: float
     pickup_radius_m: float
     terminal_half_extent_m: float
@@ -73,6 +81,10 @@ class SteelTideConfig:
     def bridge_warning_ms(self) -> int:
         return self.seconds_to_ms(self.bridge_warning_seconds)
 
+    def light_strip_lamps(self) -> int:
+        """Lamps along the span. The first shares the alarm; the last lands on connect."""
+        return max(int(self.bridge_warning_seconds), 1) + 1
+
     @property
     def core_reset_timeout_ms(self) -> int:
         return self.seconds_to_ms(self.core_reset_timeout_seconds)
@@ -104,6 +116,7 @@ def load_config(path: Path | None = None) -> SteelTideConfig:
         spawn_protection_seconds=float(raw["spawn_protection_seconds"]),
         score_channel_seconds=float(raw["score_channel_seconds"]),
         bridge_warning_seconds=float(raw["bridge_warning_seconds"]),
+        readable_without_reflection=_json_bool(raw, "readable_without_reflection"),
         pass_range_m=float(raw["pass_range_m"]),
         pickup_radius_m=float(raw["pickup_radius_m"]),
         terminal_half_extent_m=float(raw["terminal_half_extent_m"]),

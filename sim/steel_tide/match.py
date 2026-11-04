@@ -34,6 +34,9 @@ class SteelTideMatch:
         self.bridge_warning_ms: int | None = None
         self.bridge_connect_ms: int | None = None
         self.bridge_connected_ms: int | None = None
+        self.light_strip_queue: list[tuple[int, int]] = []
+        self.light_strip_count = 0
+        self.warning_started_ms: int | None = None
         self.disconnect_at_ms: int | None = None
         self.settled_kind: str | None = None
 
@@ -194,6 +197,9 @@ class SteelTideMatch:
         self.bridge_connect_ms = connect_ms
         warning = connect_ms - self.config.bridge_warning_ms
         self.bridge_warning_ms = max(warning, self.t_ms)
+        self.light_strip_queue = []
+        self.light_strip_count = 0
+        self.warning_started_ms = None
 
     def schedule_bridge_disconnect(self, at_seconds: float) -> None:
         self.disconnect_at_ms = self.config.seconds_to_ms(at_seconds)
@@ -215,6 +221,8 @@ class SteelTideMatch:
                 times.append(combatant.respawn_ms)
         if self.bridge_warning_ms is not None:
             times.append(self.bridge_warning_ms)
+        for when, _index in self.light_strip_queue:
+            times.append(when)
         if self.bridge_connect_ms is not None:
             times.append(self.bridge_connect_ms)
         if self.disconnect_at_ms is not None:
@@ -637,21 +645,84 @@ class SteelTideMatch:
         self.channel = None
         self._emit("ScoreChannelInterrupted", {"combatant_id": combatant_id, "reason": reason, "elapsed_ms": elapsed})
 
+    def _strip_offsets(self, span_ms: int) -> list[int]:
+        lamps = self.config.light_strip_lamps()
+        if lamps <= 1 or span_ms <= 0:
+            return [0]
+        return [index * span_ms // (lamps - 1) for index in range(lamps)]
+
+    def _begin_bridge_warning(self, t_ms: int) -> None:
+        connect_ms = self.bridge_connect_ms if self.bridge_connect_ms is not None else t_ms
+        span = max(connect_ms - t_ms, 0)
+        offsets = self._strip_offsets(span)
+        lamps = len(offsets)
+        self.warning_started_ms = t_ms
+        self.light_strip_count = lamps
+        self.light_strip_queue = [(t_ms + offsets[index], index) for index in range(1, lamps - 1)]
+        self._emit(
+            "BridgeWarningStarted",
+            {
+                "lead_ms": self.config.bridge_warning_ms,
+                "cues": ["water_reflection", "span_light_strip", "alarm"],
+                "readable_without_reflection": self.config.readable_without_reflection,
+                "alarm_started": True,
+                "alarm_with": "span_light_strip",
+                "light_strip_index": 0,
+                "light_strip_count": lamps,
+                "sequence_ms": span,
+                "offset_ms": 0,
+            },
+        )
+
+    def _advance_light_strip(self, t_ms: int) -> None:
+        pending: list[tuple[int, int]] = []
+        origin = self.warning_started_ms
+        for when, index in self.light_strip_queue:
+            if when > t_ms:
+                pending.append((when, index))
+                continue
+            self._emit(
+                "BridgeLightStripAdvanced",
+                {
+                    "index": index,
+                    "count": self.light_strip_count,
+                    "offset_ms": 0 if origin is None else when - origin,
+                    "cue": "span_light_strip",
+                },
+            )
+        self.light_strip_queue = pending
+
+    def _complete_bridge_warning(self, t_ms: int) -> None:
+        if self.warning_started_ms is None:
+            return
+        elapsed = t_ms - self.warning_started_ms
+        count = self.light_strip_count
+        self.light_strip_queue = []
+        self.warning_started_ms = None
+        self.light_strip_count = 0
+        self._emit(
+            "BridgeWarningCompleted",
+            {
+                "lead_ms": self.config.bridge_warning_ms,
+                "elapsed_ms": elapsed,
+                "readable_without_reflection": self.config.readable_without_reflection,
+                "alarm_started_with": "span_light_strip",
+                "light_strip_index": max(count - 1, 0),
+                "light_strip_count": count,
+                "sequence_ms": elapsed,
+            },
+        )
+
     def _apply_timers(self, t_ms: int) -> None:
         if self.bridge_warning_ms is not None and t_ms >= self.bridge_warning_ms:
             self.bridge_warning_ms = None
             if self.bridge_state != "connected":
                 self.bridge_state = "warning"
-            self._emit(
-                "BridgeWarningStarted",
-                {
-                    "lead_ms": self.config.bridge_warning_ms,
-                    "cues": ["water_reflection", "span_light_strip", "alarm"],
-                    "readable_without_reflection": True,
-                },
-            )
+            self._begin_bridge_warning(t_ms)
+        self._advance_light_strip(t_ms)
         if self.bridge_connect_ms is not None and t_ms >= self.bridge_connect_ms:
             self.bridge_connect_ms = None
+            self._complete_bridge_warning(t_ms)
             self.bridge_state = "connected"
             self.bridge_connected_ms = t_ms
             self._emit("BridgeStateChanged", {"state": "connected"})

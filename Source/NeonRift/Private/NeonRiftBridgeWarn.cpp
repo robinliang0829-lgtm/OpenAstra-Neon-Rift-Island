@@ -7,9 +7,19 @@ void ANeonRiftBridgeWarn::EmitBridgeOccupantNudged(const FString& PayloadJson)
 	NeonRiftEmit(this, NeonRiftEvents::BridgeOccupantNudged, PayloadJson);
 }
 
+void ANeonRiftBridgeWarn::EmitBridgeLightStripAdvanced(const FString& PayloadJson)
+{
+	NeonRiftEmit(this, NeonRiftEvents::BridgeLightStripAdvanced, PayloadJson);
+}
+
 void ANeonRiftBridgeWarn::EmitBridgeStateChanged(const FString& PayloadJson)
 {
 	NeonRiftEmit(this, NeonRiftEvents::BridgeStateChanged, PayloadJson);
+}
+
+void ANeonRiftBridgeWarn::EmitBridgeWarningCompleted(const FString& PayloadJson)
+{
+	NeonRiftEmit(this, NeonRiftEvents::BridgeWarningCompleted, PayloadJson);
 }
 
 void ANeonRiftBridgeWarn::EmitBridgeWarningStarted(const FString& PayloadJson)
