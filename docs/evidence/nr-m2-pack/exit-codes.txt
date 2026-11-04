@@ -1,0 +1,16 @@
+# schema nr-m2-pack-dev-v1
+# kind headless-python-dev-pack
+# ue_pack false
+# cook false
+# binary_package false
+# columns name exit_code command
+repro	0	PYTHONPATH=sim python3 -m steel_tide repro
+nr02	0	PYTHONPATH=sim python3 -m steel_tide nr02 --check
+nr03	0	PYTHONPATH=sim python3 -m steel_tide nr03 --check
+m1	0	PYTHONPATH=sim python3 -m steel_tide m1 --check
+m1-pass	0	PYTHONPATH=sim python3 -m steel_tide m1-pass --check
+m1-bot	0	PYTHONPATH=sim python3 -m steel_tide m1-bot --check
+m2-resident	0	PYTHONPATH=sim python3 -m steel_tide m2-resident --check
+m2-roles	0	PYTHONPATH=sim python3 -m steel_tide m2-roles --check
+m2-bridge	0	PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
+unittest	0	PYTHONPATH=sim python3 -m unittest discover -s sim/tests -v

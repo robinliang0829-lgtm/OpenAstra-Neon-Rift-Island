@@ -1,4 +1,4 @@
-"""Run the bot slice or the scripted reproductions."""
+"""Run the dev pack, a slice, or the scripted reproductions."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ from .model import badge_for
 from .nr_m1 import main as m1_main
 from .nr_m1_bot import main as m1_bot_main
 from .nr_m2_bridge import main as m2_bridge_main
+from .nr_m2_pack import main as m2_pack_main
 from .nr_m2_resident import main as m2_resident_main
 from .nr_m2_roles import main as m2_roles_main
 from .nr_m1_pass import main as m1_pass_main
@@ -19,6 +20,8 @@ from .repro import run_repro_report
 
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
+    if args[:1] == ["m2-pack"]:
+        return m2_pack_main(args[1:])
     if args[:1] == ["m2-bridge"]:
         return m2_bridge_main(args[1:])
     if args[:1] == ["m2-roles"]:

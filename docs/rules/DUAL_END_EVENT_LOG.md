@@ -164,3 +164,11 @@ PYTHONPATH=sim python3 -m steel_tide m2-roles --check
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
 ```
+
+## NR-M2-pack
+
+这条不新加双端 schema，也不新加事件名。它把 `repro`、上面各张 `--check` 和 `unittest` 串成一条无头 Python 验收。不是 UE 包。命令和退出码在 `docs/evidence/nr-m2-pack/`。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-pack --check
+```
