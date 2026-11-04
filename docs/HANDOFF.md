@@ -12,6 +12,8 @@ NR-M1 首切片已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -
 
 NR-M1-pass 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m1-pass --check`，样例在 `docs/evidence/nr-m1-pass/`。规格见 [NR-M1-pass.md](NR-M1-pass.md)。近距传球、持芯禁止突进、读条受击或离开都不记分、常规时间先到 2 分以 `kind=points` 结束。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M1-bot 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m1-bot --check`，样例在 `docs/evidence/nr-m1-bot/`。规格见 [NR-M1-bot.md](NR-M1-bot.md)。四个 `local_bot` 自己走完一局：同帧抢芯、近距传球、一次读条打断、常规时间先到 2 分。`BotDecision` 写下 `reason` 和 `target_id`。这不是生产数字居民。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。

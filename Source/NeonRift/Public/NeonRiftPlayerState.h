@@ -36,7 +36,9 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
 	FString MatchFaction;
 
-	/** human, digital_resident, or local_bot. Copied from the sim. */
+	/** human, digital_resident, or local_bot. Copied from the sim.
+	 *  local_bot is not a digital_resident. NR-M1-bot does not construct UNeonRiftResidentPort.
+	 */
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
 	FString ControllerKind;
 

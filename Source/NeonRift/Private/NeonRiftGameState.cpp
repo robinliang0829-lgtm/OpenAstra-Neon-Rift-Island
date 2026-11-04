@@ -105,6 +105,7 @@ void ANeonRiftGameState::NoteMirror(FName EventName, const FString& PayloadJson)
 		NeonRiftEvents::BridgeStateChanged,
 		NeonRiftEvents::BridgeWarningCompleted,
 		NeonRiftEvents::BridgeWarningStarted,
+		NeonRiftEvents::BotDecision,
 		NeonRiftEvents::CombatantJoined,
 		NeonRiftEvents::CoreDropRejected,
 		NeonRiftEvents::CoreMarkRejected,

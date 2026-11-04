@@ -186,6 +186,33 @@ class SteelTideMatch:
             for cmd in self.inbox
         )
 
+    def note_bot_decision(
+        self,
+        combatant_id: str,
+        action: str,
+        reason: str,
+        target_id: str,
+        distance_m: float | None = None,
+    ) -> None:
+        """Record a local_bot choice. Does not grant the core and does not score.
+
+        `digital_resident` is a different controller. This method refuses it.
+        The resident port is not called from here.
+        """
+        combatant = self.combatants[combatant_id]
+        if combatant.controller != "local_bot":
+            raise RuntimeError("bot decisions are only recorded for local_bot")
+        payload: dict = {
+            "action": action,
+            "combatant_id": combatant_id,
+            "controller": combatant.controller,
+            "reason": reason,
+            "target_id": target_id,
+        }
+        if distance_m is not None:
+            payload["distance_m"] = distance_m
+        self._emit("BotDecision", payload)
+
     def place_for_test(
         self,
         combatant_id: str,

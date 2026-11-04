@@ -15,6 +15,7 @@ EVENT_NAMES = (
     "BridgeStateChanged",
     "BridgeWarningCompleted",
     "BridgeWarningStarted",
+    "BotDecision",
     "CombatantJoined",
     "CoreDropRejected",
     "CoreDropped",
@@ -97,4 +98,5 @@ EVENT_GROUPS = {
         "RouteRejected",
         "RouteSelected",
     ),
+    "BotPolicy": ("BotDecision",),
 }
