@@ -33,7 +33,7 @@
 
 数字居民和本地机器人走同一套意图。回传里把 `local_bot` 和真正的 Resident 分开写。这批 bot 不是生产数字居民。
 
-`BotDecision` 由 `sim/steel_tide` 在本地 bot 提交意图时写下，不是玩家 RPC，也不计分。`hit` 仍只有服务器能发。bot 决定打断读条时，模拟替服务器排队一次 `down` 为 false 的命中。`ResidentDecision` 是薄策略数字居民的同一类审计，`controller` 为 `digital_resident`。它不改持有者，不计分，也不写墙后坐标。NR-M1-bot 不构造 `UNeonRiftResidentPort`。NR-M2-resident 在 `sim/steel_tide` 里调用 `select_match` 和 `decide`。GameMode / GameState / PlayerState 仍不构造它，也不记分。
+`BotDecision` 由 `sim/steel_tide` 在本地 bot 提交意图时写下，不是玩家 RPC，也不计分。`hit` 仍只有服务器能发。bot 决定打断读条时，模拟替服务器排队一次 `down` 为 false 的命中。`ResidentDecision` 是薄策略数字居民的同一类审计，`controller` 为 `digital_resident`。它不改持有者，不计分，也不写墙后坐标。NR-M1-bot 不构造 `UNeonRiftResidentPort`。NR-M2-resident 在 `sim/steel_tide` 里调用 `select_match` 和 `decide`。NR-M2-roles 让这两条决策在岗位上再选突进、支援或侦察；`reason` 写岗位 id。GameMode / GameState / PlayerState 仍不构造端口，也不记分。
 
 ## 同一服务器帧的顺序
 
@@ -100,6 +100,7 @@ PYTHONPATH=sim python3 -m steel_tide m1 --check
 PYTHONPATH=sim python3 -m steel_tide m1-pass --check
 PYTHONPATH=sim python3 -m steel_tide m1-bot --check
 PYTHONPATH=sim python3 -m steel_tide m2-resident --check
+PYTHONPATH=sim python3 -m steel_tide m2-roles --check
 ```
 
 双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。

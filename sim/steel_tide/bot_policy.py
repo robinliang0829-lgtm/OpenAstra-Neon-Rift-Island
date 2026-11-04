@@ -28,6 +28,8 @@ class Decision:
     target_id: str
     goal: str | None = None
     distance_m: float | None = None
+    ability: str | None = None
+    progress: str | None = None
 
 
 def run_local_bots(match: SteelTideMatch, horizon_s: float | None = None) -> SteelTideMatch:
@@ -68,7 +70,24 @@ def _issue(match: SteelTideMatch) -> None:
 
 
 def decide(match: SteelTideMatch, combatant) -> Decision | None:
-    """One intent for a local bot. Humans and residents are not decided here."""
+    """One intent for a local bot. Humans and residents are not decided here.
+
+    Role abilities stay off unless the match sets `role_abilities_enabled`.
+    NR-M1-bot and NR-M2-resident leave it unset, so their logs do not grow
+    an AbilityUsed line. NR-M2-roles turns it on for both this function and
+    the resident port.
+    """
+    decision = _decide_local(match, combatant)
+    if not getattr(match, "role_abilities_enabled", False):
+        return decision
+    # Local import: role_ability imports Decision from this module.
+    from .role_ability import choose_role_ability, view_for_bot
+
+    return choose_role_ability(view_for_bot(match, combatant, decision), decision)
+
+
+def _decide_local(match: SteelTideMatch, combatant) -> Decision | None:
+    """Contest, pass, interrupt, and score. No role ability."""
     if combatant.controller != "local_bot":
         return None
     if combatant.downed or combatant.faction is None or combatant.anchor is None:
@@ -197,8 +216,34 @@ def _commit(match: SteelTideMatch, combatant, decision: Decision) -> None:
             target_id=decision.target_id,
             down=False,
         )
+    elif action == "use_ability":
+        if match.has_pending(combatant.id, "use_ability"):
+            return
+        payload = {"combatant_id": combatant.id, "ability": decision.ability}
+        if decision.ability == "dash":
+            payload["dest"] = decision.target_id
+        else:
+            payload["target_id"] = decision.target_id
+        match.enqueue(combatant.client_id, "use_ability", match.t_seconds, **payload)
+        if decision.ability == "shield" and decision.target_id and not _pending_hit(match, decision.target_id):
+            # Same timestamp as the shield. use_ability is applied before hit,
+            # so the directed charge is what stops this contact.
+            match.enqueue(
+                SERVER_CLIENT,
+                "hit",
+                match.t_seconds,
+                target_id=decision.target_id,
+                down=False,
+            )
     else:
         return
+    if decision.progress is not None:
+        progress = getattr(match, "ability_progress", None)
+        if progress is None:
+            progress = {}
+            match.ability_progress = progress
+        progress[combatant.id] = decision.progress
+    note_role = combatant.role if decision.ability else None
     if combatant.controller == "local_bot":
         match.note_bot_decision(
             combatant.id,
@@ -206,6 +251,8 @@ def _commit(match: SteelTideMatch, combatant, decision: Decision) -> None:
             decision.reason,
             decision.target_id,
             distance_m=decision.distance_m,
+            ability=decision.ability,
+            role=note_role,
         )
     elif combatant.controller == "digital_resident":
         match.note_resident_decision(
@@ -214,6 +261,8 @@ def _commit(match: SteelTideMatch, combatant, decision: Decision) -> None:
             decision.reason,
             decision.target_id,
             distance_m=decision.distance_m,
+            ability=decision.ability,
+            role=note_role,
         )
 
 

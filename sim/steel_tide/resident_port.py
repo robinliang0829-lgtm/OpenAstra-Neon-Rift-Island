@@ -8,6 +8,10 @@ only the perceived dict.
 Enemy coordinates behind the repair alley are not in that dict. A covered
 enemy is an id. Teammate signals may carry an anchor name and `distance_m`.
 No `pos`, `x_m`, or `y_m` is fed in.
+
+When the match sets `role_abilities_enabled`, `decide` may also return the
+role ability: assault dash, support shield, or recon mark. The reason is the
+role id. A covered target is still only an id.
 """
 
 from __future__ import annotations
@@ -16,6 +20,7 @@ import math
 
 from .bot_policy import Decision
 from .match import SteelTideMatch
+from .role_ability import attach_resident_ability, choose_role_ability, view_from_resident
 
 # Not a production resident. The sim match is the only scorer.
 PRODUCTION_RESIDENT = False
@@ -81,7 +86,10 @@ class DigitalResidentPort:
             self.hidden_shapes.append(frozenset(item))
         if not self.joined:
             return None
-        return _decide_thin(perceived)
+        base = _decide_thin(perceived)
+        if not perceived.get("role_abilities"):
+            return base
+        return choose_role_ability(view_from_resident(perceived, base), base)
 
     def _refuse(self) -> dict:
         self.joined = False
@@ -173,6 +181,7 @@ def perceive(match: SteelTideMatch, combatant) -> dict:
             view["channel_reader_anchor"] = reader.anchor
             view["channel_reader_faction"] = reader.faction
             view["channel_reader_id"] = reader.id
+    attach_resident_ability(match, combatant, view)
     assert_no_post_wall(view)
     return view
 
@@ -204,6 +213,20 @@ def assert_no_post_wall(perceived: dict) -> None:
     reader_id = perceived.get("channel_reader_id")
     if reader_id in hidden_ids:
         raise ValueError("post-wall coordinates")
+    hops = perceived.get("hops")
+    if hops is not None:
+        if not isinstance(hops, dict):
+            raise ValueError("post-wall coordinates")
+        for goal, hop in hops.items():
+            if not isinstance(goal, str) or not isinstance(hop, dict):
+                raise ValueError("post-wall coordinates")
+            if set(hop) - {"dest", "distance_m"}:
+                raise ValueError("post-wall coordinates")
+            if not isinstance(hop.get("dest"), str):
+                raise ValueError("post-wall coordinates")
+            distance = hop.get("distance_m")
+            if not isinstance(distance, (int, float)) or isinstance(distance, bool):
+                raise ValueError("post-wall coordinates")
 
 
 def _decide_thin(perceived: dict) -> Decision | None:

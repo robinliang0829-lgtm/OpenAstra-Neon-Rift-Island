@@ -16,6 +16,8 @@ NR-M1-bot 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m ste
 
 NR-M2-resident 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-resident --check`，样例在 `docs/evidence/nr-m2-resident/`。规格见 [NR-M2-resident.md](NR-M2-resident.md)。一局 3v3 里 `a2` 的 `controller` 是 `digital_resident`，走 `select_match` 和 `decide`。其余驱动者仍是 `local_bot`。日志用 `ResidentDecision` 和 `BotDecision` 分开。薄策略不是生产数字居民，不喂墙后坐标。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M2-roles 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-roles --check`，样例在 `docs/evidence/nr-m2-roles/`。规格见 [NR-M2-roles.md](NR-M2-roles.md)。同一局 3v3 里，`local_bot` 和 `digital_resident` 都会按岗位使用能力。日志里三种 `AbilityUsed` 都有：突进 `dash`、支援 `shield`、侦察 `mark`。`BotDecision` / `ResidentDecision` 的 `reason` 是岗位 id。抢芯、近距传球、一次打断、先到 2 分和 4 秒桥预警仍走前面的口。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。
