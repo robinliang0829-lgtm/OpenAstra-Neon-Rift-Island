@@ -43,3 +43,14 @@ Shape and shoulder slot identify the humanoid sides. The beast and the quadruped
 | `NR_Proxy_Quadruped` | silhouette `hydraulic_quadruped` |
 | `NR_Proxy_EngineeringMachine` | `mat.worn_yellow` |
 | `NR_Proxy_WetConcrete` | `mat.wet_concrete` |
+
+## Shoulder lamps
+
+Day-port and night-port intensities live in `config/steel_tide_greybox.json` under `lighting`. The lamp slot is the team mark. Auxiliary color may tint the lamp. It is not the id.
+
+| id | slot | shape |
+| --- | --- | --- |
+| `light.shoulder.A.open_chevron.shoulder_left` | `shoulder_left` | `open_chevron` |
+| `light.shoulder.B.closed_ring.shoulder_right` | `shoulder_right` | `closed_ring` |
+
+Source of the ids is `sim/steel_tide/light.py`. The match log is [NR-M2-light](../NR-M2-light.md).

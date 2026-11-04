@@ -5,6 +5,9 @@ acceptance pack. It does not cook, package a binary, or launch UE.
 
     PYTHONPATH=sim python3 -m steel_tide m2-pack
     PYTHONPATH=sim python3 -m steel_tide m2-pack --check
+
+m2-light is not a step. It is a side-log readability contract. unittest
+still runs sim/tests/test_nr_m2_light.py. See docs/NR-M2-light.md.
 """
 
 from __future__ import annotations
@@ -34,6 +37,8 @@ STEPS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("m2-bridge", "steel_tide", ("m2-bridge", "--check")),
     ("unittest", "unittest", ("discover", "-s", "sim/tests", "-v")),
 )
+
+# m2-fail is a separate --check. It is not a step above. See docs/NR-M2-fail.md.
 
 
 def command_line(module: str, args: tuple[str, ...]) -> str:
