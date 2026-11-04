@@ -1,0 +1,81 @@
+# schema nr-m1-dual-end-v1
+# authority sim/steel_tide
+# end client-b
+# viewpoint_client client-b
+# controlled b1
+# local_bots a2,a3,b2,b3
+# roster a1:human:A:client-a,a2:local_bot:A:bot-a2,a3:local_bot:A:bot-a3,b1:human:B:client-b,b2:local_bot:B:bot-b2,b3:local_bot:B:bot-b3
+# mirrored_holder -
+# mirrored_score A=0 B=1
+# event_lines 69
+# identities a1:humanoid_robot:A:human,a2:humanoid_robot:A:local_bot,a3:human:A:local_bot,b1:humanoid_robot:B:human,b2:humanoid_robot:B:local_bot,b3:beast:B:local_bot
+# comparable event_body_identical
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-a", "combatant_id": "a1", "controller": "human"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-a2", "combatant_id": "a2", "controller": "local_bot"}
+   0.000  CombatantJoined  {"body": "human", "client_id": "bot-a3", "combatant_id": "a3", "controller": "local_bot"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-b", "combatant_id": "b1", "controller": "human"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-b2", "combatant_id": "b2", "controller": "local_bot"}
+   0.000  CombatantJoined  {"body": "beast", "client_id": "bot-b3", "combatant_id": "b3", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "B"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  FactionRejected  {"body": "human", "combatant_id": "a3", "faction": "B", "reason": "illegal_faction"}
+   0.000  FactionRejected  {"body": "beast", "combatant_id": "b3", "faction": "A", "reason": "illegal_faction"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "A"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleRejected  {"combatant_id": "a1", "reason": "unknown_role", "role": "scout"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a1", "role": "assault"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a2", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a2", "role": "support"}
+   0.000  FactionChosen  {"body": "human", "combatant_id": "a3", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a3", "role": "recon"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b1", "role": "recon"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b2", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b2", "role": "assault"}
+   0.000  FactionChosen  {"body": "beast", "combatant_id": "b3", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b3", "role": "support"}
+   0.000  FactionsLocked  {"assignments": {"a1": "A", "a2": "A", "a3": "A", "b1": "B", "b2": "B", "b3": "B"}, "identities": {"a1": {"body": "humanoid_robot", "controller": "human", "faction": "A"}, "a2": {"body": "humanoid_robot", "controller": "local_bot", "faction": "A"}, "a3": {"body": "human", "controller": "local_bot", "faction": "A"}, "b1": {"body": "humanoid_robot", "controller": "human", "faction": "B"}, "b2": {"body": "humanoid_robot", "controller": "local_bot", "faction": "B"}, "b3": {"body": "beast", "controller": "local_bot", "faction": "B"}}}
+   0.000  RolesLocked  {"assignments": {"a1": "assault", "a2": "support", "a3": "recon", "b1": "recon", "b2": "assault", "b3": "support"}}
+   0.000  MatchStarted  {"deadline_ms": 360000, "points_to_win": 2, "role_select_open": false}
+   0.000  FactionRejected  {"combatant_id": "a1", "reason": "locked"}
+   0.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+   0.400  RouteSelected  {"combatant_id": "b2", "route": "elevated"}
+   0.400  RouteSelected  {"combatant_id": "a1", "route": "elevated"}
+   1.000  HitIgnored  {"reason": "spawn_protection", "target_id": "a1"}
+   4.000  AbilityUsed  {"ability": "dash", "combatant_id": "b2", "dest": "terminal_b", "faction": "B", "from": "spawn_b", "range_m": 12, "ready_ms": 12000, "role": "assault"}
+   4.000  AbilityUsed  {"ability": "dash", "combatant_id": "a1", "dest": "terminal_a", "faction": "A", "from": "spawn_a", "range_m": 12, "ready_ms": 12000, "role": "assault"}
+   4.000  AbilityRejected  {"ability": "dash", "combatant_id": "a1", "ready_ms": 12000, "reason": "cooldown", "role": "assault"}
+   5.000  AbilityRejected  {"ability": "mark", "combatant_id": "b1", "reason": "not_visible", "target_id": "a3"}
+   5.500  AbilityUsed  {"ability": "mark", "combatant_id": "b1", "faction": "B", "ready_ms": 15500, "role": "recon", "target_id": "a3"}
+   6.000  AbilityRejected  {"ability": "shield", "combatant_id": "a2", "reason": "out_of_range", "target_id": "a1"}
+   6.200  AbilityUsed  {"ability": "shield", "combatant_id": "a2", "directed_by": "a2", "faction": "A", "ready_ms": 18200, "role": "support", "target_id": "a1"}
+   6.200  HitIgnored  {"directed_by": "a2", "reason": "shield", "target_id": "a1"}
+   6.400  ActorDowned  {"combatant_id": "a2", "respawn_ms": 11400}
+   8.000  CorePicked  {"anchor": "center", "client_id": "client-a", "combatant_id": "a1"}
+   8.000  CorePickRejected  {"client_id": "client-b", "combatant_id": "b1", "reason": "already_held"}
+   8.200  ScoreChannelStarted  {"combatant_id": "a1", "ends_ms": 11200, "terminal": "terminal_b"}
+   9.000  ScoreChannelInterrupted  {"combatant_id": "a1", "elapsed_ms": 800, "reason": "hit"}
+   9.000  CoreDropped  {"anchor": "terminal_b", "combatant_id": "a1", "reason": "downed", "status": "ground"}
+   9.000  ActorDowned  {"combatant_id": "a1", "respawn_ms": 14000}
+   9.500  CorePicked  {"anchor": "terminal_b", "client_id": "bot-b2", "combatant_id": "b2"}
+  11.400  ActorRespawned  {"anchor": "spawn_a", "combatant_id": "a2", "protection_until_ms": 14400}
+  14.000  ActorRespawned  {"anchor": "spawn_a", "combatant_id": "a1", "protection_until_ms": 17000}
+  14.500  HitIgnored  {"reason": "spawn_protection", "target_id": "a1"}
+  16.000  BridgeWarningStarted  {"alarm_started": true, "alarm_with": "span_light_strip", "cues": ["water_reflection", "span_light_strip", "alarm"], "lead_ms": 4000, "light_strip_count": 5, "light_strip_index": 0, "offset_ms": 0, "readable_without_reflection": true, "sequence_ms": 4000}
+  17.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 1, "offset_ms": 1000}
+  18.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 2, "offset_ms": 2000}
+  19.000  AbilityRejected  {"ability": "shield", "combatant_id": "a2", "reason": "wrong_faction", "target_id": "b1"}
+  19.000  BridgeLightStripAdvanced  {"count": 5, "cue": "span_light_strip", "index": 3, "offset_ms": 3000}
+  20.000  BridgeWarningCompleted  {"alarm_started_with": "span_light_strip", "elapsed_ms": 4000, "lead_ms": 4000, "light_strip_count": 5, "light_strip_index": 4, "readable_without_reflection": true, "sequence_ms": 4000}
+  20.000  BridgeStateChanged  {"state": "connected"}
+  21.000  AbilityRejected  {"ability": "dash", "combatant_id": "a1", "dest": "center", "reason": "out_of_range"}
+  22.000  AbilityRejected  {"ability": "mark", "combatant_id": "a1", "reason": "wrong_role", "role": "assault"}
+ 360.000  MatchClockExpired  {"role_select_open": false, "score": {"A": 0, "B": 0}}
+ 360.000  OvertimeStarted  {"deadline_ms": 420000, "role_select_open": false, "score": {"A": 0, "B": 0}}
+ 360.000  FactionRejected  {"combatant_id": "a1", "reason": "locked"}
+ 360.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+ 361.000  ScoreChannelStarted  {"combatant_id": "b2", "ends_ms": 364000, "terminal": "terminal_a"}
+ 364.000  PointScored  {"combatant_id": "b2", "faction": "B", "points": 1, "score": {"A": 0, "B": 1}}
+ 364.000  CoreReturnedToCenter  {"anchor": "center", "scoring_faction": "B"}
+ 364.000  MatchSettled  {"kind": "score", "role_select_open": false, "score": {"A": 0, "B": 1}, "winner": "B"}

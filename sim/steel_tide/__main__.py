@@ -6,6 +6,7 @@ import sys
 
 from .bots import run_bot_slice
 from .model import badge_for
+from .nr_m1 import main as m1_main
 from .nr02 import main as nr02_main
 from .nr03 import main as nr03_main
 from .repro import run_repro_report
@@ -13,6 +14,8 @@ from .repro import run_repro_report
 
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
+    if args[:1] == ["m1"]:
+        return m1_main(args[1:])
     if args[:1] == ["nr02"]:
         return nr02_main(args[1:])
     if args[:1] == ["nr03"]:

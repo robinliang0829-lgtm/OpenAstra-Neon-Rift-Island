@@ -28,11 +28,27 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
 	FString ViewpointClientId;
 
+	/** Body type copied from the sim. Not a faction and not a controller. */
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
+	FString BodyType;
+
+	/** Match faction copied from the sim. Empty until FactionChosen. */
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
+	FString MatchFaction;
+
+	/** human, digital_resident, or local_bot. Copied from the sim. */
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
+	FString ControllerKind;
+
 	UPROPERTY(ReplicatedUsing=OnRep_ViewpointEventLog, BlueprintReadOnly, Category="NeonRift")
 	TArray<FString> ViewpointEventLog;
 
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void SetViewpointClientId(const FString& InClientId);
+
+	/** Copy the three identity labels. Does not choose a side and does not score. */
+	UFUNCTION(BlueprintCallable, Category="NeonRift")
+	void SetIdentityLabels(const FString& InBodyType, const FString& InMatchFaction, const FString& InControllerKind);
 
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void BindToMatchRelay();

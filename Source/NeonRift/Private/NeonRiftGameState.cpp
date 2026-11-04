@@ -25,6 +25,7 @@ void ANeonRiftGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(ANeonRiftGameState, MirroredHolderEvent);
 	DOREPLIFETIME(ANeonRiftGameState, MirroredHolderPayload);
 	DOREPLIFETIME(ANeonRiftGameState, MirroredScorePayload);
+	DOREPLIFETIME(ANeonRiftGameState, MirroredIdentityPayload);
 }
 
 void ANeonRiftGameState::BeginPlay()
@@ -89,6 +90,11 @@ void ANeonRiftGameState::NoteMirror(FName EventName, const FString& PayloadJson)
 		MirroredScorePayload = PayloadJson;
 		return;
 	}
+	if (NameIs(EventName, NeonRiftEvents::FactionsLocked))
+	{
+		MirroredIdentityPayload = PayloadJson;
+		return;
+	}
 	static const TCHAR* const HeardOnly[] = {
 		NeonRiftEvents::AbilityRejected,
 		NeonRiftEvents::AbilityUsed,
@@ -107,7 +113,6 @@ void ANeonRiftGameState::NoteMirror(FName EventName, const FString& PayloadJson)
 		NeonRiftEvents::CorePickRejected,
 		NeonRiftEvents::FactionChosen,
 		NeonRiftEvents::FactionRejected,
-		NeonRiftEvents::FactionsLocked,
 		NeonRiftEvents::HitIgnored,
 		NeonRiftEvents::HitRejected,
 		NeonRiftEvents::MatchClockExpired,
