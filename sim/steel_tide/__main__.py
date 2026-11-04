@@ -16,6 +16,7 @@ from .nr_m2_roles import main as m2_roles_main
 from .nr_m1_pass import main as m1_pass_main
 from .nr02 import main as nr02_main
 from .nr03 import main as nr03_main
+from .nr_m2_art import main as m2_art_main
 from .repro import run_repro_report
 
 
@@ -43,6 +44,8 @@ def main(argv: list[str] | None = None) -> int:
         return nr03_main(args[1:])
     if args[:1] == ["repro"]:
         return 0 if run_repro_report() else 1
+    if args[:1] == ["m2-art"]:
+        return m2_art_main(args[1:])
     match = run_bot_slice()
     print("Steel Tide local-bot slice (not production residents)")
     print(f"phase={match.phase} score={match.score} holder={match.core.holder_id} t={match.t_seconds:.3f}s")

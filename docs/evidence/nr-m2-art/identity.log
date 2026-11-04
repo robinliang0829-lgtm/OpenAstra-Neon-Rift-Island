@@ -1,0 +1,45 @@
+# schema nr-m2-art-identity-v1
+# kind art-identity-contract
+# match false
+# wired_into_m2_pack false
+# event_names_changed false
+# scoring_changed false
+# texture_binaries false
+# uasset false
+# umap false
+# cook false
+# engine_association 5.4
+# ue_units_per_meter 100
+# map_slice SteelTidePort
+# color_is_identity false
+# face_is_identity false
+# shared_body NR_Body_Humanoid
+# light_midline_x 32
+# columns materials: token id hex role family blender ue texture
+wet_concrete	mat.wet_concrete	#3E4644	environment	harbor	NR_Mat_WetConcrete	MI_NR_WetConcrete	none
+worn_yellow	mat.worn_yellow	#C4A15A	environment	harbor	NR_Mat_WornYellow	MI_NR_WornYellow	none
+sign_cyan	env.sign_cyan	#2EC8C3	environment	harbor	NR_Mat_SignCyan	MI_NR_SignCyan	none
+sign_magenta	env.sign_magenta	#D24B7A	environment	harbor	NR_Mat_SignMagenta	MI_NR_SignMagenta	none
+sea_wall	env.sea_wall	#6E7570	environment	harbor	NR_Mat_SeaWall	MI_NR_SeaWall	none
+tide_cyan	aux.tide_cyan	#3DDFD4	auxiliary	auxiliary	NR_Mat_AuxTideCyan	MI_NR_AuxTideCyan	none
+hazard_amber	aux.hazard_amber	#E2A23A	auxiliary	auxiliary	NR_Mat_AuxHazardAmber	MI_NR_AuxHazardAmber	none
+# columns decals: faction shape light_slot id light_id primitive geometry light_rect closed blender ue socket texture
+A	open_chevron	shoulder_left	badge.A.open_chevron	light.A.shoulder_left	polyline	16,44 32,20 48,44	4,28,6,8	false	NR_Decal_BadgeA_OpenChevron	D_NR_BadgeA_OpenChevron	socket.shoulder_left	none
+B	closed_ring	shoulder_right	badge.B.closed_ring	light.B.shoulder_right	circle	32,32,16	54,28,6,8	true	NR_Decal_BadgeB_ClosedRing	D_NR_BadgeB_ClosedRing	socket.shoulder_right	none
+# columns checklist: id owner status
+harbor.tokens	both	spec_only
+harbor.concrete	both	spec_only
+harbor.signs	both	spec_only
+harbor.yellow	both	spec_only
+harbor.seawall	both	spec_only
+badge.shape	both	spec_only
+badge.light	both	spec_only
+badge.body	ue	spec_only
+badge.noface	both	spec_only
+naming.decal	both	spec_only
+naming.material	both	spec_only
+naming.notexture	both	no_binary
+scale.units	blender	spec_only
+engine.placeholder	ue	repo_holds_5.4
+pack.unwired	both	unwired
+# counts materials=7 decals=2 checklist=15
