@@ -20,6 +20,8 @@ NR-M2-roles 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m s
 
 NR-M2-bridge 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-bridge --check`，样例在 `docs/evidence/nr-m2-bridge/`。规格见 [NR-M2-bridge.md](NR-M2-bridge.md)。桥接通和断开改权威路线图：跨度边只在 `connected` 时可走，机修巷断开时仍可走到对方端子并得分。`BridgeStateChanged` 的 `connected` 和 `disconnected` 都在三端日志里。站在跨度上的人落到本方桥头，桥头再踏上去会被拒绝。落点和拒绝不计分，也不把人打倒。抢芯、传球、打断、先到 2 分和岗位能力仍走前面的口。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M2-pack 已入库。这是无头 Python 开发包，不是 UE 包。UE 仍挂。仓内一条命令是 `PYTHONPATH=sim python3 -m steel_tide m2-pack --check`。它串起 `repro`、`nr02`、`nr03`、`m1`、`m1-pass`、`m1-bot`、`m2-resident`、`m2-roles`、`m2-bridge` 和 `unittest`，全部退出码为 0 才算通过。命令和退出码在 `docs/evidence/nr-m2-pack/`。规格见 [NR-M2-pack.md](NR-M2-pack.md)。不要 cook，不要打二进制包，不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。

@@ -92,6 +92,14 @@
 
 ## 和原型对日志
 
+仓内一条验收是无头 Python 开发包，不是 UE 包，也不 cook：
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-pack --check
+```
+
+它串起下面每一条。规格见 [../NR-M2-pack.md](../NR-M2-pack.md)。
+
 ```bash
 PYTHONPATH=sim python3 -m steel_tide repro
 PYTHONPATH=sim python3 -m steel_tide nr02 --check
