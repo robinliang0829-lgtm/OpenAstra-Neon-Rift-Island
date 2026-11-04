@@ -14,6 +14,7 @@ namespace NeonRiftEvents
 	inline const TCHAR* const BridgeStateChanged = TEXT("BridgeStateChanged");
 	inline const TCHAR* const BridgeWarningCompleted = TEXT("BridgeWarningCompleted");
 	inline const TCHAR* const BridgeWarningStarted = TEXT("BridgeWarningStarted");
+	inline const TCHAR* const BotDecision = TEXT("BotDecision");
 	inline const TCHAR* const CombatantJoined = TEXT("CombatantJoined");
 	inline const TCHAR* const CoreDropRejected = TEXT("CoreDropRejected");
 	inline const TCHAR* const CoreDropped = TEXT("CoreDropped");

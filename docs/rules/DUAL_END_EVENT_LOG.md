@@ -82,6 +82,7 @@ EventName  {json}
 | `BridgeStateChanged` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `BridgeWarningCompleted` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `BridgeWarningStarted` | 不改变持有者 | 不改变比分 | 不是打断 |
+| `BotDecision` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `CombatantJoined` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `CoreDropRejected` | 不改变持有者 | 不改变比分 | 不是打断 |
 | `CoreDropped` | 清空持有者 | 不改变比分 | 不是打断 |
@@ -129,4 +130,12 @@ PYTHONPATH=sim python3 -m steel_tide m1 --check
 
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m1-pass --check
+```
+
+## NR-M1-bot
+
+同一套三端正文，schema 换成 `nr-m1-bot-dual-end-v1`。表头同样有 `identities`。样例在 `docs/evidence/nr-m1-bot/`。四个 `local_bot` 的 `BotDecision` 带 `reason` 和 `target_id`。这一局在常规时间先到 2 分结束，日志里没有 `OvertimeStarted`。`digital_resident` 不进这局。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m1-bot --check
 ```
