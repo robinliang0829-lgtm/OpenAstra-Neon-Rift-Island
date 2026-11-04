@@ -114,3 +114,11 @@ EventName  {json}
 | `ScoreChannelRejected` | 不改变持有者 | 不得记分 | 不是打断 |
 | `ScoreChannelStarted` | 不改变持有者 | 不改变比分 | 不是打断 |
 <!-- /nr02-event-schema -->
+
+## NR-M1
+
+同一套三端正文，schema 换成 `nr-m1-dual-end-v1`。多一个表头 `identities`，格式 `id:body:faction:controller`。它不参加计分。样例在 `docs/evidence/nr-m1/`。平局加时的服务器日志是 `retie.log`，schema `nr-m1-retie-v1`。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m1 --check
+```

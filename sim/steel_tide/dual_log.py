@@ -146,7 +146,13 @@ def roster_token(match: SteelTideMatch) -> str:
     return ",".join(parts)
 
 
-def render_log(match: SteelTideMatch, end: str) -> str:
+def render_log(
+    match: SteelTideMatch,
+    end: str,
+    *,
+    schema: str = SCHEMA_ID,
+    extra_headers: tuple[tuple[str, str], ...] = (),
+) -> str:
     if end not in ENDS:
         raise ValueError(f"unknown end {end}")
     holder = format_holder(replay_holder(match.events))
@@ -163,7 +169,7 @@ def render_log(match: SteelTideMatch, end: str) -> str:
         viewpoint = "client-b"
         controlled = "b1"
     fields = {
-        "schema": SCHEMA_ID,
+        "schema": schema,
         "authority": AUTHORITY,
         "end": end,
         "viewpoint_client": viewpoint,
@@ -175,12 +181,25 @@ def render_log(match: SteelTideMatch, end: str) -> str:
         "event_lines": str(event_lines),
         "comparable": "event_body_identical",
     }
-    header = "\n".join(f"# {key} {fields[key]}" for key in HEADER_KEYS)
-    return header + "\n" + body
+    lines: list[str] = []
+    for key in HEADER_KEYS:
+        if key == "comparable":
+            for extra_key, value in extra_headers:
+                lines.append(f"# {extra_key} {value}")
+        lines.append(f"# {key} {fields[key]}")
+    return "\n".join(lines) + "\n" + body
 
 
-def render_dual_logs(match: SteelTideMatch) -> dict[str, str]:
-    return {end: render_log(match, end) for end in ENDS}
+def render_dual_logs(
+    match: SteelTideMatch,
+    *,
+    schema: str = SCHEMA_ID,
+    extra_headers: tuple[tuple[str, str], ...] = (),
+) -> dict[str, str]:
+    return {
+        end: render_log(match, end, schema=schema, extra_headers=extra_headers)
+        for end in ENDS
+    }
 
 
 def parse_log(text: str) -> tuple[dict[str, str], str]:
@@ -196,7 +215,13 @@ def parse_log(text: str) -> tuple[dict[str, str], str]:
     return headers, body
 
 
-def compare_dual_logs(match: SteelTideMatch, logs: dict[str, str]) -> list[str]:
+def compare_dual_logs(
+    match: SteelTideMatch,
+    logs: dict[str, str],
+    *,
+    schema: str = SCHEMA_ID,
+    extra_headers: tuple[tuple[str, str], ...] = (),
+) -> list[str]:
     errors: list[str] = []
     if tuple(logs) != ENDS:
         errors.append(f"ends {tuple(logs)} != {ENDS}")
@@ -221,8 +246,11 @@ def compare_dual_logs(match: SteelTideMatch, logs: dict[str, str]) -> list[str]:
         if missing:
             errors.append(f"{end} missing header {missing}")
             continue
-        if header["schema"] != SCHEMA_ID or header["authority"] != AUTHORITY:
+        if header["schema"] != schema or header["authority"] != AUTHORITY:
             errors.append(f"{end} schema/authority drifted")
+        for extra_key, value in extra_headers:
+            if header.get(extra_key) != value:
+                errors.append(f"{end} {extra_key} drifted")
         if header["end"] != end:
             errors.append(f"{end} header end is {header['end']}")
         if header["comparable"] != "event_body_identical":
@@ -257,19 +285,21 @@ def compare_dual_logs(match: SteelTideMatch, logs: dict[str, str]) -> list[str]:
     return errors
 
 
-def evidence_paths() -> dict[str, Path]:
-    return {end: EVIDENCE_DIR / f"{end}.log" for end in ENDS}
+def evidence_paths(directory: Path | None = None) -> dict[str, Path]:
+    root = EVIDENCE_DIR if directory is None else directory
+    return {end: root / f"{end}.log" for end in ENDS}
 
 
-def write_evidence(logs: dict[str, str]) -> None:
-    EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
-    for end, path in evidence_paths().items():
+def write_evidence(logs: dict[str, str], directory: Path | None = None) -> None:
+    root = EVIDENCE_DIR if directory is None else directory
+    root.mkdir(parents=True, exist_ok=True)
+    for end, path in evidence_paths(root).items():
         path.write_text(logs[end], encoding="utf-8", newline="\n")
 
 
-def diff_against_evidence(logs: dict[str, str]) -> list[str]:
+def diff_against_evidence(logs: dict[str, str], directory: Path | None = None) -> list[str]:
     errors: list[str] = []
-    for end, path in evidence_paths().items():
+    for end, path in evidence_paths(directory).items():
         if not path.is_file():
             errors.append(f"missing sample log {path}")
             continue

@@ -18,3 +18,5 @@ jobs:
         run: PYTHONPATH=sim python3 -m steel_tide repro
       - name: NR-02 dual-end 3v3
         run: PYTHONPATH=sim python3 -m steel_tide nr02 --check
+      - name: NR-M1 prep slice
+        run: PYTHONPATH=sim python3 -m steel_tide m1 --check

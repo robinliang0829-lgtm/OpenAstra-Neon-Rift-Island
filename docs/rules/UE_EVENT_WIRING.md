@@ -13,7 +13,7 @@
 | `UNeonRiftMatchSubsystem` | `Source/NeonRift/Public/NeonRiftMatchSubsystem.h` | 唯一广播口 |
 | `ANeonRiftGameMode` | `Source/NeonRift/Public/NeonRiftGameMode.h` | 指定 GameState / PlayerState，转发总线，不计分 |
 | `ANeonRiftGameState` | `Source/NeonRift/Public/NeonRiftGameState.h` | 订阅总线，复制事件行和权威载荷 |
-| `ANeonRiftPlayerState` | `Source/NeonRift/Public/NeonRiftPlayerState.h` | 一个客户端视角，再广播同一行 |
+| `ANeonRiftPlayerState` | `Source/NeonRift/Public/NeonRiftPlayerState.h` | 一个客户端视角，再广播同一行。`BodyType`、`MatchFaction`、`ControllerKind` 只复制身体、阵营、操控者，不选边，不计分 |
 | `ANeonRiftPhaseCore` | `Source/NeonRift/Public/NeonRiftPhaseCore.h` | 相位芯事件 |
 | `UNeonRiftFactionSelect` | `Source/NeonRift/Public/NeonRiftFactionSelect.h` | 选边、岗位、锁队 |
 | `ANeonRiftTerminalScore` | `Source/NeonRift/Public/NeonRiftTerminalScore.h` | 端子读条、倒地、结算 |
@@ -25,7 +25,7 @@
 
 ## 谁可以发什么
 
-玩家客户端可以发：`request_move`、`pick_core`、`pass_core`、`drop_core`、`begin_score`、`set_route`。
+玩家客户端可以发：`request_move`、`use_ability`、`pick_core`、`pass_core`、`drop_core`、`begin_score`、`set_route`。
 
 只有服务器可以发：`hit`、`leave_terminal`、`mark_core_overboard`、`mark_core_stuck`。玩家 RPC 自称「我被打了」或「芯掉海里了」会被拒绝（`server_only`）。原型里这四类命令的 `client_id` 固定为 `server`。
 
@@ -36,12 +36,13 @@
 先处理该帧全部意图，再处理计时器。意图优先级与 `SteelTideMatch` 一致：
 
 1. `request_move`
-2. `hit`、`leave_terminal`、`drop_core`
-3. `pass_core`
-4. `mark_core_overboard`、`mark_core_stuck`
-5. `pick_core`（这一帧所有拾取一起裁决，不按到达函数的先后抢两次）
-6. `begin_score`
-7. `set_route`
+2. `use_ability`（同帧的定向护盾先于命中）
+3. `hit`、`leave_terminal`、`drop_core`
+4. `pass_core`
+5. `mark_core_overboard`、`mark_core_stuck`
+6. `pick_core`（这一帧所有拾取一起裁决，不按到达函数的先后抢两次）
+7. `begin_score`
+8. `set_route`
 
 同帧拾取按 `(client_id, combatant_id)` 稳定排序。排序只为了和原型日志对齐，**通过条件是恰好一人成功**。两人同时站在芯上时，另一人收到 `CorePickRejected`，原因 `already_held`。
 
@@ -57,7 +58,7 @@
 | `CombatantJoined` | 进局，写明 body、controller、client | 玩家或 bot |
 | `FactionChosen` / `FactionRejected` | 选边。非法身体、或已锁队 | 大厅 |
 | `RoleChosen` / `RoleRejected` | 突进 `assault` / 支援 `support` / 侦察 `recon`。锁队后拒绝 | 大厅 |
-| `FactionsLocked` `RolesLocked` `MatchStarted` | 开局。`role_select_open` 为 false | 子系统 |
+| `FactionsLocked` `RolesLocked` `MatchStarted` | 开局。`FactionsLocked.identities` 写下 body、faction、controller 三个字段。`role_select_open` 为 false | 子系统 |
 | `RouteSelected` / `RouteRejected` | 选择 `elevated` 或 `repair_alley` | `ANeonRiftBridgeWarn` |
 | `MoveCompleted` / `MoveRejected` | 沿配置边行走。桥未接通为 `bridge_blocked`；走得太快为 `too_soon` | `ANeonRiftBridgeWarn` |
 | `CorePicked` / `CorePickRejected` | 芯状态是 `spawn` 或 `ground`，且人在芯的锚点上。同帧第二人原因 `already_held` | `ANeonRiftPhaseCore` |
@@ -70,15 +71,15 @@
 | `CoreReturnedToCenter` | 得分后芯回 `center`，这不是超时复位 | `ANeonRiftPhaseCore` |
 | `CoreReset` | `stuck` 或 `overboard` 持续 `core_reset_timeout_seconds`（提案 8.0）。不计分 | `ANeonRiftPhaseCore` |
 | `ActorDowned` | 命中且不在出生保护内。持芯者先掉芯 | `ANeonRiftTerminalScore` |
-| `HitIgnored` / `HitRejected` | 出生保护内忽略。玩家客户端伪造命中被拒绝 | `ANeonRiftTerminalScore` |
-| `ActorRespawned` | `down_seconds`（提案 5.0）后回本方出生点 | `ANeonRiftTerminalScore` |
+| `HitIgnored` / `HitRejected` | 出生保护内忽略，并且先于护盾，不消耗护盾。护盾是定向的一发，载荷可带 `directed_by`。玩家客户端伪造命中被拒绝 | `ANeonRiftTerminalScore` |
+| `ActorRespawned` | `down_seconds`（提案 5.0）后回本方出生点，载荷带 `protection_until_ms`（提案再保护 3.0 秒）。芯留在掉落处 | `ANeonRiftTerminalScore` |
 | `BridgeLightStripAdvanced` | 预警开始后，灯带按剩余提前量逐盏点亮。不改持有者，不计分 | `ANeonRiftBridgeWarn` |
 | `BridgeWarningStarted` | 接通前 `bridge_warning_seconds`（配置 4）。警报与灯带第一盏同一毫秒开始。载荷含配置里的 `readable_without_reflection` | `ANeonRiftBridgeWarn` |
 | `BridgeWarningCompleted` | 灯带走完。与接通同一毫秒，提前量为 4 秒。不是记分 | `ANeonRiftBridgeWarn` |
 | `BridgeStateChanged` | `connected` 或 `disconnected`。接通紧跟 `BridgeWarningCompleted` | `ANeonRiftBridgeWarn` |
 | `BridgeOccupantNudged` | 断开时把跨度上的人挪到本方桥头，不嵌进网格 | `ANeonRiftBridgeWarn` |
 | `MatchClockExpired` | 提案 360 秒。`role_select_open` 仍为 false | `ANeonRiftTerminalScore` |
-| `OvertimeStarted` | 平分才进入。提案 60 秒，先得分者结束。不重新选岗位 | `ANeonRiftTerminalScore` |
+| `OvertimeStarted` | 平分才进入。提案 60 秒。打破平局的第一笔得分立即结束：未到 `points_to_win` 时 `kind=score`，到达时 `kind=points`。这一笔若把比分打回相同，立即 `kind=draw`。60 秒结束仍相同也是 `kind=draw`，不开启第二段，不重新选岗位 | `ANeonRiftTerminalScore` |
 | `MatchSettled` | 只发一次。`kind` 为 `points`、`score` 或 `draw` | `ANeonRiftTerminalScore` |
 
 持芯者速度用 `walk_speed_mps`（6，即 600 uu/s），不能冲刺。未持芯的原型移动用 `sprint_speed_mps`（8，即 800 uu/s）。1 米 = 100 UE 单位。坐标：模拟 x → UE X，模拟 y → UE Y，Z 向上，甲板 Z = 0。锚点表在 `config/steel_tide_greybox.json`。
@@ -89,6 +90,7 @@
 PYTHONPATH=sim python3 -m steel_tide repro
 PYTHONPATH=sim python3 -m steel_tide nr02 --check
 PYTHONPATH=sim python3 -m steel_tide nr03 --check
+PYTHONPATH=sim python3 -m steel_tide m1 --check
 ```
 
 双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。

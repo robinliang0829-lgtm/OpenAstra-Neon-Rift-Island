@@ -40,6 +40,10 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
 	FString MirroredScorePayload;
 
+	/** Raw FactionsLocked payload. Body, faction, and controller stay in that JSON. */
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="NeonRift")
+	FString MirroredIdentityPayload;
+
 	UFUNCTION()
 	void HandleMatchEvent(FName EventName, FString PayloadJson);
 

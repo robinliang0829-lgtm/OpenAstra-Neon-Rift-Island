@@ -122,7 +122,16 @@ class SteelTideMatch:
         self.match_deadline_ms = self.t_ms + self.config.match_ms
         for combatant in self.combatants.values():
             self._place_at_spawn(combatant, protect=True)
-        self._emit("FactionsLocked", {"assignments": {c.id: c.faction for c in self.combatants.values()}})
+        self._emit(
+            "FactionsLocked",
+            {
+                "assignments": {c.id: c.faction for c in self.combatants.values()},
+                "identities": {
+                    c.id: {"body": c.body, "controller": c.controller, "faction": c.faction}
+                    for c in self.combatants.values()
+                },
+            },
+        )
         self._emit("RolesLocked", {"assignments": {c.id: c.role for c in self.combatants.values()}})
         self._emit(
             "MatchStarted",
@@ -350,7 +359,12 @@ class SteelTideMatch:
             return
         if target.shield_charges > 0:
             target.shield_charges -= 1
-            self._emit("HitIgnored", {"target_id": target_id, "reason": "shield"})
+            directed_by = target.shield_from_id
+            target.shield_from_id = None
+            payload = {"reason": "shield", "target_id": target_id}
+            if directed_by:
+                payload["directed_by"] = directed_by
+            self._emit("HitIgnored", payload)
             return
         if self.channel and self.channel.combatant_id == target_id:
             self._interrupt(target_id, "hit")
@@ -499,37 +513,74 @@ class SteelTideMatch:
         if self.t_ms < combatant.ability_ready_ms:
             self._emit(
                 "AbilityRejected",
-                {"combatant_id": combatant_id, "reason": "cooldown", "ready_ms": combatant.ability_ready_ms},
+                {
+                    "ability": requested,
+                    "combatant_id": combatant_id,
+                    "ready_ms": combatant.ability_ready_ms,
+                    "reason": "cooldown",
+                    "role": combatant.role,
+                },
             )
             return
+        origin = combatant.anchor
         reason = self._apply_ability(combatant, spec, cmd)
         if reason is not None:
-            payload = {"combatant_id": combatant_id, "reason": reason, "ability": spec["id"]}
+            payload: dict = {"ability": spec["id"], "combatant_id": combatant_id, "reason": reason}
+            if cmd.payload.get("dest"):
+                payload["dest"] = cmd.payload["dest"]
+            if cmd.payload.get("target_id"):
+                payload["target_id"] = cmd.payload["target_id"]
             self._emit("AbilityRejected", payload)
             return
         combatant.ability_ready_ms = self.t_ms + self.config.seconds_to_ms(spec["cooldown_seconds"])
-        self._emit(
-            "AbilityUsed",
-            {
-                "combatant_id": combatant_id,
-                "ability": spec["id"],
-                "role": combatant.role,
-                "faction": combatant.faction,
-                "ready_ms": combatant.ability_ready_ms,
-                "target_id": cmd.payload.get("target_id"),
-            },
-        )
+        payload = {
+            "ability": spec["id"],
+            "combatant_id": combatant_id,
+            "faction": combatant.faction,
+            "ready_ms": combatant.ability_ready_ms,
+            "role": combatant.role,
+        }
+        if spec["id"] == "dash":
+            payload["dest"] = combatant.anchor
+            payload["from"] = origin
+            payload["range_m"] = spec["range_m"]
+        if spec["id"] in ("mark", "shield"):
+            payload["target_id"] = cmd.payload.get("target_id")
+        if spec["id"] == "shield":
+            payload["directed_by"] = combatant_id
+        self._emit("AbilityUsed", payload)
 
     def _apply_ability(self, combatant: Combatant, spec: dict, cmd: Command) -> str | None:
         ability = spec["id"]
         if ability == "dash":
             return self._dash(combatant, cmd.payload.get("dest"), float(spec["range_m"]))
         if ability == "shield":
-            combatant.shield_charges = 1
-            return None
+            return self._shield(combatant, spec, cmd)
         if ability == "mark":
             return self._mark(combatant, cmd.payload.get("target_id"))
         return "unknown_ability"
+
+    def _shield(self, combatant: Combatant, spec: dict, cmd: Command) -> str | None:
+        """Place one hit of shield on a named combatant. range_m is the placement limit.
+
+        Zero range does not travel: only a teammate at these coordinates, including the
+        support, can receive it. It is not an aura and it does not cover the other team.
+        """
+        target_id = cmd.payload.get("target_id") or combatant.id
+        target = self.combatants.get(target_id)
+        if target is None:
+            return "no_target"
+        if target.faction != combatant.faction:
+            return "wrong_faction"
+        if target.downed:
+            return "downed"
+        distance = math.hypot(combatant.pos[0] - target.pos[0], combatant.pos[1] - target.pos[1])
+        if distance > float(spec["range_m"]):
+            return "out_of_range"
+        target.shield_charges = 1
+        target.shield_from_id = combatant.id
+        cmd.payload["target_id"] = target.id
+        return None
 
     def _dash(self, combatant: Combatant, dest: str | None, max_range_m: float) -> str | None:
         if not dest or not combatant.anchor:
@@ -734,7 +785,14 @@ class SteelTideMatch:
                 combatant.respawn_ms = None
                 combatant.downed = False
                 self._place_at_spawn(combatant, protect=True)
-                self._emit("ActorRespawned", {"combatant_id": combatant.id, "anchor": combatant.anchor})
+                self._emit(
+                    "ActorRespawned",
+                    {
+                        "anchor": combatant.anchor,
+                        "combatant_id": combatant.id,
+                        "protection_until_ms": combatant.protection_until_ms,
+                    },
+                )
         if self.core.status in ("stuck", "overboard") and t_ms >= self.core.since_ms + self.config.core_reset_timeout_ms:
             reason = self.core.status
             self.core.holder_id = None
@@ -789,7 +847,21 @@ class SteelTideMatch:
             },
         )
         self._emit("CoreReturnedToCenter", {"anchor": "center", "scoring_faction": faction})
-        if self.score[faction] >= self.config.points_to_win and self.phase != "settled":
+        if self.phase == "settled":
+            return
+        if self.phase == "overtime":
+            # First point ends overtime. A point that restores a tie is the re-tie draw.
+            # Reaching points_to_win while ahead is still a points win. The 60s buzzer
+            # draw, when nobody has broken the tie, stays in _expire_clock.
+            self.ot_deadline_ms = None
+            if self.score["A"] == self.score["B"]:
+                self._settle("draw")
+            elif self.score[faction] >= self.config.points_to_win:
+                self._settle("points")
+            else:
+                self._settle("score")
+            return
+        if self.score[faction] >= self.config.points_to_win:
             self._settle("points")
 
     def _expire_clock(self) -> None:
@@ -803,13 +875,18 @@ class SteelTideMatch:
                 self.ot_deadline_ms = self.t_ms + self.config.overtime_ms
                 self._emit(
                     "OvertimeStarted",
-                    {"deadline_ms": self.ot_deadline_ms, "role_select_open": False},
+                    {
+                        "deadline_ms": self.ot_deadline_ms,
+                        "role_select_open": False,
+                        "score": dict(self.score),
+                    },
                 )
         if self.phase == "overtime" and self.ot_deadline_ms is not None and self.t_ms >= self.ot_deadline_ms:
             self.ot_deadline_ms = None
             if self.score["A"] != self.score["B"]:
                 self._settle("score")
             else:
+                # Still tied when the 60s ends: draw. There is no second overtime.
                 self._settle("draw")
 
     def _settle(self, kind: str) -> None:

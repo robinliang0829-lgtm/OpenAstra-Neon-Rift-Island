@@ -51,6 +51,7 @@ class Combatant:
     preferred_route: str = "repair_alley"
     ability_ready_ms: int = 0
     shield_charges: int = 0
+    shield_from_id: str | None = None
 
 
 @dataclass

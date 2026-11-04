@@ -1,0 +1,47 @@
+# schema nr-m1-retie-v1
+# authority sim/steel_tide
+# end server
+# viewpoint_client -
+# controlled a1,a2,a3,b1,b2,b3
+# local_bots a2,a3,b2,b3
+# roster a1:human:A:client-a,a2:local_bot:A:bot-a2,a3:local_bot:A:bot-a3,b1:human:B:client-b,b2:local_bot:B:bot-b2,b3:local_bot:B:bot-b3
+# mirrored_holder -
+# mirrored_score A=0 B=0
+# event_lines 35
+# identities a1:humanoid_robot:A:human,a2:humanoid_robot:A:local_bot,a3:human:A:local_bot,b1:humanoid_robot:B:human,b2:humanoid_robot:B:local_bot,b3:beast:B:local_bot
+# comparable event_body_identical
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-a", "combatant_id": "a1", "controller": "human"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-a2", "combatant_id": "a2", "controller": "local_bot"}
+   0.000  CombatantJoined  {"body": "human", "client_id": "bot-a3", "combatant_id": "a3", "controller": "local_bot"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-b", "combatant_id": "b1", "controller": "human"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-b2", "combatant_id": "b2", "controller": "local_bot"}
+   0.000  CombatantJoined  {"body": "beast", "client_id": "bot-b3", "combatant_id": "b3", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "B"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  FactionRejected  {"body": "human", "combatant_id": "a3", "faction": "B", "reason": "illegal_faction"}
+   0.000  FactionRejected  {"body": "beast", "combatant_id": "b3", "faction": "A", "reason": "illegal_faction"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "A"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleRejected  {"combatant_id": "a1", "reason": "unknown_role", "role": "scout"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a1", "role": "assault"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a2", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a2", "role": "support"}
+   0.000  FactionChosen  {"body": "human", "combatant_id": "a3", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a3", "role": "recon"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b1", "role": "recon"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b2", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b2", "role": "assault"}
+   0.000  FactionChosen  {"body": "beast", "combatant_id": "b3", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b3", "role": "support"}
+   0.000  FactionsLocked  {"assignments": {"a1": "A", "a2": "A", "a3": "A", "b1": "B", "b2": "B", "b3": "B"}, "identities": {"a1": {"body": "humanoid_robot", "controller": "human", "faction": "A"}, "a2": {"body": "humanoid_robot", "controller": "local_bot", "faction": "A"}, "a3": {"body": "human", "controller": "local_bot", "faction": "A"}, "b1": {"body": "humanoid_robot", "controller": "human", "faction": "B"}, "b2": {"body": "humanoid_robot", "controller": "local_bot", "faction": "B"}, "b3": {"body": "beast", "controller": "local_bot", "faction": "B"}}}
+   0.000  RolesLocked  {"assignments": {"a1": "assault", "a2": "support", "a3": "recon", "b1": "recon", "b2": "assault", "b3": "support"}}
+   0.000  MatchStarted  {"deadline_ms": 360000, "points_to_win": 2, "role_select_open": false}
+   0.000  FactionRejected  {"combatant_id": "a1", "reason": "locked"}
+   0.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+ 360.000  MatchClockExpired  {"role_select_open": false, "score": {"A": 0, "B": 0}}
+ 360.000  OvertimeStarted  {"deadline_ms": 420000, "role_select_open": false, "score": {"A": 0, "B": 0}}
+ 420.000  MatchSettled  {"kind": "draw", "role_select_open": false, "score": {"A": 0, "B": 0}, "winner": null}
+ 420.000  FactionRejected  {"combatant_id": "a1", "reason": "locked"}
+ 420.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}

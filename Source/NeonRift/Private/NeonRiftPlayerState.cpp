@@ -14,6 +14,9 @@ void ANeonRiftPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ANeonRiftPlayerState, ViewpointClientId);
+	DOREPLIFETIME(ANeonRiftPlayerState, BodyType);
+	DOREPLIFETIME(ANeonRiftPlayerState, MatchFaction);
+	DOREPLIFETIME(ANeonRiftPlayerState, ControllerKind);
 	DOREPLIFETIME(ANeonRiftPlayerState, ViewpointEventLog);
 }
 
@@ -46,6 +49,21 @@ void ANeonRiftPlayerState::SetViewpointClientId(const FString& InClientId)
 		return;
 	}
 	ViewpointClientId = InClientId;
+}
+
+void ANeonRiftPlayerState::SetIdentityLabels(
+	const FString& InBodyType,
+	const FString& InMatchFaction,
+	const FString& InControllerKind)
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+	// Labels copied from CombatantJoined / FactionChosen. Not a second roster.
+	BodyType = InBodyType;
+	MatchFaction = InMatchFaction;
+	ControllerKind = InControllerKind;
 }
 
 void ANeonRiftPlayerState::BindToMatchRelay()
