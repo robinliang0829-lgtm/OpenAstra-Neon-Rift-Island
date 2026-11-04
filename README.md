@@ -64,6 +64,7 @@ PYTHONPATH=sim python3 -m steel_tide
 
 ## 资料
 
+- HUD 旁路：[docs/NR-M2-hud.md](docs/NR-M2-hud.md)。`PYTHONPATH=sim python3 -m steel_tide m2-hud --check` 对照 `docs/evidence/nr-m2-hud/`。不进 `m2-pack` 的步骤表。没有 UMG，没有贴图，没有 `.uasset`。颜色只是辅助，阵营仍是肩章形状和肩灯位置。
 - 概念页（与本包对齐）：https://app.notion.com/p/3ff0f164d1a2817c9069cfb02c1bfaa7
 - 游戏组工作流冻结页（创世岛原流程）：https://app.notion.com/p/40d0f164d1a2815ea084c2e10c05ebe7
 - 开工包原文：[docs/kickoff/](docs/kickoff/)

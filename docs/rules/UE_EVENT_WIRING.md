@@ -133,3 +133,9 @@ NR-02 的通过线是双端日志里出现与这三条相同的结果，而不�
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-fail --check
 ```
+
+`HudCue` 不在上表，也不在 `sim/steel_tide/events.py` 的 `EVENT_NAMES`。模拟在权威事件的同一毫秒另写一行旁路日志，`rules_effect` 为 `none`，不改持有者，不加分，不打断。比分板、端子读条、出生护盾、岗位锁定和选边锁定的 id 在 `Source/NeonRift/Public/NeonRiftHudCues.h`，与 `sim/steel_tide/hud.py` 一致。阵营字用肩章形状和肩灯位置，颜色只是辅助。不提交 UMG 或贴图。规格见 [../NR-M2-hud.md](../NR-M2-hud.md)。它和开发包并行，不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-hud --check
+```

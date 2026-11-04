@@ -54,3 +54,5 @@ PYTHONPATH=sim python3 -m steel_tide nr02 --check
 11. 出现双持或同一次读条记两分：留下两端日志退回，不要改胜负条件。
 
 胜负以 `sim/steel_tide` 为准。事件名以 `Source/NeonRift/Public/NeonRiftEventNames.h` 为准。
+
+NR-M2-hud 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-hud --check`，样例在 `docs/evidence/nr-m2-hud/`。规格见 [NR-M2-hud.md](NR-M2-hud.md)。模拟在权威事件的同一毫秒写 `HudCue` 旁路日志：比分板跟 `PointScored` / `MatchSettled`，端子读条跟 `ScoreChannelStarted` / `ScoreChannelInterrupted`，出生护盾跟 `MatchStarted` / `HitIgnored` `spawn_protection` / `ActorRespawned`，岗位和选边锁定跟 `RoleRejected` / `FactionRejected` 的 `locked`。颜色只是辅助，阵营仍是肩章形状和肩灯位置。不提交 UMG、贴图或 `.uasset`。`HudCue` 不进计分事件名，也不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。不要在这台机器上开 UE，也不要改 `EngineAssociation`。

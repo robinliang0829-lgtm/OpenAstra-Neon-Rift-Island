@@ -141,6 +141,9 @@ def diff_evidence(results: list[StepResult]) -> list[str]:
     return errors
 
 
+# m2-hud is a separate --check. It is not a step in STEPS. See docs/NR-M2-hud.md.
+
+
 def acceptance_errors(results: list[StepResult]) -> list[str]:
     errors: list[str] = []
     names = [step[0] for step in STEPS]

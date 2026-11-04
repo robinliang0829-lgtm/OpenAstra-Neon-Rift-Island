@@ -165,6 +165,14 @@ PYTHONPATH=sim python3 -m steel_tide m2-roles --check
 PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
 ```
 
+## NR-M2-hud
+
+`HudCue` 不进上面的事件表，也不进三端正文。它是权威事件同一毫秒的旁路日志，不改持有者，不加分，不是打断。比分板、端子读条、出生护盾和岗位/选边锁定都抄来源事件的时间。样例在 `docs/evidence/nr-m2-hud/hud.log`。这条不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。颜色只是辅助，阵营仍是肩章形状和肩灯位置。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-hud --check
+```
+
 ## NR-M2-pack
 
 这条不新加双端 schema，也不新加事件名。它把 `repro`、上面各张 `--check` 和 `unittest` 串成一条无头 Python 验收。不是 UE 包。命令和退出码在 `docs/evidence/nr-m2-pack/`。

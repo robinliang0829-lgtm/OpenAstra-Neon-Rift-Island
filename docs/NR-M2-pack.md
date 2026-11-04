@@ -80,3 +80,5 @@ UE 仍挂。装上本机引擎之后才做这些，做不到就停，把安装�
 2. 打开 `NeonRift.uproject`。`EngineAssociation` 仍是 `5.4` 占位。不要改。
 3. 不要交回 `.umap` / `.uasset`。不要 cook，不要打二进制包。
 4. 按上表的卡逐张做实机。关卡蓝图不要写计分。胜负仍以 `sim/steel_tide` 为准。
+
+`m2-hud` 不在这张表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。比分板、端子读条、出生护盾和岗位/选边锁定是旁路日志，用 `PYTHONPATH=sim python3 -m steel_tide m2-hud --check`，样例在 `docs/evidence/nr-m2-hud/`。规格见 [NR-M2-hud](NR-M2-hud.md)。`wired_into_m2_pack` 为 false。`unittest` 这一步会跑 `sim/tests/test_nr_m2_hud.py`。单独的 `--check` 才对照 HUD 样例日志。没有 UMG，没有贴图。
