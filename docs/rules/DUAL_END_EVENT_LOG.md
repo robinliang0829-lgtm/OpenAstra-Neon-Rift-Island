@@ -180,3 +180,11 @@ PYTHONPATH=sim python3 -m steel_tide m2-pack --check
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-audio --check
 ```
+
+## NR-M2-light
+
+`LightCue` 不进上面的事件表，也不进三端正文。它是权威事件同一毫秒的旁路日志，不改持有者，不加分，不是打断。肩灯、灯带、端子读条、得分和出生保护都抄来源事件的时间。样例在 `docs/evidence/nr-m2-light/light.log`。这条不进 `m2-pack` 的步骤表。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-light --check
+```

@@ -20,6 +20,17 @@
   "score_channel_seconds": 3,
   "bridge_warning_seconds": 4,
   "readable_without_reflection": true,
+  "lighting": {
+    "day_port_intensity": 1.0,
+    "night_port_intensity": 0.25,
+    "min_readable_contrast": 1.5,
+    "color_assist": true,
+    "shoulder_intensity": 2.0,
+    "read_bar_intensity": 1.5,
+    "score_intensity": 2.0,
+    "spawn_protection_intensity": 1.5,
+    "strip_intensity": 2.0
+  },
   "pass_range_m": 4.0,
   "pickup_radius_m": 1.5,
   "terminal_half_extent_m": 2.0,

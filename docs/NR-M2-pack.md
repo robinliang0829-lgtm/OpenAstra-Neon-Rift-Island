@@ -42,6 +42,8 @@ python3 -m steel_tide m2-pack --check
 
 规则仍是 `sim/steel_tide`。这条命令不新造计分，不新造事件名，不改 `config/steel_tide_greybox.json`。
 
+`m2-light` 不在这张表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。肩灯、4 秒灯带、端子读条、得分和出生保护的灯光契约是旁路日志，用 `PYTHONPATH=sim python3 -m steel_tide m2-light --check`，样例在 `docs/evidence/nr-m2-light/`。规格见 [NR-M2-light](NR-M2-light.md)。`unittest` 这一步会跑 `sim/tests/test_nr_m2_light.py`，所以开发包仍会执行这份契约的单元测试。单独的 `--check` 才对照灯光样例日志。日港和夜港强度写在配置的 `lighting` 里，由这条契约读取；开发包命令不改写那份配置。
+
 样例只记命令和退出码：
 
 - `docs/evidence/nr-m2-pack/commands.txt`
@@ -65,6 +67,8 @@ python3 -m steel_tide m2-pack --check
 | [NR-M2-audio](NR-M2-audio.md) | 队标音口、4 秒桥预警和芯链音效。仓内只有事件旁路日志。实机播放仍等 UE |
 
 M2 里原画方向的美术、灯光、声音也仍在本机 UE 上，不在这个开发包里。不要 cook，不要打二进制包。
+
+仓内灯光契约是 `m2-light`，不在上表。它只核对 `LightCue` 日志。实机灯光仍等 UE。见 [NR-M2-light](NR-M2-light.md)。
 
 ## 上机以后
 
