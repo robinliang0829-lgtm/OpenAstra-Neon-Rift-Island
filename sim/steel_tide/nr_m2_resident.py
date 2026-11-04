@@ -46,7 +46,12 @@ def _extra(match: SteelTideMatch) -> tuple[tuple[str, str], ...]:
     return (("identities", ",".join(parts)), ("digital_residents", ",".join(residents)))
 
 
-def _open(config: SteelTideConfig, port: DigitalResidentPort) -> SteelTideMatch:
+def _open(
+    config: SteelTideConfig,
+    port: DigitalResidentPort,
+    routes: dict[str, str] | None = None,
+) -> SteelTideMatch:
+    chosen = routes or {}
     match = SteelTideMatch(config)
     for combatant_id, client_id, body, controller, faction, role, face in ROSTER:
         match.add_combatant(
@@ -55,7 +60,7 @@ def _open(config: SteelTideConfig, port: DigitalResidentPort) -> SteelTideMatch:
             body,
             controller,
             face_variant=face,
-            preferred_route="repair_alley",
+            preferred_route=chosen.get(combatant_id, "repair_alley"),
         )
         if controller == "digital_resident":
             combatant = match.combatants[combatant_id]

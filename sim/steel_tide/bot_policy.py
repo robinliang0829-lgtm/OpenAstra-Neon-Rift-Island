@@ -15,7 +15,7 @@ import math
 from dataclasses import dataclass
 
 from .match import SERVER_CLIENT, SteelTideMatch
-from .routes import shortest_path, step_edge
+from .routes import bridgeheads, plan_route, step_edge
 
 # The assault contests the channel one second after it starts, inside the 3s read.
 INTERRUPT_AFTER_S = 1.0
@@ -269,15 +269,20 @@ def _commit(match: SteelTideMatch, combatant, decision: Decision) -> None:
 def _enqueue_move(match: SteelTideMatch, combatant, goal: str) -> bool:
     if not goal or match.has_pending(combatant.id, "request_move"):
         return False
-    path = shortest_path(match.config, combatant.anchor or "", goal, combatant.preferred_route, match.bridge_state)
+    anchor = combatant.anchor or ""
+    path, route = plan_route(match.config, anchor, goal, combatant.preferred_route, match.bridge_state)
+    match.remember_travel(combatant.id, goal, route, path, anchor)
     if not path:
+        _probe_blocked_span(match, combatant, goal)
         return False
     dest = path[0]
-    edge = step_edge(match.config, combatant.anchor or "", dest, combatant.preferred_route, match.bridge_state)
+    edge = step_edge(match.config, anchor, dest, route, match.bridge_state)
     if edge is None:
         return False
     travel_ms = match._travel_ms(edge.length_m, combatant.id)
     earliest = combatant.anchor_since_ms + travel_ms
+    if edge.bridge:
+        earliest = max(earliest, (match.bridge_connected_ms or 0) + travel_ms)
     eta_ms = earliest if earliest >= match.t_ms else match.t_ms
     match.enqueue(
         combatant.client_id,
@@ -285,6 +290,33 @@ def _enqueue_move(match: SteelTideMatch, combatant, goal: str) -> bool:
         eta_ms / 1000,
         combatant_id=combatant.id,
         dest=dest,
-        route=combatant.preferred_route,
+        route=route,
     )
     return True
+
+
+def _probe_blocked_span(match: SteelTideMatch, combatant, goal: str) -> None:
+    """One rejected step onto the open span. The body stays on the safe edge.
+
+    The reject is not a score and not a down. It is recorded once per time
+    the span is open, so the log is not a stream of the same refusal.
+    """
+    if combatant.preferred_route != "elevated" or match.bridge_state == "connected":
+        return
+    anchor = combatant.anchor
+    if anchor not in bridgeheads(match.config) or anchor == goal:
+        return
+    if not match._bridge_blocks(anchor, "center"):
+        return
+    key = (combatant.id, match.bridge_generation)
+    if key in match.span_probes or match.has_pending(combatant.id, "request_move"):
+        return
+    match.span_probes.add(key)
+    match.enqueue(
+        combatant.client_id,
+        "request_move",
+        match.t_seconds,
+        combatant_id=combatant.id,
+        dest="center",
+        route="elevated",
+    )

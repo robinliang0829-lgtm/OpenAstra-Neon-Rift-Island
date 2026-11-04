@@ -156,3 +156,11 @@ PYTHONPATH=sim python3 -m steel_tide m2-resident --check
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-roles --check
 ```
+
+## NR-M2-bridge
+
+同一套三端正文，schema 换成 `nr-m2-bridge-dual-end-v1`。表头有 `identities`，另有 `digital_residents`。样例在 `docs/evidence/nr-m2-bridge/`。`a2` 仍是 `digital_resident`，其余三个驱动者仍是 `local_bot`。这一局在常规时间先到 2 分结束，日志里没有 `OvertimeStarted`。`BridgeStateChanged` 先 `connected`，后 `disconnected`，三端正文都有。`reason` 为 `path_recompute` 的决策在接通和断开各出现。断开时的 `BridgeOccupantNudged` 和 `MoveRejected` / `bridge_blocked` 不记分，也不击倒。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
+```
