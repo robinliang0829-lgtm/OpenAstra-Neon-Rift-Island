@@ -1,0 +1,372 @@
+{
+  "id": "NR01_SteelTide",
+  "level": "NR_SteelTide_Greybox",
+  "status": "layout_only_no_umap",
+  "source": "sim/steel_tide/layout.py",
+  "rules": "config/steel_tide_greybox.json",
+  "ue_units_per_meter": 100,
+  "ue_axes": "sim x -> UE X, sim y -> UE Y, Z up, deck Z = 0",
+  "walk_speed_uu_s": 600,
+  "actors": {
+    "NR_Spawn_A": {
+      "anchor": "spawn_a",
+      "x_m": 0.0,
+      "y_m": 0.0,
+      "x_uu": 0,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 0,
+      "note": "A spawn, face +X"
+    },
+    "NR_Terminal_A": {
+      "anchor": "terminal_a",
+      "x_m": 12.0,
+      "y_m": 0.0,
+      "x_uu": 1200,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 0,
+      "note": "B scores here"
+    },
+    "NR_BridgeHead_A": {
+      "anchor": "bridgehead_a",
+      "x_m": 24.0,
+      "y_m": 0.0,
+      "x_uu": 2400,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 0,
+      "note": "Safe deck when the span drops"
+    },
+    "NR_CoreSpawn": {
+      "anchor": "center",
+      "x_m": 48.0,
+      "y_m": 0.0,
+      "x_uu": 4800,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 0,
+      "note": "Single phase-core spawn"
+    },
+    "NR_BridgeHead_B": {
+      "anchor": "bridgehead_b",
+      "x_m": 72.0,
+      "y_m": 0.0,
+      "x_uu": 7200,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 180,
+      "note": "Safe deck when the span drops"
+    },
+    "NR_Terminal_B": {
+      "anchor": "terminal_b",
+      "x_m": 84.0,
+      "y_m": 0.0,
+      "x_uu": 8400,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 180,
+      "note": "A scores here"
+    },
+    "NR_Spawn_B": {
+      "anchor": "spawn_b",
+      "x_m": 96.0,
+      "y_m": 0.0,
+      "x_uu": 9600,
+      "y_uu": 0,
+      "z_uu": 0,
+      "yaw": 180,
+      "note": "B spawn, face -X"
+    },
+    "NR_Alley_A": {
+      "anchor": "alley_a",
+      "x_m": 0.0,
+      "y_m": 18.0,
+      "x_uu": 0,
+      "y_uu": 1800,
+      "z_uu": 0,
+      "yaw": 0,
+      "note": "Repair-alley node"
+    },
+    "NR_Alley_Mid": {
+      "anchor": "alley_mid",
+      "x_m": 48.0,
+      "y_m": 18.0,
+      "x_uu": 4800,
+      "y_uu": 1800,
+      "z_uu": 0,
+      "yaw": 0,
+      "note": "Repair-alley node"
+    },
+    "NR_Alley_B": {
+      "anchor": "alley_b",
+      "x_m": 96.0,
+      "y_m": 18.0,
+      "x_uu": 9600,
+      "y_uu": 1800,
+      "z_uu": 0,
+      "yaw": 180,
+      "note": "Repair-alley node"
+    }
+  },
+  "routes": {
+    "elevated_spawn_a_to_center": {
+      "route": "elevated",
+      "bridge_state": "connected",
+      "length_m": 48.0,
+      "walk_seconds_at_walk_speed": 8.0,
+      "anchors": [
+        "spawn_a",
+        "terminal_a",
+        "bridgehead_a",
+        "center"
+      ],
+      "points": [
+        {
+          "anchor": "spawn_a",
+          "x_m": 0.0,
+          "y_m": 0.0,
+          "x_uu": 0,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "terminal_a",
+          "x_m": 12.0,
+          "y_m": 0.0,
+          "x_uu": 1200,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "bridgehead_a",
+          "x_m": 24.0,
+          "y_m": 0.0,
+          "x_uu": 2400,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "center",
+          "x_m": 48.0,
+          "y_m": 0.0,
+          "x_uu": 4800,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        }
+      ]
+    },
+    "elevated_spawn_b_to_center": {
+      "route": "elevated",
+      "bridge_state": "connected",
+      "length_m": 48.0,
+      "walk_seconds_at_walk_speed": 8.0,
+      "anchors": [
+        "spawn_b",
+        "terminal_b",
+        "bridgehead_b",
+        "center"
+      ],
+      "points": [
+        {
+          "anchor": "spawn_b",
+          "x_m": 96.0,
+          "y_m": 0.0,
+          "x_uu": 9600,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "terminal_b",
+          "x_m": 84.0,
+          "y_m": 0.0,
+          "x_uu": 8400,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "bridgehead_b",
+          "x_m": 72.0,
+          "y_m": 0.0,
+          "x_uu": 7200,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "center",
+          "x_m": 48.0,
+          "y_m": 0.0,
+          "x_uu": 4800,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        }
+      ]
+    },
+    "repair_alley_spawn_a_to_center": {
+      "route": "repair_alley",
+      "bridge_state": "disconnected",
+      "length_m": 84.0,
+      "walk_seconds_at_walk_speed": 14.0,
+      "anchors": [
+        "spawn_a",
+        "alley_a",
+        "alley_mid",
+        "center"
+      ],
+      "points": [
+        {
+          "anchor": "spawn_a",
+          "x_m": 0.0,
+          "y_m": 0.0,
+          "x_uu": 0,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "alley_a",
+          "x_m": 0.0,
+          "y_m": 18.0,
+          "x_uu": 0,
+          "y_uu": 1800,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "alley_mid",
+          "x_m": 48.0,
+          "y_m": 18.0,
+          "x_uu": 4800,
+          "y_uu": 1800,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "center",
+          "x_m": 48.0,
+          "y_m": 0.0,
+          "x_uu": 4800,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        }
+      ]
+    },
+    "repair_alley_spawn_b_to_center": {
+      "route": "repair_alley",
+      "bridge_state": "disconnected",
+      "length_m": 84.0,
+      "walk_seconds_at_walk_speed": 14.0,
+      "anchors": [
+        "spawn_b",
+        "alley_b",
+        "alley_mid",
+        "center"
+      ],
+      "points": [
+        {
+          "anchor": "spawn_b",
+          "x_m": 96.0,
+          "y_m": 0.0,
+          "x_uu": 9600,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "alley_b",
+          "x_m": 96.0,
+          "y_m": 18.0,
+          "x_uu": 9600,
+          "y_uu": 1800,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "alley_mid",
+          "x_m": 48.0,
+          "y_m": 18.0,
+          "x_uu": 4800,
+          "y_uu": 1800,
+          "z_uu": 0,
+          "yaw": 0.0
+        },
+        {
+          "anchor": "center",
+          "x_m": 48.0,
+          "y_m": 0.0,
+          "x_uu": 4800,
+          "y_uu": 0,
+          "z_uu": 0,
+          "yaw": 0.0
+        }
+      ]
+    }
+  },
+  "decks": [
+    {
+      "name": "NR_Deck_A",
+      "x_min_uu": 0,
+      "x_max_uu": 2400,
+      "y_uu": 0,
+      "width_uu": 400,
+      "thickness_uu": 40,
+      "length_m": 24.0
+    },
+    {
+      "name": "NR_BridgeSpan",
+      "x_min_uu": 2400,
+      "x_max_uu": 7200,
+      "y_uu": 0,
+      "width_uu": 400,
+      "thickness_uu": 40,
+      "length_m": 48.0
+    },
+    {
+      "name": "NR_Deck_B",
+      "x_min_uu": 7200,
+      "x_max_uu": 9600,
+      "y_uu": 0,
+      "width_uu": 400,
+      "thickness_uu": 40,
+      "length_m": 24.0
+    },
+    {
+      "name": "NR_AlleyDeck",
+      "x_min_uu": 0,
+      "x_max_uu": 9600,
+      "y_uu": 1800,
+      "width_uu": 400,
+      "thickness_uu": 40,
+      "length_m": 96.0
+    }
+  ],
+  "alley_links": [
+    {
+      "name": "NR_AlleyLink_A",
+      "x_uu": 0,
+      "y_min_uu": 0,
+      "y_max_uu": 1800
+    },
+    {
+      "name": "NR_AlleyLink_Mid",
+      "x_uu": 4800,
+      "y_min_uu": 0,
+      "y_max_uu": 1800
+    },
+    {
+      "name": "NR_AlleyLink_B",
+      "x_uu": 9600,
+      "y_min_uu": 0,
+      "y_max_uu": 1800
+    }
+  ]
+}

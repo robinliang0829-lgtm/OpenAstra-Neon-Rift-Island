@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.4",
+	"Category": "Game",
+	"Description": "OpenAstra Neon Rift skeleton. EngineAssociation 5.4 is a placeholder. PM-钢潮岛 locks the real minor from the machine install. No custom umap is checked in.",
+	"Modules": [
+		{
+			"Name": "NeonRift",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
