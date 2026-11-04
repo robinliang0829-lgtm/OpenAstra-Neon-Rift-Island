@@ -18,6 +18,7 @@
 | `UNeonRiftFactionSelect` | `Source/NeonRift/Public/NeonRiftFactionSelect.h` | 选边、岗位、锁队 |
 | `ANeonRiftTerminalScore` | `Source/NeonRift/Public/NeonRiftTerminalScore.h` | 端子读条、倒地、结算 |
 | `ANeonRiftBridgeWarn` | `Source/NeonRift/Public/NeonRiftBridgeWarn.h` | 桥预警、路线、移动 |
+| `UNeonRiftReadabilityAsset` | `Source/NeonRift/Public/NeonRiftReadability.h` | NR-03 代理与 4 秒预警的数据。不记分 |
 | 参数 | `config/steel_tide_greybox.json` | 秒数和阵营。不要在编辑器里另填一套 |
 
 复制以服务器为准。客户端发送意图。UI 读复制下来的 `holder_id`，不把本地预测的第二名持有者当成真的。
@@ -44,7 +45,7 @@
 
 同帧拾取按 `(client_id, combatant_id)` 稳定排序。排序只为了和原型日志对齐，**通过条件是恰好一人成功**。两人同时站在芯上时，另一人收到 `CorePickRejected`，原因 `already_held`。
 
-计时器在意图之后，顺序为：桥预警、桥接通、桥断开、复活、芯超时复位、读条完成、比赛钟。因此读条结束的同一毫秒若有 `hit`，先打断，不计分。
+计时器在意图之后，顺序为：桥预警、灯带递进、桥预警结束、桥接通、桥断开、复活、芯超时复位、读条完成、比赛钟。因此读条结束的同一毫秒若有 `hit`，先打断，不计分。灯带和警报不改变持有者，也不加分。
 
 ## 事件
 
@@ -71,8 +72,10 @@
 | `ActorDowned` | 命中且不在出生保护内。持芯者先掉芯 | `ANeonRiftTerminalScore` |
 | `HitIgnored` / `HitRejected` | 出生保护内忽略。玩家客户端伪造命中被拒绝 | `ANeonRiftTerminalScore` |
 | `ActorRespawned` | `down_seconds`（提案 5.0）后回本方出生点 | `ANeonRiftTerminalScore` |
-| `BridgeWarningStarted` | 接通前 `bridge_warning_seconds`（提案 4.0）。载荷含 `readable_without_reflection: true` | `ANeonRiftBridgeWarn` |
-| `BridgeStateChanged` | `connected` 或 `disconnected` | `ANeonRiftBridgeWarn` |
+| `BridgeLightStripAdvanced` | 预警开始后，灯带按剩余提前量逐盏点亮。不改持有者，不计分 | `ANeonRiftBridgeWarn` |
+| `BridgeWarningStarted` | 接通前 `bridge_warning_seconds`（配置 4）。警报与灯带第一盏同一毫秒开始。载荷含配置里的 `readable_without_reflection` | `ANeonRiftBridgeWarn` |
+| `BridgeWarningCompleted` | 灯带走完。与接通同一毫秒，提前量为 4 秒。不是记分 | `ANeonRiftBridgeWarn` |
+| `BridgeStateChanged` | `connected` 或 `disconnected`。接通紧跟 `BridgeWarningCompleted` | `ANeonRiftBridgeWarn` |
 | `BridgeOccupantNudged` | 断开时把跨度上的人挪到本方桥头，不嵌进网格 | `ANeonRiftBridgeWarn` |
 | `MatchClockExpired` | 提案 360 秒。`role_select_open` 仍为 false | `ANeonRiftTerminalScore` |
 | `OvertimeStarted` | 平分才进入。提案 60 秒，先得分者结束。不重新选岗位 | `ANeonRiftTerminalScore` |
@@ -85,6 +88,7 @@
 ```bash
 PYTHONPATH=sim python3 -m steel_tide repro
 PYTHONPATH=sim python3 -m steel_tide nr02 --check
+PYTHONPATH=sim python3 -m steel_tide nr03 --check
 ```
 
 双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。

@@ -14,7 +14,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void EmitBridgeOccupantNudged(const FString& PayloadJson);
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
+	void EmitBridgeLightStripAdvanced(const FString& PayloadJson);
+	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void EmitBridgeStateChanged(const FString& PayloadJson);
+	UFUNCTION(BlueprintCallable, Category="NeonRift")
+	void EmitBridgeWarningCompleted(const FString& PayloadJson);
 	UFUNCTION(BlueprintCallable, Category="NeonRift")
 	void EmitBridgeWarningStarted(const FString& PayloadJson);
 	UFUNCTION(BlueprintCallable, Category="NeonRift")

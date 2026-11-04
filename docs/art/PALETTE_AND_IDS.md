@@ -19,3 +19,16 @@ Team identity is the badge shape and the shoulder light slot. Hex color is auxil
 | `light.B.shoulder_right` | right shoulder | B light slot |
 
 Source of the values is `sim/steel_tide/palette.py`.
+
+## NR-03 proxies
+
+Shape and shoulder slot identify the humanoid sides. The beast and the quadruped share neither outline. Machine paint and deck concrete are materials, not team ids. Spec file: `docs/art/NR03_PROXIES.json`.
+
+| proxy | uses |
+| --- | --- |
+| `NR_Proxy_Humanoid_A` | `badge.A.open_chevron`, `light.A.shoulder_left`, body `NR_Body_Humanoid` |
+| `NR_Proxy_Humanoid_B` | `badge.B.closed_ring`, `light.B.shoulder_right`, body `NR_Body_Humanoid` |
+| `NR_Proxy_Beast` | silhouette `organic_beast` |
+| `NR_Proxy_Quadruped` | silhouette `hydraulic_quadruped` |
+| `NR_Proxy_EngineeringMachine` | `mat.worn_yellow` |
+| `NR_Proxy_WetConcrete` | `mat.wet_concrete` |

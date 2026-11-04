@@ -9,8 +9,10 @@ namespace NeonRiftEvents
 	inline const TCHAR* const AbilityUsed = TEXT("AbilityUsed");
 	inline const TCHAR* const ActorDowned = TEXT("ActorDowned");
 	inline const TCHAR* const ActorRespawned = TEXT("ActorRespawned");
+	inline const TCHAR* const BridgeLightStripAdvanced = TEXT("BridgeLightStripAdvanced");
 	inline const TCHAR* const BridgeOccupantNudged = TEXT("BridgeOccupantNudged");
 	inline const TCHAR* const BridgeStateChanged = TEXT("BridgeStateChanged");
+	inline const TCHAR* const BridgeWarningCompleted = TEXT("BridgeWarningCompleted");
 	inline const TCHAR* const BridgeWarningStarted = TEXT("BridgeWarningStarted");
 	inline const TCHAR* const CombatantJoined = TEXT("CombatantJoined");
 	inline const TCHAR* const CoreDropRejected = TEXT("CoreDropRejected");

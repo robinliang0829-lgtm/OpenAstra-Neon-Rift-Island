@@ -1,0 +1,142 @@
+{
+  "id": "NR03_readability",
+  "status": "spec_only_no_umap",
+  "authority": "sim/steel_tide",
+  "source": "sim/steel_tide/nr03.py",
+  "palette": "docs/art/PALETTE_AND_IDS.md",
+  "level": "NR_SteelTide_Greybox",
+  "badges": {
+    "A": {
+      "faction": "A",
+      "id": "badge.A.open_chevron",
+      "shape": "open_chevron",
+      "light_id": "light.A.shoulder_left",
+      "light_slot": "shoulder_left",
+      "aux": "tide_cyan",
+      "aux_id": "aux.tide_cyan",
+      "aux_hex": "#3DDFD4",
+      "aux_role": "auxiliary",
+      "file": "docs/art/badges/badge_A_open_chevron.svg",
+      "color_is_identity": false
+    },
+    "B": {
+      "faction": "B",
+      "id": "badge.B.closed_ring",
+      "shape": "closed_ring",
+      "light_id": "light.B.shoulder_right",
+      "light_slot": "shoulder_right",
+      "aux": "hazard_amber",
+      "aux_id": "aux.hazard_amber",
+      "aux_hex": "#E2A23A",
+      "aux_role": "auxiliary",
+      "file": "docs/art/badges/badge_B_closed_ring.svg",
+      "color_is_identity": false
+    }
+  },
+  "bridge_warning": {
+    "event_started": "BridgeWarningStarted",
+    "event_advance": "BridgeLightStripAdvanced",
+    "event_completed": "BridgeWarningCompleted",
+    "event_connect": "BridgeStateChanged",
+    "connect_state": "connected",
+    "bridge_warning_seconds": 4.0,
+    "readable_without_reflection": true,
+    "alarm_starts_with": "span_light_strip",
+    "optional_cue": "water_reflection",
+    "required_cues": [
+      "span_light_strip",
+      "alarm"
+    ],
+    "lamps": 5,
+    "span_actor": "NR_BridgeSpan"
+  },
+  "proxies": [
+    {
+      "id": "NR_Proxy_Humanoid_A",
+      "kind": "humanoid",
+      "body_id": "NR_Body_Humanoid",
+      "same_body_as": "NR_Proxy_Humanoid_B",
+      "faction": "A",
+      "badge_id": "badge.A.open_chevron",
+      "shape": "open_chevron",
+      "light_id": "light.A.shoulder_left",
+      "light_slot": "shoulder_left",
+      "aux": "tide_cyan",
+      "body_silhouette": [
+        "00100",
+        "01110",
+        "00100",
+        "01110",
+        "01010"
+      ]
+    },
+    {
+      "id": "NR_Proxy_Humanoid_B",
+      "kind": "humanoid",
+      "body_id": "NR_Body_Humanoid",
+      "same_body_as": "NR_Proxy_Humanoid_A",
+      "faction": "B",
+      "badge_id": "badge.B.closed_ring",
+      "shape": "closed_ring",
+      "light_id": "light.B.shoulder_right",
+      "light_slot": "shoulder_right",
+      "aux": "hazard_amber",
+      "body_silhouette": [
+        "00100",
+        "01110",
+        "00100",
+        "01110",
+        "01010"
+      ]
+    },
+    {
+      "id": "NR_Proxy_Beast",
+      "kind": "beast",
+      "body_id": "NR_Body_Beast",
+      "silhouette_id": "organic_beast",
+      "paint_hex": "#6E7570",
+      "silhouette": [
+        "00111100",
+        "01111100",
+        "01110010",
+        "00100010",
+        "00100000",
+        "01100000"
+      ],
+      "note": "Organic stance. A recolor of the quadruped is not this proxy."
+    },
+    {
+      "id": "NR_Proxy_Quadruped",
+      "kind": "robot",
+      "body_id": "NR_Body_Quadruped",
+      "silhouette_id": "hydraulic_quadruped",
+      "paint_hex": "#6E7570",
+      "silhouette": [
+        "01111110",
+        "01111110",
+        "01000010",
+        "01000010",
+        "01000010",
+        "01000010"
+      ],
+      "note": "Machine stance. Paint matches the beast so the outline has to differ."
+    },
+    {
+      "id": "NR_Proxy_EngineeringMachine",
+      "kind": "prop",
+      "material_id": "mat.worn_yellow",
+      "paint": "worn_yellow",
+      "hex": "#C4A15A",
+      "role": "scale_reference"
+    },
+    {
+      "id": "NR_Proxy_WetConcrete",
+      "kind": "material",
+      "material_id": "mat.wet_concrete",
+      "token": "wet_concrete",
+      "hex": "#3E4644",
+      "roughness": "high",
+      "reflection_required_for_readability": false
+    }
+  ]
+}

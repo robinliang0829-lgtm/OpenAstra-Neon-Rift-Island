@@ -19,6 +19,7 @@
   "spawn_protection_seconds": 3,
   "score_channel_seconds": 3,
   "bridge_warning_seconds": 4,
+  "readable_without_reflection": true,
   "pass_range_m": 4.0,
   "pickup_radius_m": 1.5,
   "terminal_half_extent_m": 2.0,
