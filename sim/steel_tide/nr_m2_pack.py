@@ -21,6 +21,7 @@ SCHEMA = "nr-m2-pack-dev-v1"
 EVIDENCE_DIR = REPO_ROOT / "docs" / "evidence" / "nr-m2-pack"
 
 # name, module, arguments after `python3 -m <module>`
+# m2-audio is a separate --check. It is not a step here. See docs/NR-M2-audio.md.
 STEPS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("repro", "steel_tide", ("repro",)),
     ("nr02", "steel_tide", ("nr02", "--check")),

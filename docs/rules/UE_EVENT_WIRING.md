@@ -21,6 +21,7 @@
 | `ANeonRiftBotPolicy` | `Source/NeonRift/Public/NeonRiftBotPolicy.h` | 转发 `BotDecision`。不选择，不计分 |
 | `UNeonRiftResidentPort` | `Source/NeonRift/Public/NeonRiftResidentPort.h` | 薄策略。`SelectMatch` / `Decide` 只记合法座位和意图，不喂坐标，不计分 |
 | `UNeonRiftReadabilityAsset` | `Source/NeonRift/Public/NeonRiftReadability.h` | NR-03 代理与 4 秒预警的数据。不记分 |
+| `NeonRiftAudio` | `Source/NeonRift/Public/NeonRiftAudioCues.h` | NR-M2 音效 id。只列名字，不播放，不计分，无声音资产 |
 | 参数 | `config/steel_tide_greybox.json` | 秒数和阵营。不要在编辑器里另填一套 |
 
 复制以服务器为准。客户端发送意图。UI 读复制下来的 `holder_id`，不把本地预测的第二名持有者当成真的。
@@ -87,6 +88,8 @@
 | `MatchClockExpired` | 提案 360 秒。`role_select_open` 仍为 false | `ANeonRiftTerminalScore` |
 | `OvertimeStarted` | 平分才进入。提案 60 秒。打破平局的第一笔得分立即结束：未到 `points_to_win` 时 `kind=score`，到达时 `kind=points`。这一笔若把比分打回相同，立即 `kind=draw`。60 秒结束仍相同也是 `kind=draw`，不开启第二段，不重新选岗位 | `ANeonRiftTerminalScore` |
 | `MatchSettled` | 只发一次。`kind` 为 `points`、`score` 或 `draw`。常规时间先到 `points_to_win` 立即 `kind=points`，不进入加时 | `ANeonRiftTerminalScore` |
+
+`AudioCue` 不在上表，也不在 `sim/steel_tide/events.py` 的 `EVENT_NAMES`。模拟在权威事件的同一毫秒另写一行旁路日志，`rules_effect` 为 `none`，不改持有者，不加分，不打断。队标、桥和芯链的 id 在 `NeonRiftAudioCues.h`，与 `sim/steel_tide/audio.py` 一致。不提交声音文件。规格见 [../NR-M2-audio.md](../NR-M2-audio.md)。
 
 持芯者速度用 `walk_speed_mps`（6，即 600 uu/s），不能冲刺，也不能突进。未持芯的原型移动用 `sprint_speed_mps`（8，即 800 uu/s）。1 米 = 100 UE 单位。坐标：模拟 x → UE X，模拟 y → UE Y，Z 向上，甲板 Z = 0。锚点表在 `config/steel_tide_greybox.json`。
 

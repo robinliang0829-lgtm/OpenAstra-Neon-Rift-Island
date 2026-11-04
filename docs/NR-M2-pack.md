@@ -38,6 +38,8 @@ python3 -m steel_tide m2-pack --check
 | m2-bridge | `PYTHONPATH=sim python3 -m steel_tide m2-bridge --check` | 桥接通和断开改权威路线图，机修巷仍可得分 |
 | unittest | `PYTHONPATH=sim python3 -m unittest discover -s sim/tests -v` | `sim/tests` 全部用例 |
 
+`m2-audio` 不在这张表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。队标音、4 秒桥预警和芯链的音效契约用 `PYTHONPATH=sim python3 -m steel_tide m2-audio --check`，样例在 `docs/evidence/nr-m2-audio/`。规格见 [NR-M2-audio](NR-M2-audio.md)。`unittest` 这一步会跑 `sim/tests/test_nr_m2_audio.py`，所以开发包仍会执行这份契约的单元测试。单独的 `--check` 才对照音效样例日志。
+
 规则仍是 `sim/steel_tide`。这条命令不新造计分，不新造事件名，不改 `config/steel_tide_greybox.json`。
 
 样例只记命令和退出码：
@@ -60,6 +62,7 @@ python3 -m steel_tide m2-pack --check
 | [NR-M2-resident](NR-M2-resident.md) | 薄策略数字居民上机。不喂墙后坐标 |
 | [NR-M2-roles](NR-M2-roles.md) | 突进、支援、侦察在 PIE 里按岗位使用 |
 | [NR-M2-bridge](NR-M2-bridge.md) | 导航网格跟权威路线图。桥张开时跨度不可走，机修巷可走。断开不记分、不击倒 |
+| [NR-M2-audio](NR-M2-audio.md) | 队标音口、4 秒桥预警和芯链音效。仓内只有事件旁路日志。实机播放仍等 UE |
 
 M2 里原画方向的美术、灯光、声音也仍在本机 UE 上，不在这个开发包里。不要 cook，不要打二进制包。
 

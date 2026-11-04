@@ -172,3 +172,11 @@ PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-pack --check
 ```
+
+## NR-M2-audio
+
+`AudioCue` 不进上面的事件表，也不进三端正文。它是权威事件同一毫秒的旁路日志，不改持有者，不加分，不是打断。样例在 `docs/evidence/nr-m2-audio/audio.log`。这条不进 `m2-pack` 的步骤表。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-audio --check
+```

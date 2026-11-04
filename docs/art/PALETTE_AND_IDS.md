@@ -20,6 +20,17 @@ Team identity is the badge shape and the shoulder light slot. Hex color is auxil
 
 Source of the values is `sim/steel_tide/palette.py`.
 
+## Audio mouths
+
+Team sound ids use the same shape and the same shoulder lamp slot. The mouth is that lamp side. Hex stays auxiliary and is not part of the id. No sound file is stored for these ids.
+
+| id | mouth | shape |
+| --- | --- | --- |
+| `sfx.team.A.open_chevron.mouth.shoulder_left` | `shoulder_left` | `open_chevron` |
+| `sfx.team.B.closed_ring.mouth.shoulder_right` | `shoulder_right` | `closed_ring` |
+
+Source of the ids is `sim/steel_tide/audio.py`. The match log is [NR-M2-audio](../NR-M2-audio.md).
+
 ## NR-03 proxies
 
 Shape and shoulder slot identify the humanoid sides. The beast and the quadruped share neither outline. Machine paint and deck concrete are materials, not team ids. Spec file: `docs/art/NR03_PROXIES.json`.
