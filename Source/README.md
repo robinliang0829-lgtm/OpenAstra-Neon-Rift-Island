@@ -7,7 +7,11 @@
 | `NeonRift.Target.cs` / `NeonRiftEditor.Target.cs` | Game 与 Editor 目标 |
 | `NeonRift/NeonRift.Build.cs` | 运行时模块 |
 | `NeonRift/Public/NeonRiftEventNames.h` | 与 `sim/steel_tide/events.py` 相同的事件名 |
+| `NeonRift/Public/NeonRiftEventLog.h` | 事件行格式。不算分 |
 | `NeonRift/Public/NeonRiftMatchSubsystem.h` | 唯一广播口 |
+| `NeonRift/Public/NeonRiftGameMode.h` | 转发总线。不保存比分 |
+| `NeonRift/Public/NeonRiftGameState.h` | 订阅并复制权威载荷 |
+| `NeonRift/Public/NeonRiftPlayerState.h` | 一个视角再广播同一行 |
 | `NeonRift/Public/NeonRiftPhaseCore.h` | 相位芯 |
 | `NeonRift/Public/NeonRiftFactionSelect.h` | 选边与锁队 |
 | `NeonRift/Public/NeonRiftTerminalScore.h` | 端子读条 |

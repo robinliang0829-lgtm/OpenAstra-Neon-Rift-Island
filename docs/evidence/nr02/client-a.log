@@ -1,0 +1,60 @@
+# schema nr02-dual-end-v1
+# authority sim/steel_tide
+# end client-a
+# viewpoint_client client-a
+# controlled a1
+# local_bots a2,a3,b2,b3
+# roster a1:human:A:client-a,a2:local_bot:A:bot-a2,a3:local_bot:A:bot-a3,b1:human:B:client-b,b2:local_bot:B:bot-b2,b3:local_bot:B:bot-b3
+# mirrored_holder a3
+# mirrored_score A=1 B=0
+# event_lines 49
+# comparable event_body_identical
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-a", "combatant_id": "a1", "controller": "human"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a1", "role": "assault"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-a2", "combatant_id": "a2", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a2", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a2", "role": "support"}
+   0.000  CombatantJoined  {"body": "human", "client_id": "bot-a3", "combatant_id": "a3", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "human", "combatant_id": "a3", "faction": "A"}
+   0.000  RoleChosen  {"combatant_id": "a3", "role": "recon"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-b", "combatant_id": "b1", "controller": "human"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b1", "role": "assault"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "bot-b2", "combatant_id": "b2", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b2", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b2", "role": "support"}
+   0.000  CombatantJoined  {"body": "beast", "client_id": "bot-b3", "combatant_id": "b3", "controller": "local_bot"}
+   0.000  FactionChosen  {"body": "beast", "combatant_id": "b3", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "b3", "role": "recon"}
+   0.000  FactionsLocked  {"assignments": {"a1": "A", "a2": "A", "a3": "A", "b1": "B", "b2": "B", "b3": "B"}}
+   0.000  RolesLocked  {"assignments": {"a1": "assault", "a2": "support", "a3": "recon", "b1": "assault", "b2": "support", "b3": "recon"}}
+   0.000  MatchStarted  {"deadline_ms": 360000, "points_to_win": 2, "role_select_open": false}
+   0.500  RouteSelected  {"combatant_id": "a2", "route": "repair_alley"}
+   0.500  RouteSelected  {"combatant_id": "a3", "route": "repair_alley"}
+   0.500  RouteSelected  {"combatant_id": "b2", "route": "repair_alley"}
+   0.500  RouteSelected  {"combatant_id": "b3", "route": "repair_alley"}
+   0.500  RouteSelected  {"combatant_id": "a1", "route": "repair_alley"}
+   0.500  RouteSelected  {"combatant_id": "b1", "route": "repair_alley"}
+   1.000  CorePickRejected  {"client_id": "bot-a2", "combatant_id": "a2", "reason": "not_at_core"}
+   1.000  CorePickRejected  {"client_id": "bot-a3", "combatant_id": "a3", "reason": "not_at_core"}
+   1.000  CorePickRejected  {"client_id": "bot-b2", "combatant_id": "b2", "reason": "not_at_core"}
+   1.000  CorePickRejected  {"client_id": "bot-b3", "combatant_id": "b3", "reason": "not_at_core"}
+   1.000  CorePicked  {"anchor": "center", "client_id": "client-a", "combatant_id": "a1"}
+   1.000  CorePickRejected  {"client_id": "client-b", "combatant_id": "b1", "reason": "already_held"}
+   2.000  ScoreChannelStarted  {"combatant_id": "a1", "ends_ms": 5000, "terminal": "terminal_b"}
+   2.250  MoveCompleted  {"combatant_id": "a3", "from": "spawn_a", "route": "repair_alley", "to": "alley_a", "travel_ms": 2250}
+   2.250  MoveCompleted  {"combatant_id": "b2", "from": "spawn_b", "route": "repair_alley", "to": "alley_b", "travel_ms": 2250}
+   2.250  MoveCompleted  {"combatant_id": "b3", "from": "spawn_b", "route": "repair_alley", "to": "alley_b", "travel_ms": 2250}
+   3.500  ScoreChannelInterrupted  {"combatant_id": "a1", "elapsed_ms": 1500, "reason": "hit"}
+   3.500  CoreDropped  {"anchor": "terminal_b", "combatant_id": "a1", "reason": "downed", "status": "ground"}
+   3.500  ActorDowned  {"combatant_id": "a1", "respawn_ms": 8500}
+   4.000  CorePicked  {"anchor": "terminal_b", "client_id": "bot-a2", "combatant_id": "a2"}
+   4.100  ScoreChannelStarted  {"combatant_id": "a2", "ends_ms": 7100, "terminal": "terminal_b"}
+   7.100  PointScored  {"combatant_id": "a2", "faction": "A", "points": 1, "score": {"A": 1, "B": 0}}
+   7.100  CoreReturnedToCenter  {"anchor": "center", "scoring_faction": "A"}
+   7.600  CoreMarkedUnpickable  {"anchor": "sea", "status": "overboard"}
+   8.500  ActorRespawned  {"anchor": "spawn_a", "combatant_id": "a1"}
+  10.000  CorePickRejected  {"client_id": "client-b", "combatant_id": "b1", "reason": "not_pickable"}
+  15.600  CoreReset  {"anchor": "center", "reason": "overboard"}
+  15.700  CorePicked  {"anchor": "center", "client_id": "bot-a3", "combatant_id": "a3"}
