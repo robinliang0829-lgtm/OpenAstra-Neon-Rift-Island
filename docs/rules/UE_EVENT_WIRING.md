@@ -33,7 +33,7 @@
 
 数字居民和本地机器人走同一套意图。回传里把 `local_bot` 和真正的 Resident 分开写。这批 bot 不是生产数字居民。
 
-`BotDecision` 由 `sim/steel_tide` 在本地 bot 提交意图时写下，不是玩家 RPC，也不计分。`hit` 仍只有服务器能发。bot 决定打断读条时，模拟替服务器排队一次 `down` 为 false 的命中。`ResidentDecision` 是薄策略数字居民的同一类审计，`controller` 为 `digital_resident`。它不改持有者，不计分，也不写墙后坐标。NR-M1-bot 不构造 `UNeonRiftResidentPort`。NR-M2-resident 在 `sim/steel_tide` 里调用 `select_match` 和 `decide`。NR-M2-roles 让这两条决策在岗位上再选突进、支援或侦察；`reason` 写岗位 id。GameMode / GameState / PlayerState 仍不构造端口，也不记分。
+`BotDecision` 由 `sim/steel_tide` 在本地 bot 提交意图时写下，不是玩家 RPC，也不计分。`hit` 仍只有服务器能发。bot 决定打断读条时，模拟替服务器排队一次 `down` 为 false 的命中。`ResidentDecision` 是薄策略数字居民的同一类审计，`controller` 为 `digital_resident`。它不改持有者，不计分，也不写墙后坐标。NR-M1-bot 不构造 `UNeonRiftResidentPort`。NR-M2-resident 在 `sim/steel_tide` 里调用 `select_match` 和 `decide`。NR-M2-roles 让这两条决策在岗位上再选突进、支援或侦察；`reason` 写岗位 id。NR-M2-bridge 在桥接通或断开、路径用到的跨度边发生变化时，用同一个决策事件写 `reason=path_recompute`。这不是新事件名。GameMode / GameState / PlayerState 仍不构造端口，也不记分。
 
 ## 同一服务器帧的顺序
 
@@ -50,7 +50,7 @@
 
 同帧拾取按 `(client_id, combatant_id)` 稳定排序。排序只为了和原型日志对齐，**通过条件是恰好一人成功**。两人同时站在芯上时，另一人收到 `CorePickRejected`，原因 `already_held`。
 
-计时器在意图之后，顺序为：桥预警、灯带递进、桥预警结束、桥接通、桥断开、复活、芯超时复位、读条完成、比赛钟。因此读条结束的同一毫秒若有 `hit`，先打断，不计分。灯带和警报不改变持有者，也不加分。
+计时器在意图之后，顺序为：桥预警、灯带递进、桥预警结束、桥接通、桥断开、复活、芯超时复位、读条完成、比赛钟。因此读条结束的同一毫秒若有 `hit`，先打断，不计分。灯带和警报不改变持有者，也不加分。接通和断开会按当时的权威路线图重算还在走的路。断开时，已经排上的跨度步先被拒绝，站在 `center` 的人落到本方桥头。拒绝和落点都不计分，也不把人打倒。
 
 ## 事件
 
@@ -82,8 +82,8 @@
 | `BridgeLightStripAdvanced` | 预警开始后，灯带按剩余提前量逐盏点亮。不改持有者，不计分 | `ANeonRiftBridgeWarn` |
 | `BridgeWarningStarted` | 接通前 `bridge_warning_seconds`（配置 4）。警报与灯带第一盏同一毫秒开始。载荷含配置里的 `readable_without_reflection` | `ANeonRiftBridgeWarn` |
 | `BridgeWarningCompleted` | 灯带走完。与接通同一毫秒，提前量为 4 秒。不是记分 | `ANeonRiftBridgeWarn` |
-| `BridgeStateChanged` | `connected` 或 `disconnected`。接通紧跟 `BridgeWarningCompleted` | `ANeonRiftBridgeWarn` |
-| `BridgeOccupantNudged` | 断开时把跨度上的人挪到本方桥头，不嵌进网格 | `ANeonRiftBridgeWarn` |
+| `BridgeStateChanged` | `connected` 或 `disconnected`。接通紧跟 `BridgeWarningCompleted`。断开把跨度边移出权威路线图 | `ANeonRiftBridgeWarn` |
+| `BridgeOccupantNudged` | 断开时把跨度上的人挪到本方桥头，不嵌进网格。不计分，不击倒，不掉芯 | `ANeonRiftBridgeWarn` |
 | `MatchClockExpired` | 提案 360 秒。`role_select_open` 仍为 false | `ANeonRiftTerminalScore` |
 | `OvertimeStarted` | 平分才进入。提案 60 秒。打破平局的第一笔得分立即结束：未到 `points_to_win` 时 `kind=score`，到达时 `kind=points`。这一笔若把比分打回相同，立即 `kind=draw`。60 秒结束仍相同也是 `kind=draw`，不开启第二段，不重新选岗位 | `ANeonRiftTerminalScore` |
 | `MatchSettled` | 只发一次。`kind` 为 `points`、`score` 或 `draw`。常规时间先到 `points_to_win` 立即 `kind=points`，不进入加时 | `ANeonRiftTerminalScore` |
@@ -101,6 +101,7 @@ PYTHONPATH=sim python3 -m steel_tide m1-pass --check
 PYTHONPATH=sim python3 -m steel_tide m1-bot --check
 PYTHONPATH=sim python3 -m steel_tide m2-resident --check
 PYTHONPATH=sim python3 -m steel_tide m2-roles --check
+PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
 ```
 
 双端对照用 [DUAL_END_EVENT_LOG.md](DUAL_END_EVENT_LOG.md)。`nr02` 是 3v3（两个客户端视角 + 四个本地 bot）的参照日志，样例在 `docs/evidence/nr02/`。`repro` 仍是四条脚本复现。

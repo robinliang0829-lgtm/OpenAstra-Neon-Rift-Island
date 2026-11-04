@@ -28,3 +28,5 @@ jobs:
         run: PYTHONPATH=sim python3 -m steel_tide m2-resident --check
       - name: NR-M2 roles slice
         run: PYTHONPATH=sim python3 -m steel_tide m2-roles --check
+      - name: NR-M2 bridge slice
+        run: PYTHONPATH=sim python3 -m steel_tide m2-bridge --check

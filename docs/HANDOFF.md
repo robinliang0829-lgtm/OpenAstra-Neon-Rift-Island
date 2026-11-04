@@ -18,6 +18,8 @@ NR-M2-resident 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -
 
 NR-M2-roles 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-roles --check`，样例在 `docs/evidence/nr-m2-roles/`。规格见 [NR-M2-roles.md](NR-M2-roles.md)。同一局 3v3 里，`local_bot` 和 `digital_resident` 都会按岗位使用能力。日志里三种 `AbilityUsed` 都有：突进 `dash`、支援 `shield`、侦察 `mark`。`BotDecision` / `ResidentDecision` 的 `reason` 是岗位 id。抢芯、近距传球、一次打断、先到 2 分和 4 秒桥预警仍走前面的口。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M2-bridge 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-bridge --check`，样例在 `docs/evidence/nr-m2-bridge/`。规格见 [NR-M2-bridge.md](NR-M2-bridge.md)。桥接通和断开改权威路线图：跨度边只在 `connected` 时可走，机修巷断开时仍可走到对方端子并得分。`BridgeStateChanged` 的 `connected` 和 `disconnected` 都在三端日志里。站在跨度上的人落到本方桥头，桥头再踏上去会被拒绝。落点和拒绝不计分，也不把人打倒。抢芯、传球、打断、先到 2 分和岗位能力仍走前面的口。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。

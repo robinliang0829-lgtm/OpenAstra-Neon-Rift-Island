@@ -6,11 +6,20 @@ import math
 
 from .config import SteelTideConfig, load_config
 from .model import Channel, Combatant, Command, Core, Event, audit_holder_log
-from .routes import shortest_path, step_edge
+from .routes import authoritative_edges, plan_route, shortest_path, span_edge_token, span_hops, step_edge
 
 
 PICK_PRIORITY = 40
 SERVER_CLIENT = "server"
+
+
+def _merge_details(payload: dict, details: dict | None) -> None:
+    if not details:
+        return
+    for key, value in details.items():
+        if key in payload or value is None:
+            continue
+        payload[key] = value
 
 
 class SteelTideMatch:
@@ -39,6 +48,11 @@ class SteelTideMatch:
         self.warning_started_ms: int | None = None
         self.disconnect_at_ms: int | None = None
         self.settled_kind: str | None = None
+        self.route_graph = authoritative_edges(self.config, self.bridge_state)
+        self.travel_goals: dict[str, str] = {}
+        self.travel_plans: dict[str, tuple] = {}
+        self.span_probes: set[tuple[str, int]] = set()
+        self.bridge_generation = 0
 
     @property
     def t_seconds(self) -> float:
@@ -195,6 +209,7 @@ class SteelTideMatch:
         distance_m: float | None = None,
         ability: str | None = None,
         role: str | None = None,
+        details: dict | None = None,
     ) -> None:
         """Record a local_bot choice. Does not grant the core and does not score.
 
@@ -217,6 +232,7 @@ class SteelTideMatch:
             payload["ability"] = ability
         if role is not None:
             payload["role"] = role
+        _merge_details(payload, details)
         self._emit("BotDecision", payload)
 
     def note_resident_decision(
@@ -229,6 +245,7 @@ class SteelTideMatch:
         role: str | None = None,
         join: bool | None = None,
         ability: str | None = None,
+        details: dict | None = None,
     ) -> None:
         """Record a digital_resident choice. Does not grant the core and does not score.
 
@@ -252,7 +269,16 @@ class SteelTideMatch:
             payload["role"] = role
         if ability is not None:
             payload["ability"] = ability
+        _merge_details(payload, details)
         self._emit("ResidentDecision", payload)
+
+    def remember_travel(self, combatant_id: str, goal: str, route: str, path: list[str] | None, anchor: str) -> None:
+        """Last path the policy committed. A bridge toggle recomputes from here.
+
+        Remembering a path does not move anyone and does not score.
+        """
+        self.travel_goals[combatant_id] = goal
+        self.travel_plans[combatant_id] = (route, tuple(path or ()), anchor)
 
     def anchor_visible(self, observer_anchor: str | None, target_anchor: str | None) -> bool:
         """Whether a human at `observer_anchor` can see `target_anchor`.
@@ -854,9 +880,10 @@ class SteelTideMatch:
         if self.bridge_connect_ms is not None and t_ms >= self.bridge_connect_ms:
             self.bridge_connect_ms = None
             self._complete_bridge_warning(t_ms)
-            self.bridge_state = "connected"
+            self._set_bridge_state("connected")
             self.bridge_connected_ms = t_ms
             self._emit("BridgeStateChanged", {"state": "connected"})
+            self._recompute_route_plans(set())
         if self.disconnect_at_ms is not None and t_ms >= self.disconnect_at_ms:
             self.disconnect_at_ms = None
             self._disconnect_bridge()
@@ -885,8 +912,50 @@ class SteelTideMatch:
             self._complete_score()
         self._expire_clock()
 
+    def _graph_signature(self) -> tuple[tuple[str, str], ...]:
+        return tuple((edge.a, edge.b) for edge in self.route_graph)
+
+    def _set_bridge_state(self, state: str) -> bool:
+        """Install `state` and rebuild the walkable graph. True when the span set changes."""
+        previous = self._graph_signature()
+        self.bridge_state = state
+        self.route_graph = authoritative_edges(self.config, state)
+        return self._graph_signature() != previous
+
     def _disconnect_bridge(self) -> None:
-        self.bridge_state = "disconnected"
+        """Open the span. It leaves the route graph. Nobody is left inside it.
+
+        Occupants at `center` fall to their faction bridgehead. A queued step
+        onto the span is rejected. Neither move scores, drops the core, or
+        downs the body. A channel that was somehow open on the span is
+        interrupted and does not score; a channel on a terminal is left alone.
+        """
+        self._set_bridge_state("disconnected")
+        self.bridge_generation += 1
+        self._reject_pending_span_moves()
+        nudged = self._nudge_span_occupants()
+        self._emit("BridgeStateChanged", {"state": "disconnected"})
+        self._recompute_route_plans(nudged)
+
+    def _reject_pending_span_moves(self) -> None:
+        for cmd in self.inbox:
+            if cmd.applied or cmd.kind != "request_move":
+                continue
+            combatant_id = cmd.payload.get("combatant_id")
+            dest = cmd.payload.get("dest")
+            combatant = self.combatants.get(combatant_id or "")
+            if combatant is None or not combatant.anchor or not isinstance(dest, str):
+                continue
+            if not self._bridge_blocks(combatant.anchor, dest):
+                continue
+            cmd.applied = True
+            self._emit(
+                "MoveRejected",
+                {"combatant_id": combatant_id, "reason": "bridge_blocked", "dest": dest},
+            )
+
+    def _nudge_span_occupants(self) -> set[str]:
+        nudged: set[str] = set()
         for combatant in list(self.combatants.values()):
             if combatant.anchor != "center":
                 continue
@@ -899,11 +968,85 @@ class SteelTideMatch:
                 self.core.pos = combatant.pos
             if self.channel and self.channel.combatant_id == combatant.id:
                 self._interrupt(combatant.id, "bridge_nudge")
+            nudged.add(combatant.id)
             self._emit(
                 "BridgeOccupantNudged",
                 {"combatant_id": combatant.id, "to": dest, "reason": "span_not_embedded"},
             )
-        self._emit("BridgeStateChanged", {"state": "disconnected"})
+        return nudged
+
+    def _recompute_route_plans(self, nudged: set[str]) -> None:
+        """Publish a new path when the span enters or leaves the route graph.
+
+        Alley plans that never used the span stay quiet, so earlier slices
+        keep their logs. A nudged body whose goal changed shape is recorded,
+        because the span move is what put them on the safe deck.
+        """
+        for combatant in self.combatants.values():
+            if combatant.controller == "human" or not combatant.anchor:
+                continue
+            goal = self.travel_goals.get(combatant.id)
+            if not goal:
+                continue
+            path, route = plan_route(
+                self.config,
+                combatant.anchor,
+                goal,
+                combatant.preferred_route,
+                self.bridge_state,
+            )
+            hops = tuple(path or ())
+            signature = (route, hops, combatant.anchor)
+            previous = self.travel_plans.get(combatant.id)
+            self.travel_plans[combatant.id] = signature
+            if previous is None:
+                continue
+            old_span = span_hops(self.config, previous[2], previous[1])
+            new_span = span_hops(self.config, combatant.anchor, hops)
+            plan_changed = (previous[0], previous[1]) != (route, hops)
+            if old_span == new_span and not (combatant.id in nudged and plan_changed):
+                continue
+            next_hop = hops[0] if hops else None
+            self._drop_stale_move(combatant.id, next_hop)
+            self._note_path_recompute(combatant, goal, hops, route)
+
+    def _drop_stale_move(self, combatant_id: str, next_hop: str | None) -> None:
+        for cmd in self.inbox:
+            if cmd.applied or cmd.kind != "request_move":
+                continue
+            if cmd.payload.get("combatant_id") != combatant_id:
+                continue
+            if cmd.payload.get("dest") == next_hop:
+                continue
+            cmd.applied = True
+
+    def _note_path_recompute(self, combatant: Combatant, goal: str, path: tuple[str, ...], route: str) -> None:
+        details = {
+            "anchor": combatant.anchor,
+            "bridge_state": self.bridge_state,
+            "goal": goal,
+            "path": ">".join(path),
+            "route": route,
+            "span_edges": span_edge_token(self.config, self.bridge_state),
+            "span_walkable": self.bridge_state == "connected",
+        }
+        target = path[0] if path else goal
+        if combatant.controller == "local_bot":
+            self.note_bot_decision(
+                combatant.id,
+                "request_move",
+                "path_recompute",
+                target,
+                details=details,
+            )
+        elif combatant.controller == "digital_resident":
+            self.note_resident_decision(
+                combatant.id,
+                "request_move",
+                "path_recompute",
+                target,
+                details=details,
+            )
 
     def _complete_score(self) -> None:
         if self.channel is None:
