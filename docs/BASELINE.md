@@ -27,6 +27,6 @@
 
 ## 快照
 
-规则与文档快照 SHA（不含本行的戳记提交）：
-
-`SNAPSHOT_SHA`
+- 分支：`cursor/neon-rift-kickoff-747a`
+- 规则与文档快照 SHA：`f8af352895dd890a7aac01e92682698f591faad2`
+- 操作员 checkout 该分支的 HEAD。HEAD 是记录上面这枚快照的戳记提交，不改规则、卡或开工包。PR 描述里的 Baseline HEAD 与 `git rev-parse HEAD` 相同。
