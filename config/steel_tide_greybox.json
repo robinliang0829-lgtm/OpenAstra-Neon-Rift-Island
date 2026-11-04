@@ -1,0 +1,90 @@
+{
+  "id": "steel_tide_greybox",
+  "title": "钢潮港：倒悬潮汐",
+  "status": "tunable_proposal_not_frozen",
+  "authority": "Robin faction law is fixed. Durations, scores, speeds, and the bridge lead are a greybox proposal from 04_首局玩法与交接, not a frozen rule.",
+  "engine": "UE5",
+  "ue5_minor": null,
+  "map_slice": "SteelTidePort",
+  "ue_units_per_meter": 100,
+  "ue_axes": "Sim x -> UE X (along the port), sim y -> UE Y (toward the repair alley), Z up. Deck at Z=0.",
+  "walk_speed_mps": 6.0,
+  "sprint_speed_mps": 8.0,
+  "carrier_can_sprint": false,
+  "team_size": 3,
+  "match_seconds": 360,
+  "points_to_win": 2,
+  "overtime_seconds": 60,
+  "down_seconds": 5,
+  "spawn_protection_seconds": 3,
+  "score_channel_seconds": 3,
+  "bridge_warning_seconds": 4,
+  "pass_range_m": 4.0,
+  "pickup_radius_m": 1.5,
+  "terminal_half_extent_m": 2.0,
+  "core_reset_timeout_seconds": 8,
+  "roles": ["assault", "support", "recon"],
+  "controllers": ["human", "digital_resident", "local_bot"],
+  "faction_rule": {
+    "human": ["A"],
+    "celestial": ["A"],
+    "humanoid_robot": ["A", "B"],
+    "robot": ["B"],
+    "beast": ["B"]
+  },
+  "badges": {
+    "A": {
+      "shape": "open_chevron",
+      "light_slot": "shoulder_left",
+      "color_aux": "tide_cyan",
+      "note": "Shape, light slot, and audio identify the side. Color is auxiliary. Do not identify by face."
+    },
+    "B": {
+      "shape": "closed_ring",
+      "light_slot": "shoulder_right",
+      "color_aux": "hazard_amber",
+      "note": "Shape, light slot, and audio identify the side. Color is auxiliary. Do not identify by face."
+    }
+  },
+  "terminals": {
+    "A": "terminal_a",
+    "B": "terminal_b",
+    "scores_at": {
+      "A": "terminal_b",
+      "B": "terminal_a"
+    }
+  },
+  "anchors": {
+    "spawn_a": [0.0, 0.0],
+    "terminal_a": [12.0, 0.0],
+    "bridgehead_a": [24.0, 0.0],
+    "center": [48.0, 0.0],
+    "bridgehead_b": [72.0, 0.0],
+    "terminal_b": [84.0, 0.0],
+    "spawn_b": [96.0, 0.0],
+    "alley_a": [0.0, 18.0],
+    "alley_mid": [48.0, 18.0],
+    "alley_b": [96.0, 18.0],
+    "sea": [48.0, -30.0],
+    "stuck": [48.0, -8.0]
+  },
+  "edges": [
+    {"a": "spawn_a", "b": "terminal_a", "length_m": 12, "bridge": false, "route": "elevated"},
+    {"a": "terminal_a", "b": "bridgehead_a", "length_m": 12, "bridge": false, "route": "elevated"},
+    {"a": "bridgehead_a", "b": "center", "length_m": 24, "bridge": true, "route": "elevated"},
+    {"a": "center", "b": "bridgehead_b", "length_m": 24, "bridge": true, "route": "elevated"},
+    {"a": "bridgehead_b", "b": "terminal_b", "length_m": 12, "bridge": false, "route": "elevated"},
+    {"a": "terminal_b", "b": "spawn_b", "length_m": 12, "bridge": false, "route": "shared"},
+    {"a": "spawn_a", "b": "alley_a", "length_m": 18, "bridge": false, "route": "alley"},
+    {"a": "alley_a", "b": "alley_mid", "length_m": 48, "bridge": false, "route": "alley"},
+    {"a": "alley_mid", "b": "center", "length_m": 18, "bridge": false, "route": "alley"},
+    {"a": "spawn_b", "b": "alley_b", "length_m": 18, "bridge": false, "route": "alley"},
+    {"a": "alley_b", "b": "alley_mid", "length_m": 48, "bridge": false, "route": "alley"}
+  ],
+  "route_lengths_m": {
+    "elevated_spawn_to_center": 48,
+    "alley_spawn_to_center": 84,
+    "alley_center_to_enemy_terminal": 96,
+    "note": "Alley center_to_enemy_terminal uses alley_mid -> far alley -> spawn -> terminal and does not cross the bridge span."
+  }
+}
