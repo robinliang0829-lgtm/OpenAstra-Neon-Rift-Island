@@ -10,6 +10,8 @@ NR-03 规格已入库、实机录像仍等 UE
 
 NR-M1 首切片已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m1 --check`，样例在 `docs/evidence/nr-m1/`。规格见 [NR-M1-prep.md](NR-M1-prep.md)。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M1-pass 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m1-pass --check`，样例在 `docs/evidence/nr-m1-pass/`。规格见 [NR-M1-pass.md](NR-M1-pass.md)。近距传球、持芯禁止突进、读条受击或离开都不记分、常规时间先到 2 分以 `kind=points` 结束。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 ## 装好之后
 
 1. 打开 `NeonRift.uproject`，允许编译 `NeonRift`。

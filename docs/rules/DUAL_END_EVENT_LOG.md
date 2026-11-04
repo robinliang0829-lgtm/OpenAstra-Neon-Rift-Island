@@ -122,3 +122,11 @@ EventName  {json}
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m1 --check
 ```
+
+## NR-M1-pass
+
+同一套三端正文，schema 换成 `nr-m1-pass-dual-end-v1`。表头同样有 `identities`。样例在 `docs/evidence/nr-m1-pass/`。这一局在常规时间先到 2 分结束，日志里没有 `OvertimeStarted`。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m1-pass --check
+```

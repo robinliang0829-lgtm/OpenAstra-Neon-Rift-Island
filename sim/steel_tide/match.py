@@ -583,6 +583,13 @@ class SteelTideMatch:
         return None
 
     def _dash(self, combatant: Combatant, dest: str | None, max_range_m: float) -> str | None:
+        """Short assault hop. Holding the core rejects the dash and does not spend cooldown.
+
+        Pass, drop, or a down releases the core. The next dash is a normal hop and
+        does not drag a core that somebody else is holding.
+        """
+        if self.core.holder_id == combatant.id:
+            return "holding_core"
         if not dest or not combatant.anchor:
             return "no_edge"
         edge = step_edge(self.config, combatant.anchor, dest, combatant.preferred_route, self.bridge_state)
@@ -595,9 +602,6 @@ class SteelTideMatch:
         combatant.anchor = dest
         combatant.pos = self.config.anchors[dest]
         combatant.anchor_since_ms = self.t_ms
-        if self.core.holder_id == combatant.id:
-            self.core.anchor = dest
-            self.core.pos = combatant.pos
         return None
 
     def _mark(self, combatant: Combatant, target_id: str | None) -> str | None:
@@ -861,6 +865,7 @@ class SteelTideMatch:
             else:
                 self._settle("score")
             return
+        # Regulation first to points_to_win ends on this score. No overtime.
         if self.score[faction] >= self.config.points_to_win:
             self._settle("points")
 

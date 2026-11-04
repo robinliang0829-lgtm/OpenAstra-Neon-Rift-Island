@@ -20,7 +20,7 @@ UE operator: open `NeonRift.uproject`. The only missing piece is the local UE in
 | M1 | 两个实际客户端加 4 个本地机器人打完一局。双方可以同时出现同型人形机器人，结果一致。掉芯、复活、打断得到验证。 |
 | M2 | 补上原画方向的美术、灯光、声音、桥的变化和数字居民策略，打出一个别人能运行的开发包。 |
 
-M0 的第一张上机卡是 [docs/NR-01.md](docs/NR-01.md)。M1 的规则复现是 [docs/NR-02.md](docs/NR-02.md)。可读性是 [docs/NR-03.md](docs/NR-03.md)。M1 首切片（两个视角、四个本地 bot、复活、加时、三岗位）是 [docs/NR-M1-prep.md](docs/NR-M1-prep.md)。实机仍等本机 UE。
+M0 的第一张上机卡是 [docs/NR-01.md](docs/NR-01.md)。M1 的规则复现是 [docs/NR-02.md](docs/NR-02.md)。可读性是 [docs/NR-03.md](docs/NR-03.md)。M1 首切片（两个视角、四个本地 bot、复活、加时、三岗位）是 [docs/NR-M1-prep.md](docs/NR-M1-prep.md)。传球、持芯突进、读条打断和常规先到 2 分是 [docs/NR-M1-pass.md](docs/NR-M1-pass.md)。实机仍等本机 UE。
 
 ## 阵营
 
@@ -46,10 +46,11 @@ PYTHONPATH=sim python3 -m steel_tide repro
 PYTHONPATH=sim python3 -m steel_tide nr02 --check
 PYTHONPATH=sim python3 -m steel_tide nr03 --check
 PYTHONPATH=sim python3 -m steel_tide m1 --check
+PYTHONPATH=sim python3 -m steel_tide m1-pass --check
 PYTHONPATH=sim python3 -m steel_tide
 ```
 
-`repro` 打印四条已通过的复现：同帧抢芯只有一人持有、打断不计分、坠海超时芯回中场、超时结算不重新三选一岗位。`nr02` 跑 3v3（两个客户端视角 + 四个本地 bot）并对照 `docs/evidence/nr02/` 的双端日志。`m1` 跑 NR-M1 首切片并对照 `docs/evidence/nr-m1/`。最后一条命令是本地 bot 对局，不是已接入的数字居民。UE 侧如何接同一批事件见 [docs/rules/UE_EVENT_WIRING.md](docs/rules/UE_EVENT_WIRING.md)。双端日志格式见 [docs/rules/DUAL_END_EVENT_LOG.md](docs/rules/DUAL_END_EVENT_LOG.md)。
+`repro` 打印四条已通过的复现：同帧抢芯只有一人持有、打断不计分、坠海超时芯回中场、超时结算不重新三选一岗位。`nr02` 跑 3v3（两个客户端视角 + 四个本地 bot）并对照 `docs/evidence/nr02/` 的双端日志。`m1` 跑 NR-M1 首切片并对照 `docs/evidence/nr-m1/`。`m1-pass` 跑近距传球、持芯突进、两种读条打断和常规先到 2 分，并对照 `docs/evidence/nr-m1-pass/`。最后一条命令是本地 bot 对局，不是已接入的数字居民。UE 侧如何接同一批事件见 [docs/rules/UE_EVENT_WIRING.md](docs/rules/UE_EVENT_WIRING.md)。双端日志格式见 [docs/rules/DUAL_END_EVENT_LOG.md](docs/rules/DUAL_END_EVENT_LOG.md)。
 
 ## 资料
 
