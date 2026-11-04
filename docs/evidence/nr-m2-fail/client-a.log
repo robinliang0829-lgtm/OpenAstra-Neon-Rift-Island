@@ -1,0 +1,48 @@
+# schema nr-m2-fail-dual-end-v1
+# authority sim/steel_tide
+# end client-a
+# viewpoint_client client-a
+# controlled a1
+# local_bots 
+# roster a1:human:A:client-a,b1:human:B:client-b
+# mirrored_holder -
+# mirrored_score A=0 B=0
+# event_lines 33
+# identities a1:humanoid_robot:A:human,b1:humanoid_robot:B:human
+# fail_paths parallel_pick,hit_interrupt,timeout_no_role_redraw
+# role_menu assault,support,recon
+# wired_into_m2_pack false
+# comparable event_body_identical
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-a", "combatant_id": "a1", "controller": "human"}
+   0.000  CombatantJoined  {"body": "humanoid_robot", "client_id": "client-b", "combatant_id": "b1", "controller": "human"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "a1", "faction": "A"}
+   0.000  FactionChosen  {"body": "humanoid_robot", "combatant_id": "b1", "faction": "B"}
+   0.000  RoleChosen  {"combatant_id": "a1", "role": "assault"}
+   0.000  RoleChosen  {"combatant_id": "b1", "role": "support"}
+   0.000  FactionsLocked  {"assignments": {"a1": "A", "b1": "B"}, "identities": {"a1": {"body": "humanoid_robot", "controller": "human", "faction": "A"}, "b1": {"body": "humanoid_robot", "controller": "human", "faction": "B"}}}
+   0.000  RolesLocked  {"assignments": {"a1": "assault", "b1": "support"}}
+   0.000  MatchStarted  {"deadline_ms": 12000, "points_to_win": 2, "role_select_open": false}
+   1.000  CorePicked  {"anchor": "center", "client_id": "client-a", "combatant_id": "a1"}
+   1.000  CorePickRejected  {"client_id": "client-b", "combatant_id": "b1", "reason": "already_held"}
+   2.000  ScoreChannelStarted  {"combatant_id": "a1", "ends_ms": 5000, "terminal": "terminal_b"}
+   4.000  ScoreChannelInterrupted  {"combatant_id": "a1", "elapsed_ms": 2000, "reason": "hit"}
+   4.000  CoreDropped  {"anchor": "terminal_b", "combatant_id": "a1", "reason": "downed", "status": "ground"}
+   4.000  ActorDowned  {"combatant_id": "a1", "respawn_ms": 9000}
+   9.000  ActorRespawned  {"anchor": "spawn_a", "combatant_id": "a1", "protection_until_ms": 12000}
+  12.000  MatchClockExpired  {"role_select_open": false, "score": {"A": 0, "B": 0}}
+  12.000  OvertimeStarted  {"deadline_ms": 17000, "role_select_open": false, "score": {"A": 0, "B": 0}}
+  12.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+  12.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+  12.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+  12.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+  12.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+  12.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+  17.000  MatchSettled  {"kind": "draw", "role_select_open": false, "score": {"A": 0, "B": 0}, "winner": null}
+  17.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+  17.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+  17.000  RoleRejected  {"combatant_id": "a1", "reason": "locked"}
+  17.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+  17.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+  17.000  RoleRejected  {"combatant_id": "b1", "reason": "locked"}
+  17.000  FactionRejected  {"combatant_id": "a1", "reason": "locked"}
+  17.000  FactionRejected  {"combatant_id": "b1", "reason": "locked"}

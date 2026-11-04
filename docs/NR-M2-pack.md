@@ -42,10 +42,14 @@ python3 -m steel_tide m2-pack --check
 
 规则仍是 `sim/steel_tide`。这条命令不新造计分，不新造事件名，不改 `config/steel_tide_greybox.json`。
 
+`m2-light` 不在这张表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。肩灯、4 秒灯带、端子读条、得分和出生保护的灯光契约是旁路日志，用 `PYTHONPATH=sim python3 -m steel_tide m2-light --check`，样例在 `docs/evidence/nr-m2-light/`。规格见 [NR-M2-light](NR-M2-light.md)。`unittest` 这一步会跑 `sim/tests/test_nr_m2_light.py`，所以开发包仍会执行这份契约的单元测试。单独的 `--check` 才对照灯光样例日志。日港和夜港强度写在配置的 `lighting` 里，由这条契约读取；开发包命令不改写那份配置。
+
 样例只记命令和退出码：
 
 - `docs/evidence/nr-m2-pack/commands.txt`
 - `docs/evidence/nr-m2-pack/exit-codes.txt`
+
+`m2-fail` 不在上表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。同帧抢芯、受击打断、超时不重新三选一用 `PYTHONPATH=sim python3 -m steel_tide m2-fail --check`，样例在 `docs/evidence/nr-m2-fail/`。规格见 [NR-M2-fail](NR-M2-fail.md)。输出里的 `wired_into_m2_pack` 为 false。`unittest` 这一步会跑 `sim/tests/test_nr_m2_fail.py`。单独的 `--check` 才对照那三份失败路径日志。
 
 ## 仍等本机 UE 的卡
 
@@ -66,6 +70,8 @@ python3 -m steel_tide m2-pack --check
 
 M2 里原画方向的美术、灯光、声音也仍在本机 UE 上，不在这个开发包里。不要 cook，不要打二进制包。
 
+仓内灯光契约是 `m2-light`，不在上表。它只核对 `LightCue` 日志。实机灯光仍等 UE。见 [NR-M2-light](NR-M2-light.md)。
+
 ## 上机以后
 
 UE 仍挂。装上本机引擎之后才做这些，做不到就停，把安装路径回给 PM-钢潮岛：
@@ -74,3 +80,5 @@ UE 仍挂。装上本机引擎之后才做这些，做不到就停，把安装�
 2. 打开 `NeonRift.uproject`。`EngineAssociation` 仍是 `5.4` 占位。不要改。
 3. 不要交回 `.umap` / `.uasset`。不要 cook，不要打二进制包。
 4. 按上表的卡逐张做实机。关卡蓝图不要写计分。胜负仍以 `sim/steel_tide` 为准。
+
+`m2-hud` 不在这张表里。它不新造事件名，也不改计分，所以不改 `docs/evidence/nr-m2-pack/`。比分板、端子读条、出生护盾和岗位/选边锁定是旁路日志，用 `PYTHONPATH=sim python3 -m steel_tide m2-hud --check`，样例在 `docs/evidence/nr-m2-hud/`。规格见 [NR-M2-hud](NR-M2-hud.md)。`wired_into_m2_pack` 为 false。`unittest` 这一步会跑 `sim/tests/test_nr_m2_hud.py`。单独的 `--check` 才对照 HUD 样例日志。没有 UMG，没有贴图。

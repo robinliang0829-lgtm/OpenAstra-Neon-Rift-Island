@@ -165,6 +165,14 @@ PYTHONPATH=sim python3 -m steel_tide m2-roles --check
 PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
 ```
 
+## NR-M2-hud
+
+`HudCue` 不进上面的事件表，也不进三端正文。它是权威事件同一毫秒的旁路日志，不改持有者，不加分，不是打断。比分板、端子读条、出生护盾和岗位/选边锁定都抄来源事件的时间。样例在 `docs/evidence/nr-m2-hud/hud.log`。这条不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。颜色只是辅助，阵营仍是肩章形状和肩灯位置。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-hud --check
+```
+
 ## NR-M2-pack
 
 这条不新加双端 schema，也不新加事件名。它把 `repro`、上面各张 `--check` 和 `unittest` 串成一条无头 Python 验收。不是 UE 包。命令和退出码在 `docs/evidence/nr-m2-pack/`。
@@ -173,10 +181,26 @@ PYTHONPATH=sim python3 -m steel_tide m2-bridge --check
 PYTHONPATH=sim python3 -m steel_tide m2-pack --check
 ```
 
+## NR-M2-fail
+
+同一套三端正文，schema 换成 `nr-m2-fail-dual-end-v1`。表头有 `identities`，另有 `fail_paths`、`role_menu` 和 `wired_into_m2_pack`。样例在 `docs/evidence/nr-m2-fail/`。两端同一毫秒抢芯：一条 `CorePicked`，一条 `CorePickRejected` / `already_held`。读条受击是 `ScoreChannelInterrupted`，没有 `PointScored`。超时 `MatchSettled` 的 `role_select_open` 为 false，三选一不再打开。这条不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-fail --check
+```
+
 ## NR-M2-audio
 
 `AudioCue` 不进上面的事件表，也不进三端正文。它是权威事件同一毫秒的旁路日志，不改持有者，不加分，不是打断。样例在 `docs/evidence/nr-m2-audio/audio.log`。这条不进 `m2-pack` 的步骤表。
 
 ```bash
 PYTHONPATH=sim python3 -m steel_tide m2-audio --check
+```
+
+## NR-M2-light
+
+`LightCue` 不进上面的事件表，也不进三端正文。它是权威事件同一毫秒的旁路日志，不改持有者，不加分，不是打断。肩灯、灯带、端子读条、得分和出生保护都抄来源事件的时间。样例在 `docs/evidence/nr-m2-light/light.log`。这条不进 `m2-pack` 的步骤表。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-light --check
 ```

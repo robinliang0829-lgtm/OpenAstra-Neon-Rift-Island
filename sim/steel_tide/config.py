@@ -27,6 +27,21 @@ class Edge:
     route: str
 
 
+@dataclass(frozen=True)
+class PortLighting:
+    """Greybox lamp levels. Slots identify the team. Color may assist."""
+
+    day_port_intensity: float
+    night_port_intensity: float
+    min_readable_contrast: float
+    color_assist: bool
+    shoulder_intensity: float
+    read_bar_intensity: float
+    score_intensity: float
+    spawn_protection_intensity: float
+    strip_intensity: float
+
+
 @dataclass
 class SteelTideConfig:
     walk_speed_mps: float
@@ -53,6 +68,7 @@ class SteelTideConfig:
     score_terminal: dict[str, str]
     anchors: dict[str, tuple[float, float]]
     edges: tuple[Edge, ...]
+    lighting: PortLighting
 
     def seconds_to_ms(self, seconds: float) -> int:
         return int(round(float(seconds) * 1000))
@@ -88,6 +104,32 @@ class SteelTideConfig:
     @property
     def core_reset_timeout_ms(self) -> int:
         return self.seconds_to_ms(self.core_reset_timeout_seconds)
+
+
+def _positive(block: dict, key: str) -> float:
+    value = float(block[key])
+    if value <= 0:
+        raise ValueError(f"lighting.{key} must be positive")
+    return value
+
+
+def _port_lighting(raw: dict) -> PortLighting:
+    block = raw["lighting"]
+    day = _positive(block, "day_port_intensity")
+    night = _positive(block, "night_port_intensity")
+    if day <= night:
+        raise ValueError("lighting.day_port_intensity must be brighter than night_port_intensity")
+    return PortLighting(
+        day_port_intensity=day,
+        night_port_intensity=night,
+        min_readable_contrast=_positive(block, "min_readable_contrast"),
+        color_assist=_json_bool(block, "color_assist"),
+        shoulder_intensity=_positive(block, "shoulder_intensity"),
+        read_bar_intensity=_positive(block, "read_bar_intensity"),
+        score_intensity=_positive(block, "score_intensity"),
+        spawn_protection_intensity=_positive(block, "spawn_protection_intensity"),
+        strip_intensity=_positive(block, "strip_intensity"),
+    )
 
 
 def load_config(path: Path | None = None) -> SteelTideConfig:
@@ -129,4 +171,5 @@ def load_config(path: Path | None = None) -> SteelTideConfig:
         score_terminal=dict(raw["terminals"]["scores_at"]),
         anchors=anchors,
         edges=edges,
+        lighting=_port_lighting(raw),
     )

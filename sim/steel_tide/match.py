@@ -6,6 +6,8 @@ import math
 
 from .audio import cues_for
 from .config import SteelTideConfig, load_config
+from .hud import cues_for as hud_cues_for
+from .light import cues_for as light_cues_for
 from .model import Channel, Combatant, Command, Core, Event, audit_holder_log
 from .routes import authoritative_edges, plan_route, shortest_path, span_edge_token, span_hops, step_edge
 
@@ -34,7 +36,11 @@ class SteelTideMatch:
         # Side log. Same timestamps as `events`, not part of the scoring name set.
         self.audio_cues: list[Event] = []
         self.score = {"A": 0, "B": 0}
+        # Side log. Same timestamps as `events`, not part of the scoring name set.
+        self.light_cues: list[Event] = []
         self.bridge_state = "disconnected"
+        # Side log. Same timestamps as `events`, not part of the scoring name set.
+        self.hud_cues: list[Event] = []
         self.channel: Channel | None = None
         self.inbox: list[Command] = []
         self._seq = 0
@@ -64,7 +70,10 @@ class SteelTideMatch:
     def _emit(self, name: str, payload: dict | None = None) -> None:
         event = Event(self.t_ms, name, payload or {})
         self.events.append(event)
-        self.audio_cues.extend(cues_for(self, event, len(self.events) - 1))
+        index = len(self.events) - 1
+        self.audio_cues.extend(cues_for(self, event, index))
+        self.light_cues.extend(light_cues_for(self, event, index))
+        self.hud_cues.extend(hud_cues_for(self, event, index))
 
     def add_combatant(
         self,

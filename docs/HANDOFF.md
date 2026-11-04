@@ -20,9 +20,13 @@ NR-M2-roles 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m s
 
 NR-M2-bridge 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-bridge --check`，样例在 `docs/evidence/nr-m2-bridge/`。规格见 [NR-M2-bridge.md](NR-M2-bridge.md)。桥接通和断开改权威路线图：跨度边只在 `connected` 时可走，机修巷断开时仍可走到对方端子并得分。`BridgeStateChanged` 的 `connected` 和 `disconnected` 都在三端日志里。站在跨度上的人落到本方桥头，桥头再踏上去会被拒绝。落点和拒绝不计分，也不把人打倒。抢芯、传球、打断、先到 2 分和岗位能力仍走前面的口。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
+NR-M2-light 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-light --check`，样例在 `docs/evidence/nr-m2-light/`。规格见 [NR-M2-light.md](NR-M2-light.md)。模拟在权威事件的同一毫秒写 `LightCue` 旁路日志：A 左肩、B 右肩，日港和夜港强度在 `config/steel_tide_greybox.json` 的 `lighting` 里，颜色只是辅助；桥的 4 秒灯带、接通、断开走 NR-03 的 `schedule_bridge_connect` / `schedule_bridge_disconnect`；端子读条、得分、出生保护各至少一条。不提交贴图，不开 Lumen，不交 `.uasset`。`LightCue` 不进计分事件名，也不进 `m2-pack` 的步骤表。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
 NR-M2-pack 已入库。这是无头 Python 开发包，不是 UE 包。UE 仍挂。仓内一条命令是 `PYTHONPATH=sim python3 -m steel_tide m2-pack --check`。它串起 `repro`、`nr02`、`nr03`、`m1`、`m1-pass`、`m1-bot`、`m2-resident`、`m2-roles`、`m2-bridge` 和 `unittest`，全部退出码为 0 才算通过。命令和退出码在 `docs/evidence/nr-m2-pack/`。规格见 [NR-M2-pack.md](NR-M2-pack.md)。不要 cook，不要打二进制包，不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
 NR-M2-audio 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-audio --check`，样例在 `docs/evidence/nr-m2-audio/`。规格见 [NR-M2-audio.md](NR-M2-audio.md)。模拟在权威事件的同一毫秒写 `AudioCue` 旁路日志：A/B 音口跟肩章形状和肩灯，颜色只是辅助；桥的 4 秒预警、灯带、接通、断开走 NR-03 的 `schedule_bridge_connect` / `schedule_bridge_disconnect`；拾取、传球、掉落、读条开始、打断、得分、回中、复位各至少一条。不提交 wav、MetaSound 或 `.uasset`。`AudioCue` 不进计分事件名，也不进 `m2-pack` 的步骤表。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
+
+NR-M2-fail 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-fail --check`，样例在 `docs/evidence/nr-m2-fail/`。规格见 [NR-M2-fail.md](NR-M2-fail.md)。两端同一毫秒抢芯只有一人持有，另一人空手；读条被击中没有 `PointScored`；超时结算不重新打开 `assault` / `support` / `recon`。`wired_into_m2_pack` 为 false，不进 `m2-pack` 的步骤表。不新造事件名，不计第二套分。不要在这台机器上开 UE，也不要改 `EngineAssociation`。
 
 ## 装好之后
 
@@ -50,3 +54,5 @@ PYTHONPATH=sim python3 -m steel_tide nr02 --check
 11. 出现双持或同一次读条记两分：留下两端日志退回，不要改胜负条件。
 
 胜负以 `sim/steel_tide` 为准。事件名以 `Source/NeonRift/Public/NeonRiftEventNames.h` 为准。
+
+NR-M2-hud 已入库。UE 仍挂。仓内命令是 `PYTHONPATH=sim python3 -m steel_tide m2-hud --check`，样例在 `docs/evidence/nr-m2-hud/`。规格见 [NR-M2-hud.md](NR-M2-hud.md)。模拟在权威事件的同一毫秒写 `HudCue` 旁路日志：比分板跟 `PointScored` / `MatchSettled`，端子读条跟 `ScoreChannelStarted` / `ScoreChannelInterrupted`，出生护盾跟 `MatchStarted` / `HitIgnored` `spawn_protection` / `ActorRespawned`，岗位和选边锁定跟 `RoleRejected` / `FactionRejected` 的 `locked`。颜色只是辅助，阵营仍是肩章形状和肩灯位置。不提交 UMG、贴图或 `.uasset`。`HudCue` 不进计分事件名，也不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。不要在这台机器上开 UE，也不要改 `EngineAssociation`。

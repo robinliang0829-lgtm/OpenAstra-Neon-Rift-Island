@@ -22,7 +22,8 @@
 | `UNeonRiftResidentPort` | `Source/NeonRift/Public/NeonRiftResidentPort.h` | 薄策略。`SelectMatch` / `Decide` 只记合法座位和意图，不喂坐标，不计分 |
 | `UNeonRiftReadabilityAsset` | `Source/NeonRift/Public/NeonRiftReadability.h` | NR-03 代理与 4 秒预警的数据。不记分 |
 | `NeonRiftAudio` | `Source/NeonRift/Public/NeonRiftAudioCues.h` | NR-M2 音效 id。只列名字，不播放，不计分，无声音资产 |
-| 参数 | `config/steel_tide_greybox.json` | 秒数和阵营。不要在编辑器里另填一套 |
+| 参数 | `config/steel_tide_greybox.json` | 秒数、阵营，以及 `lighting` 里的日港和夜港强度。不要在编辑器里另填一套 |
+| `NeonRiftLight` | `Source/NeonRift/Public/NeonRiftLightCues.h` | NR-M2 灯光 id。只列名字，不打光，不计分，无贴图 |
 
 复制以服务器为准。客户端发送意图。UI 读复制下来的 `holder_id`，不把本地预测的第二名持有者当成真的。
 
@@ -93,6 +94,8 @@
 
 持芯者速度用 `walk_speed_mps`（6，即 600 uu/s），不能冲刺，也不能突进。未持芯的原型移动用 `sprint_speed_mps`（8，即 800 uu/s）。1 米 = 100 UE 单位。坐标：模拟 x → UE X，模拟 y → UE Y，Z 向上，甲板 Z = 0。锚点表在 `config/steel_tide_greybox.json`。
 
+`LightCue` 不在上表，也不在 `sim/steel_tide/events.py` 的 `EVENT_NAMES`。模拟在权威事件的同一毫秒另写一行旁路日志，`rules_effect` 为 `none`，不改持有者，不加分，不打断。肩灯、桥灯带、端子读条、得分和出生保护的 id 在 `NeonRiftLightCues.h`，与 `sim/steel_tide/light.py` 一致。桥的 4 秒仍走 NR-03 的 `schedule_bridge_connect` / `schedule_bridge_disconnect`。不提交贴图。规格见 [../NR-M2-light.md](../NR-M2-light.md)。
+
 ## 和原型对日志
 
 仓内一条验收是无头 Python 开发包，不是 UE 包，也不 cook：
@@ -124,3 +127,15 @@ NR-02 的通过线是双端日志里出现与这三条相同的结果，而不�
 - 芯进海水或卡住体积：满 8 秒一条 `CoreReset` 回到 `center`，没有 `PointScored`。得分回中用的是 `CoreReturnedToCenter`，不要接成复位。
 
 出现双持或一次读条记两次分，把两端日志退回 Codex，不要在编辑器里改胜负条件。
+
+同帧抢芯、读条受击不计分、超时结算不重新三选一，另有仓内刀口 `m2-fail`。它和开发包并行，不进上面的步骤表。`wired_into_m2_pack` 为 false。它不新造事件名。规格见 [../NR-M2-fail.md](../NR-M2-fail.md)。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-fail --check
+```
+
+`HudCue` 不在上表，也不在 `sim/steel_tide/events.py` 的 `EVENT_NAMES`。模拟在权威事件的同一毫秒另写一行旁路日志，`rules_effect` 为 `none`，不改持有者，不加分，不打断。比分板、端子读条、出生护盾、岗位锁定和选边锁定的 id 在 `Source/NeonRift/Public/NeonRiftHudCues.h`，与 `sim/steel_tide/hud.py` 一致。阵营字用肩章形状和肩灯位置，颜色只是辅助。不提交 UMG 或贴图。规格见 [../NR-M2-hud.md](../NR-M2-hud.md)。它和开发包并行，不进 `m2-pack` 的步骤表。`wired_into_m2_pack` 为 false。
+
+```bash
+PYTHONPATH=sim python3 -m steel_tide m2-hud --check
+```
